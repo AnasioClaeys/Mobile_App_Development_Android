@@ -4,7 +4,7 @@ data class Game(
     val id: Int,
     val title: String,
     val brand: String,
-    val genre: String,
+    val genre: List<String>,
     val year: Int,
-    val platform: String
+    val platform: List<String>
 )
