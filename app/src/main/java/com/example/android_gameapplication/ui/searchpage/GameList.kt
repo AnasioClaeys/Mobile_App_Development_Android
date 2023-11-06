@@ -62,7 +62,7 @@ fun GameListItem(game:Game) {
             ) {
                 Text(
                     text = game.title,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     color = Color(0xFF2b2b2b)
                 )
             }
