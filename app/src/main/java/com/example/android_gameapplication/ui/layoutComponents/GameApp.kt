@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.android_gameapplication.R
+import com.example.android_gameapplication.ui.searchpage.SearchpageOverview
 
 enum class Destinations {
     Start,
@@ -68,7 +69,7 @@ fun GameApp() {
                 StartScreen()
             }
             composable(route = Destinations.Search.name) {
-                Text(text = "Search page", fontSize = 28.sp)
+                SearchpageOverview()
             }
         }
     }
