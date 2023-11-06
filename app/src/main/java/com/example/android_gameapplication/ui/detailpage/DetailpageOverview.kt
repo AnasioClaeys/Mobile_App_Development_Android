@@ -1,19 +1,14 @@
 package com.example.android_gameapplication.ui.detailpage
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,7 +40,6 @@ fun DetailpageOverview(game: Game) {
 
         Text(
             modifier = Modifier
-                .padding(bottom = 2.dp)
                 .padding(start = 8.dp),
             text = "Summary:",
             fontSize = 22.sp
@@ -57,53 +51,11 @@ fun DetailpageOverview(game: Game) {
             fontSize = 18.sp
         )
 
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = "Genre:",
-            fontSize = 22.sp
-        )
+        ComponentRow("Genres", game.genre)
 
-        LazyRow(
-            content = {
-                game.genre.forEach { genre ->
-                    item {
-                        FilledTonalButton(
-                            onClick = {
-                                // Handle button click here if needed
-                            },
-                            content = {
-                                Text(text = genre)
-                            },
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
-                }
-            }
-        )
+        ComponentRow("Platforms", game.platform)
 
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = "Platforms:",
-            fontSize = 22.sp
-        )
 
-        LazyRow(
-            content = {
-                game.platform.forEach { platform ->
-                    item {
-                        FilledTonalButton(
-                            onClick = {
-                                // Handle button click here if needed
-                            },
-                            content = {
-                                Text(text = platform)
-                            },
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
-                }
-            }
-        )
         Text(
             modifier = Modifier.padding(8.dp),
             text = "Release date:",
