@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import com.example.android_gameapplication.data.gamesList
 
 @Composable
-fun HomepageOverview(navController: NavController, onCarousel: (Int) -> Unit) {
+fun HomepageOverview(navController: NavController, onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -23,7 +23,7 @@ fun HomepageOverview(navController: NavController, onCarousel: (Int) -> Unit) {
             navController = navController, onCarousel = onCarousel
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = modifier.height(8.dp))
 
         MainComponentHomepage(
             title = "Recently released",

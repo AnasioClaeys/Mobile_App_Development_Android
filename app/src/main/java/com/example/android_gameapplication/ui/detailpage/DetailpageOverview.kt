@@ -20,37 +20,37 @@ import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.model.Game
 
 @Composable
-fun DetailpageOverview(gameId: Int) {
+fun DetailpageOverview(gameId: Int, modifier: Modifier = Modifier,) {
 
     val game = Game.getGameById(gameId)
     LazyColumn(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+        modifier = modifier.fillMaxWidth().padding(bottom = 16.dp)
     ) {
         item {
             Image(
                 painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
                 contentDescription = game.title,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .height(300.dp),
                 contentScale = ContentScale.Crop
             )
 
             Text(
-                modifier = Modifier.padding(8.dp),
+                modifier = modifier.padding(8.dp),
                 text = "${game.title}",
                 fontSize = 28.sp
             )
 
             Text(
-                modifier = Modifier
+                modifier = modifier
                     .padding(start = 8.dp),
                 text = "Summary:",
                 fontSize = 22.sp
             )
 
             Text(
-                modifier = Modifier.padding(start = 8.dp),
+                modifier = modifier.padding(start = 8.dp),
                 text = "blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 fontSize = 18.sp
             )
@@ -61,7 +61,7 @@ fun DetailpageOverview(gameId: Int) {
 
 
             Text(
-                modifier = Modifier.padding(8.dp),
+                modifier = modifier.padding(8.dp),
                 text = "Release date:",
                 fontSize = 22.sp
             )
@@ -73,7 +73,7 @@ fun DetailpageOverview(gameId: Int) {
                 content = {
                     Text(text = "${game.year}")
                 },
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = modifier.padding(start = 8.dp)
             )
         }
 

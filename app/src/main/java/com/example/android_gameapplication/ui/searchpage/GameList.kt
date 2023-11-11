@@ -32,16 +32,16 @@ import com.example.android_gameapplication.ui.model.Game
 
 
 @Composable
-fun GameListItem(game: Game, onListitem: (Int) -> Unit) {
+fun GameListItem(game: Game, onListitem: (Int) -> Unit, modifier: Modifier= Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(6.dp)
             .clickable(onClick = { onListitem(game.id) }),
         shape = RoundedCornerShape(15.dp),
 //        elevation = 8.dp
     ) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .padding(8.dp)
                 .fillMaxWidth()
                 .height(60.dp),
@@ -51,14 +51,14 @@ fun GameListItem(game: Game, onListitem: (Int) -> Unit) {
                 painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
                 contentDescription = "Image",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
+                modifier = modifier
                     .size(70.dp)
                     .clip(
                         RoundedCornerShape(16.dp)
                     )
             )
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .padding(horizontal = 20.dp)
                     .weight(1f)
             ) {

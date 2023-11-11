@@ -22,10 +22,11 @@ fun MainComponentHomepage(
     title: String,
     gamesList: List<Game>,
     navController: NavController,
-    onCarousel: (Int) -> Unit
+    onCarousel: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Text(
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp),
         text = title,
         fontSize = 28.sp
     )
@@ -36,7 +37,7 @@ fun MainComponentHomepage(
     )
 
     FilledTonalButton(
-        modifier = Modifier
+        modifier = modifier
             .padding(bottom = 10.dp),
 
         onClick = { /*Action*/ },
@@ -45,7 +46,7 @@ fun MainComponentHomepage(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("More popular games", fontSize = 14.sp)
-            Spacer(modifier = Modifier.width(8.dp)) // Voeg 8dp witruimte toe tussen de tekst en de pijl
+            Spacer(modifier = modifier.width(8.dp)) // Voeg 8dp witruimte toe tussen de tekst en de pijl
             Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = "Arrow Icon")
         }
     }

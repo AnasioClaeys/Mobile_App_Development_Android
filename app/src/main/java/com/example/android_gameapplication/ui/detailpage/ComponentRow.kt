@@ -10,9 +10,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ComponentRow(title: String, component:List<String>) {
+fun ComponentRow(title: String, component:List<String>, modifier:Modifier= Modifier) {
     Text(
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp),
         text = "${title}:",
         fontSize = 22.sp
     )
@@ -28,7 +28,7 @@ fun ComponentRow(title: String, component:List<String>) {
                         content = {
                             Text(text = component)
                         },
-                        modifier = Modifier.padding(start = 8.dp)
+                        modifier = modifier.padding(start = 8.dp)
                     )
                 }
             }
