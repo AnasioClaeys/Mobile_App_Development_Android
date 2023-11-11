@@ -14,17 +14,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.android_gameapplication.ui.model.Game
 
 @Composable
-fun MainComponentHomepage(title:String, gamesList: List<Game>) {
+fun MainComponentHomepage(
+    title: String,
+    gamesList: List<Game>,
+    navController: NavController,
+    onCarousel: (Int) -> Unit
+) {
     Text(
         modifier = Modifier.padding(8.dp),
         text = title,
         fontSize = 28.sp
     )
 
-    Carousel(gamesList = gamesList)
+    Carousel(
+        gamesList = gamesList,
+        navController = navController, onCarousel = onCarousel
+    )
 
     FilledTonalButton(
         modifier = Modifier

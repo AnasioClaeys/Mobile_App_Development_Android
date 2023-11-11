@@ -1,6 +1,7 @@
 package com.example.android_gameapplication.ui.homepage
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,18 +19,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.android_gameapplication.R
-import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.model.Game
 
 @Composable
-fun GameCard(game: Game) {
+fun GameCard(game: Game, navController: NavController, onCarousel: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .height(200.dp)
+            .clickable(onClick = {onCarousel(game.id)})
     ) {
         Column(
             modifier = Modifier
@@ -65,16 +66,19 @@ fun GameCard(game: Game) {
 }
 
 @Composable
-fun Carousel(gamesList: List<Game>) {
+fun Carousel(gamesList: List<Game>, navController: NavController, onCarousel: (Int) -> Unit) {
     LazyRow() {
         items(gamesList) { game ->
-            GameCard(game = game)
+            GameCard(
+                game = game,
+                navController = navController, onCarousel = onCarousel
+            )
         }
     }
 }
 
-@Preview
+/*@Preview
 @Composable
 fun CardPrev() {
     Carousel(gamesList)
-}
+}*/
