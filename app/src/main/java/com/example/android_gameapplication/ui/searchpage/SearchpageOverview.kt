@@ -11,11 +11,11 @@ import com.example.android_gameapplication.data.gamesList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchpageOverview(onListItem: (Int) -> Unit) {
+fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier=Modifier) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
-        TextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
+        TextField(value = "", onValueChange = {}, modifier = modifier.fillMaxWidth())
 
         GamesList(
             gamesList = gamesList,

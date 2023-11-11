@@ -25,15 +25,15 @@ import com.example.android_gameapplication.R
 import com.example.android_gameapplication.ui.model.Game
 
 @Composable
-fun GameCard(game: Game, navController: NavController, onCarousel: (Int) -> Unit) {
+fun GameCard(game: Game, navController: NavController, onCarousel: (Int) -> Unit, modifier:Modifier=Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .height(200.dp)
             .clickable(onClick = {onCarousel(game.id)})
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .width(150.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -42,13 +42,13 @@ fun GameCard(game: Game, navController: NavController, onCarousel: (Int) -> Unit
             Image(
                 painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
                 contentDescription = game.title,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .height(140.dp),
                 contentScale = ContentScale.Crop
             )
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .height(60.dp)
                     .fillMaxWidth()
                     .padding(8.dp),
