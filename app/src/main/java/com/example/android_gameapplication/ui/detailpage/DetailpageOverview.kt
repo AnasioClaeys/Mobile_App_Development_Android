@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,65 +20,69 @@ import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.model.Game
 
 @Composable
-fun DetailpageOverview(game: Game) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
+fun DetailpageOverview(gameId: Int) {
+
+    val game = Game.getGameById(gameId)
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
-            contentDescription = game.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            contentScale = ContentScale.Crop
-        )
+        item {
+            Image(
+                painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
+                contentDescription = game.title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp),
+                contentScale = ContentScale.Crop
+            )
 
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = "${game.title}",
-            fontSize = 28.sp
-        )
+            Text(
+                modifier = Modifier.padding(8.dp),
+                text = "${game.title}",
+                fontSize = 28.sp
+            )
 
-        Text(
-            modifier = Modifier
-                .padding(start = 8.dp),
-            text = "Summary:",
-            fontSize = 22.sp
-        )
+            Text(
+                modifier = Modifier
+                    .padding(start = 8.dp),
+                text = "Summary:",
+                fontSize = 22.sp
+            )
 
-        Text(
-            modifier = Modifier.padding(start = 8.dp),
-            text = "blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            fontSize = 18.sp
-        )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = "blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                fontSize = 18.sp
+            )
 
-        ComponentRow("Genres", game.genre)
+            ComponentRow("Genres", game.genre)
 
-        ComponentRow("Platforms", game.platform)
+            ComponentRow("Platforms", game.platform)
 
 
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = "Release date:",
-            fontSize = 22.sp
-        )
+            Text(
+                modifier = Modifier.padding(8.dp),
+                text = "Release date:",
+                fontSize = 22.sp
+            )
 
-        FilledTonalButton(
-            onClick = {
-                // Handle button click here if needed
-            },
-            content = {
-                Text(text = "${game.year}")
-            },
-            modifier = Modifier.padding(start = 8.dp)
-        )
+            FilledTonalButton(
+                onClick = {
+                    // Handle button click here if needed
+                },
+                content = {
+                    Text(text = "${game.year}")
+                },
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
 
     }
 }
 
 
-@Preview
-@Composable
-fun DetailPageOverviewPreview() {
-    DetailpageOverview(gamesList[0])
-}
+//@Preview
+//@Composable
+//fun DetailPageOverviewPreview() {
+//    DetailpageOverview(gamesList[0])
+//}

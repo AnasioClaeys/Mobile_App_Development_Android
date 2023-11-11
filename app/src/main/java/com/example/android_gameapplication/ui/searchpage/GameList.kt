@@ -1,6 +1,7 @@
 package com.example.android_gameapplication.ui.searchpage
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowForward
@@ -24,29 +24,31 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.android_gameapplication.R
-import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.model.Game
 
 
 @Composable
-fun GameListItem(game:Game) {
+fun GameListItem(game: Game, onListitem: (Int) -> Unit) {
     Card(
-        modifier = Modifier.padding(6.dp),
+        modifier = Modifier
+            .padding(6.dp)
+            .clickable(onClick = { onListitem(game.id) }),
         shape = RoundedCornerShape(15.dp),
 //        elevation = 8.dp
     ) {
         Row(
             modifier = Modifier
                 .padding(8.dp)
-                .fillMaxWidth().height(60.dp),
+                .fillMaxWidth()
+                .height(60.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(id= R.drawable.f2dtyp_wwaabdst),
+                painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
                 contentDescription = "Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -67,7 +69,7 @@ fun GameListItem(game:Game) {
                 )
             }
             IconButton(
-                onClick = { /* Voeg hier de gewenste actie toe bij het klikken op de knop */ }
+                onClick = { onListitem(game.id) }
             ) {
                 Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = "Arrow Icon")
             }
@@ -76,18 +78,20 @@ fun GameListItem(game:Game) {
 }
 
 @Composable
-fun GamesList(gamesList: List<Game>) {
+fun GamesList(gamesList: List<Game>, onListItem: (Int) -> Unit) {
     LazyColumn {
         items(gamesList) { game ->
-            GameListItem(game)
+            GameListItem(
+                game = game,
+                onListitem = onListItem
+            )
         }
     }
 }
 
 
-
-@Preview
+/*@Preview
 @Composable
 fun GameListPreview() {
     GamesList(gamesList = gamesList)
-}
+}*/
