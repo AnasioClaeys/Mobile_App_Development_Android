@@ -9,20 +9,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.data.gamesList
+import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 import com.example.android_gameapplication.ui.model.Game
 
 @Composable
 fun DetailpageOverview(gameId: Int, modifier: Modifier = Modifier,) {
+    val viewModel: GameViewModel = viewModel()
 
-    val game = Game.getGameById(gameId)
+    val game = viewModel.getGameById(gameId)
+//    val game = Game.getGameById(gameId)
+
     LazyColumn(
         modifier = modifier.fillMaxWidth().padding(bottom = 16.dp)
     ) {

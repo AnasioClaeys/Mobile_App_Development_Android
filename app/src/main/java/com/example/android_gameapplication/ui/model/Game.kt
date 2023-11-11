@@ -14,5 +14,11 @@ data class Game(
         fun getGameById(id: Int): Game {
             return gamesList.find { it.id == id }!!
         }
+
+        fun getAllGames(): List<Game> {
+            return gamesList
+        }
+
+
     }
 }
