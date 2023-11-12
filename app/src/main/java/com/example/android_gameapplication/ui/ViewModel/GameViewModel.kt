@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
 class GameViewModel : ViewModel() {
-    private val _gameUiState = MutableStateFlow(GameUiState(gamesList= Game.getAllGames()))
+    private val _gameUiState = MutableStateFlow(GameUiState(gamesList= Game.getAllGames(), searchList = Game.getAllGames()))
     val gameUiState = _gameUiState.asStateFlow()
 
     //gameUiState to getGameById
@@ -27,25 +27,40 @@ class GameViewModel : ViewModel() {
 
     //**********************************************************************************************************************
     //SEARCH
-    private val _searchText = MutableStateFlow("")
-    val searchText = _searchText.asStateFlow()
+//    private val _searchText = MutableStateFlow("")
+//    val searchText = _searchText.asStateFlow()
+
+//    fun onSearchTextChange(text: String) {
+//        _gameUiState.update {
+//            it.copy(searchText = text)
+//        }
+////        _searchText.value = text
+//    }
+
+//    private val _searchList = MutableStateFlow(gameUiState.value.gamesList)
+//    val searchList = gameUiState
+//        .combine(_searchList) { uiState, searchList ->
+//            if (uiState.searchText.isEmpty()) {
+//                searchList
+//            } else {
+//                searchList.filter { it.title.contains(uiState.searchText, ignoreCase = true) }
+//            }
+//        }
+//        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _searchList.value)
+
+    //**********************************************************************************************************************
+    //SEARCH
 
     fun onSearchTextChange(text: String) {
-        _searchText.value = text
-    }
-
-    private val _searchList = MutableStateFlow(gameUiState.value.gamesList)
-    val searchList = searchText
-        .combine(_searchList) { searchText, searchList ->
-            if (searchText.isEmpty()) {
-                searchList
-            } else {
-                searchList.filter { it.title.contains(searchText, ignoreCase = true) }
-            }
+        _gameUiState.update { currentState ->
+            currentState.copy(
+                searchText = text,
+                searchList = if (text.isEmpty()) {
+                    currentState.gamesList
+                } else {
+                    currentState.gamesList.filter { it.title.contains(text, ignoreCase = true) }
+                }
+            )
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _searchList.value)
-
-
-
-
+    }
 }
