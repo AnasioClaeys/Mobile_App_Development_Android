@@ -53,6 +53,7 @@ fun GameApp() {
                 },
                 when (currentBackStackEntry?.destination?.route) {
                     Destinations.Search.name -> R.string.searchpage_title
+                    Destinations.DetailPage.name -> R.string.detailpage_title
                     else -> R.string.app_name
                 }
             )
