@@ -70,7 +70,6 @@ fun GameApp() {
         ) {
             composable(route = Destinations.Start.name) {
                 StartScreen(
-                    navController = navController,
                     onCarousel = { gameId -> navController.navigate("${Destinations.DetailPage.name}/${gameId}") })
             }
             composable(route = Destinations.Search.name) {

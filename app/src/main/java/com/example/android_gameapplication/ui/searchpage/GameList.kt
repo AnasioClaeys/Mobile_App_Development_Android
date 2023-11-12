@@ -32,11 +32,11 @@ import com.example.android_gameapplication.ui.model.Game
 
 
 @Composable
-fun GameListItem(game: Game, onListitem: (Int) -> Unit, modifier: Modifier= Modifier) {
+fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modifier) {
     Card(
         modifier = modifier
             .padding(6.dp)
-            .clickable(onClick = { onListitem(game.id) }),
+            .clickable(onClick = { onListItem(game.id) }),
         shape = RoundedCornerShape(15.dp),
 //        elevation = 8.dp
     ) {
@@ -69,7 +69,7 @@ fun GameListItem(game: Game, onListitem: (Int) -> Unit, modifier: Modifier= Modi
                 )
             }
             IconButton(
-                onClick = { onListitem(game.id) }
+                onClick = { onListItem(game.id) }
             ) {
                 Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = "Arrow Icon")
             }
@@ -83,7 +83,7 @@ fun GamesList(gamesList: List<Game>, onListItem: (Int) -> Unit) {
         items(gamesList) { game ->
             GameListItem(
                 game = game,
-                onListitem = onListItem
+                onListItem = onListItem
             )
         }
     }

@@ -6,11 +6,11 @@ import androidx.navigation.NavController
 import com.example.android_gameapplication.ui.homepage.HomepageOverview
 
 @Composable
-fun StartScreen(navController: NavController, onCarousel: (Int) -> Unit) {
+fun StartScreen(onCarousel: (Int) -> Unit) {
     LazyColumn(
     ) {
         item {
-            HomepageOverview(navController = navController, onCarousel = onCarousel)
+            HomepageOverview(onCarousel = onCarousel)
         }
     }
 }

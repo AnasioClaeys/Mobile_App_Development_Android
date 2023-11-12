@@ -21,7 +21,6 @@ import com.example.android_gameapplication.ui.model.Game
 fun MainComponentHomepage(
     title: String,
     gamesList: List<Game>,
-    navController: NavController,
     onCarousel: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -33,7 +32,7 @@ fun MainComponentHomepage(
 
     Carousel(
         gamesList = gamesList,
-        navController = navController, onCarousel = onCarousel
+        onCarousel = onCarousel
     )
 
     FilledTonalButton(

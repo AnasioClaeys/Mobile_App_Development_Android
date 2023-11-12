@@ -25,7 +25,7 @@ import com.example.android_gameapplication.R
 import com.example.android_gameapplication.ui.model.Game
 
 @Composable
-fun GameCard(game: Game, navController: NavController, onCarousel: (Int) -> Unit, modifier:Modifier=Modifier) {
+fun GameCard(game: Game, onCarousel: (Int) -> Unit, modifier:Modifier=Modifier) {
     Card(
         modifier = modifier
             .padding(8.dp)
@@ -66,12 +66,12 @@ fun GameCard(game: Game, navController: NavController, onCarousel: (Int) -> Unit
 }
 
 @Composable
-fun Carousel(gamesList: List<Game>, navController: NavController, onCarousel: (Int) -> Unit) {
+fun Carousel(gamesList: List<Game>, onCarousel: (Int) -> Unit) {
     LazyRow() {
         items(gamesList) { game ->
             GameCard(
                 game = game,
-                navController = navController, onCarousel = onCarousel
+                onCarousel = onCarousel
             )
         }
     }
