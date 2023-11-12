@@ -52,8 +52,8 @@ fun GameApp() {
 
                 },
                 when (currentBackStackEntry?.destination?.route) {
-                    Destinations.Search.name -> R.string.search_page_title
-                    else -> R.string.app_title
+                    Destinations.Search.name -> R.string.searchpage_title
+                    else -> R.string.app_name
                 }
             )
         },
