@@ -22,10 +22,6 @@ import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 @Composable
 fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
     val viewModel: GameViewModel = viewModel()
-//    val gameUiState by viewModel.gameUiState.collectAsState()
-//    val gamesList = gameUiState.gamesList
-
-
     val searchText by viewModel.searchText.collectAsState()
     val searchList by viewModel.searchList.collectAsState()
 

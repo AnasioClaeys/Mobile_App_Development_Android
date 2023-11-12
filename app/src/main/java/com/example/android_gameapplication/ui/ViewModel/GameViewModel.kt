@@ -30,6 +30,10 @@ class GameViewModel : ViewModel() {
     private val _searchText = MutableStateFlow("")
     val searchText = _searchText.asStateFlow()
 
+    fun onSearchTextChange(text: String) {
+        _searchText.value = text
+    }
+
     private val _searchList = MutableStateFlow(gameUiState.value.gamesList)
     val searchList = searchText
         .combine(_searchList) { searchText, searchList ->
@@ -42,8 +46,6 @@ class GameViewModel : ViewModel() {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _searchList.value)
 
 
-    fun onSearchTextChange(text: String) {
-        _searchText.value = text
-    }
+
 
 }
