@@ -40,10 +40,21 @@ fun GameApp() {
         navController.navigate("${Destinations.DetailPage.name}/${gameId}")
     }
 
+//    val canNavigateBack = navController.previousBackStackEntry != null
+//    val navigateUp: () -> Unit = { navController.navigateUp() }
+
+//    val currentScreenTitle = Destinations.valueOf(
+//        currentBackStackEntry?.destination?.route ?: Destinations.Start.name,
+//    ).title
+
     Scaffold(
         topBar = {
             TopAppBar(
                 {
+//                    canNavigateBack = canNavigateBack,
+//                    navigateUp = navigateUp,
+//                    currentScreenTitle = currentScreenTitle,
+
                     val isStartDestination =
                         currentBackStackEntry?.destination?.route == Destinations.Start.name
                     if (isStartDestination) {
