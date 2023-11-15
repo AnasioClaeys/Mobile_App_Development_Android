@@ -27,10 +27,34 @@ fun GameApp() {
 
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val onHome: () -> Unit = {
+        navController.popBackStack(Destinations.Start.name, false)
+    }
+
+    val onSearch: () -> Unit = {
+        navController.navigate(Destinations.Search.name)
+    }
+
+    val onDetail: (Int) -> Unit = { gameId ->
+        navController.navigate("${Destinations.DetailPage.name}/${gameId}")
+    }
+
+//    val canNavigateBack = navController.previousBackStackEntry != null
+//    val navigateUp: () -> Unit = { navController.navigateUp() }
+
+//    val currentScreenTitle = Destinations.valueOf(
+//        currentBackStackEntry?.destination?.route ?: Destinations.Start.name,
+//    ).title
+
     Scaffold(
         topBar = {
             TopAppBar(
                 {
+//                    canNavigateBack = canNavigateBack,
+//                    navigateUp = navigateUp,
+//                    currentScreenTitle = currentScreenTitle,
+
                     val isStartDestination =
                         currentBackStackEntry?.destination?.route == Destinations.Start.name
                     if (isStartDestination) {
@@ -52,15 +76,17 @@ fun GameApp() {
 
                 },
                 when (currentBackStackEntry?.destination?.route) {
-                    Destinations.Search.name -> R.string.search_page_title
-                    else -> R.string.app_title
+                    Destinations.Search.name -> R.string.searchpage_title
+                    Destinations.DetailPage.name -> R.string.detailpage_title
+                    else -> R.string.app_name
                 }
             )
         },
         bottomBar = {
             BottomAppBar(
-                { navController.popBackStack(Destinations.Start.name, false) },
-                { navController.navigate(Destinations.Search.name) })
+                onHome = onHome,
+                onSearch = onSearch
+                )
         },
     ) { innerPadding ->
         NavHost(
@@ -70,14 +96,10 @@ fun GameApp() {
         ) {
             composable(route = Destinations.Start.name) {
                 StartScreen(
-                    onCarousel = { gameId -> navController.navigate("${Destinations.DetailPage.name}/${gameId}") })
+                    onCarousel = onDetail)
             }
             composable(route = Destinations.Search.name) {
-                SearchpageOverview(onListItem = { gameId ->
-                    navController.navigate(
-                        "${Destinations.DetailPage.name}/${gameId}"
-                    )
-                })
+                SearchpageOverview(onListItem = onDetail)
             }
 
             composable("${Destinations.DetailPage.name}/{id}") {

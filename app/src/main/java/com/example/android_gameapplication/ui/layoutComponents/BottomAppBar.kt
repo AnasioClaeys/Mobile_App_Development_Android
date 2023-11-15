@@ -15,11 +15,11 @@ fun BottomAppBar(onHome: () -> Unit, onSearch: () -> Unit) {
         contentColor = MaterialTheme.colorScheme.primary,
         actions = {
             IconButton(onClick = onHome) {
-                Icon(Icons.Outlined.Home, contentDescription = "Localized description")
+                Icon(Icons.Outlined.Home, contentDescription = "Navigate to home screen")
             }
 
             IconButton(onClick = onSearch) {
-                Icon(Icons.Outlined.Search, contentDescription = "Localized description")
+                Icon(Icons.Outlined.Search, contentDescription = "Navigate to search screen")
             }
         }
     )

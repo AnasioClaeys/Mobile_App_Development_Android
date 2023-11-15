@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Android_GameApplication</string>
-    <string name="app_title">Game application</string>
-    <string name="search_page_title">Search page</string>
+    <string name="app_name">Game Application</string>
+    <string name="searchpage_title">Search page</string>
+    <string name="detailpage_title">Detail page</string>
 </resources>
