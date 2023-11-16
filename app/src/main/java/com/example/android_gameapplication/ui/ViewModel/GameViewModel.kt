@@ -27,12 +27,18 @@ class GameViewModel : ViewModel() {
         getApiGames()
     }
 
-    private fun getApiGames(){
+    private fun getApiGames() {
         viewModelScope.launch {
-            val result = gameService.getGames()
-            println("The tasks: $result")
-        }
+            try {
+                val response = gameService.getGames()
+                val games = response.results
 
+                println("The tasks: $games")
+            } catch (e: Exception) {
+                Log.e("GameViewModel", "Error fetching games from API", e)
+                // Handle error, e.g., show a message to the user
+            }
+        }
     }
 
 
