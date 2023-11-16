@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.model.Game
+import com.example.android_gameapplication.ui.network.GameApi.gameService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,10 +15,29 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class GameViewModel : ViewModel() {
     private val _gameUiState = MutableStateFlow(GameUiState(gamesList= Game.getAllGames(), searchList = Game.getAllGames()))
     val gameUiState = _gameUiState.asStateFlow()
+
+    //**********************************************************************************************************************
+    //api
+    init {
+        getApiGames()
+    }
+
+    private fun getApiGames(){
+        viewModelScope.launch {
+            val result = gameService.getGames()
+            println("The tasks: $result")
+        }
+
+    }
+
+
+
+    //**********************************************************************************************************************
 
     //gameUiState to getGameById
     fun getGameById(gameId: Int): Game {
@@ -63,4 +83,5 @@ class GameViewModel : ViewModel() {
             )
         }
     }
+
 }
