@@ -19,6 +19,8 @@ data class ApiGame(
     @SerialName("genres")
     val genres: List<Genre>?,
     val platforms: List<Platform>?,
+    @SerialName("background_image")
+    val backgroundImage: String
 )
 
 @Serializable
