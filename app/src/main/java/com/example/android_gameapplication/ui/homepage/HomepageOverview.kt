@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -14,6 +15,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
+import com.example.android_gameapplication.network.ApiGameState
 
 @Composable
 fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
@@ -21,11 +23,14 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
     val gameUiState by viewModel.gameUiState.collectAsState()
     val gamesList = gameUiState.gamesList
 
+
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         MainComponentHomepage(
+
             title = "Popular games",
             gamesList = gamesList,
             onCarousel = onCarousel

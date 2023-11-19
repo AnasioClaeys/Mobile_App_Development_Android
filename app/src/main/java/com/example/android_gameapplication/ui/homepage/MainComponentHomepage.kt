@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.android_gameapplication.ui.model.Game
+import com.example.android_gameapplication.model.Game
 
 @Composable
 fun MainComponentHomepage(

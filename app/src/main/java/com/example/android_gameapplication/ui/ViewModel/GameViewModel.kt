@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_gameapplication.data.gamesList
-import com.example.android_gameapplication.ui.model.Game
-import com.example.android_gameapplication.ui.network.GameApi.gameService
+import com.example.android_gameapplication.model.Game
+import com.example.android_gameapplication.network.GameApi.gameService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

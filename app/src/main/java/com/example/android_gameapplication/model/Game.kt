@@ -1,4 +1,4 @@
-package com.example.android_gameapplication.ui.model
+package com.example.android_gameapplication.model
 
 import com.example.android_gameapplication.data.gamesList
 

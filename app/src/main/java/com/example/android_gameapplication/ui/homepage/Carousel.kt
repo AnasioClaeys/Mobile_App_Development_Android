@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.android_gameapplication.R
-import com.example.android_gameapplication.ui.model.Game
+import com.example.android_gameapplication.model.Game
 
 @Composable
 fun GameCard(game: Game, onCarousel: (Int) -> Unit, modifier:Modifier=Modifier) {

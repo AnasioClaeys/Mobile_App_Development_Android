@@ -21,7 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
-import com.example.android_gameapplication.ui.model.Game
+import com.example.android_gameapplication.model.Game
 
 @Composable
 fun DetailpageOverview(gameId: Int, modifier: Modifier = Modifier,) {

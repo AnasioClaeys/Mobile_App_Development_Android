@@ -1,4 +1,4 @@
-package com.example.android_gameapplication.ui.network
+package com.example.android_gameapplication.network
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

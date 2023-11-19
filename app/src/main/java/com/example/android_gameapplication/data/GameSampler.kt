@@ -1,6 +1,6 @@
 package com.example.android_gameapplication.data
 
-import com.example.android_gameapplication.ui.model.Game
+import com.example.android_gameapplication.model.Game
 
 val gamesList = listOf(
     Game(1, "EAFC 24", "EA SPORTS", listOf("Sports","Adventure"), 2023, listOf("PlayStation 4", "Xbox One", "PC")),
