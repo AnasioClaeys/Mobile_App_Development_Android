@@ -12,16 +12,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.android_gameapplication.data.gamesList
+import com.example.android_gameapplication.network.GameApiState
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
-import com.example.android_gameapplication.network.ApiGameState
 
 @Composable
 fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
     val viewModel: GameViewModel = viewModel()
     val gameUiState by viewModel.gameUiState.collectAsState()
     val gamesList = gameUiState.gamesList
+    val gameApiState = viewModel.gameApiState
+
+
+//    when (gameApiState) {
+//        is GameApiState.Loading -> {
+//
+//        }
+//    }
 
 
 
@@ -29,20 +35,31 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        MainComponentHomepage(
 
-            title = "Popular games",
-            gamesList = gamesList,
-            onCarousel = onCarousel
-        )
+
+        when(gameApiState){
+            is GameApiState.Loading -> Text("Loading...")
+            is GameApiState.Error -> Text("Couldn't load...")
+            is GameApiState.Success -> MainComponentHomepage(
+                title = "Popular games in 2023",
+                gamesList = gameApiState.games,
+                onCarousel = onCarousel
+            )
+        }
+
+
 
         Spacer(modifier = modifier.height(8.dp))
 
-        MainComponentHomepage(
-            title = "Recently released",
-            gamesList = gamesList,
-            onCarousel = onCarousel
-        )
+        when(gameApiState){
+            is GameApiState.Loading -> Text("Loading...")
+            is GameApiState.Error -> Text("Couldn't load...")
+            is GameApiState.Success -> MainComponentHomepage(
+                title = "Popular games of all time",
+                gamesList = gameApiState.games,
+                onCarousel = onCarousel
+            )
+        }
 
     }
 }

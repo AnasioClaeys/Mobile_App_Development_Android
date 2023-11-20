@@ -36,7 +36,7 @@ fun DetailpageOverview(gameId: Int, modifier: Modifier = Modifier,) {
         item {
             Image(
                 painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
-                contentDescription = game.title,
+                contentDescription = game.name,
                 modifier = modifier
                     .fillMaxWidth()
                     .height(300.dp),
@@ -45,7 +45,7 @@ fun DetailpageOverview(gameId: Int, modifier: Modifier = Modifier,) {
 
             Text(
                 modifier = modifier.padding(8.dp),
-                text = "${game.title}",
+                text = "${game.name}",
                 fontSize = 28.sp
             )
 
@@ -62,9 +62,9 @@ fun DetailpageOverview(gameId: Int, modifier: Modifier = Modifier,) {
                 fontSize = 18.sp
             )
 
-            ComponentRow("Genres", game.genre)
+            ComponentRow("Genres", game.genres)
 
-            ComponentRow("Platforms", game.platform)
+            ComponentRow("Platforms", game.platforms)
 
 
             Text(
@@ -78,7 +78,7 @@ fun DetailpageOverview(gameId: Int, modifier: Modifier = Modifier,) {
                     // Handle button click here if needed
                 },
                 content = {
-                    Text(text = "${game.year}")
+                    Text(text = "${game.released}")
                 },
                 modifier = modifier.padding(start = 8.dp)
             )

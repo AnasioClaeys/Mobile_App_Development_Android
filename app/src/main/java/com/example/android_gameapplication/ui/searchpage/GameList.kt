@@ -63,7 +63,7 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modi
                     .weight(1f)
             ) {
                 Text(
-                    text = game.title,
+                    text = game.name,
                     fontSize = 20.sp,
                     color = Color(0xFF2b2b2b)
                 )

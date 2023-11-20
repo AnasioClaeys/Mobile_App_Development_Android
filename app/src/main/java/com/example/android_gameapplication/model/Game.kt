@@ -4,11 +4,12 @@ import com.example.android_gameapplication.data.gamesList
 
 data class Game(
     val id: Int,
-    val title: String,
-    val brand: String,
-    val genre: List<String>,
-    val year: Int,
-    val platform: List<String>
+    val name: String,
+//    val brand: String,
+    val genres: List<String>,
+    val released: String,
+    val platforms: List<String>,
+    val backgroundImage: String
 ){
     companion object {
         fun getGameById(id: Int): Game {

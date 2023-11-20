@@ -41,7 +41,7 @@ fun GameCard(game: Game, onCarousel: (Int) -> Unit, modifier:Modifier=Modifier) 
         ) {
             Image(
                 painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
-                contentDescription = game.title,
+                contentDescription = game.name,
                 modifier = modifier
                     .fillMaxWidth()
                     .height(140.dp),
@@ -56,7 +56,7 @@ fun GameCard(game: Game, onCarousel: (Int) -> Unit, modifier:Modifier=Modifier) 
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = game.title,
+                    text = game.name,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )

@@ -1,14 +1,15 @@
 package com.example.android_gameapplication.ui.ViewModel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.model.Game
 import com.example.android_gameapplication.network.GameApi.gameService
-import kotlinx.coroutines.delay
+import com.example.android_gameapplication.network.GameApiState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
@@ -16,6 +17,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.example.android_gameapplication.network.asDomainObjects
+
 
 class GameViewModel : ViewModel() {
     private val _gameUiState = MutableStateFlow(GameUiState(gamesList= Game.getAllGames(), searchList = Game.getAllGames()))
@@ -23,23 +26,44 @@ class GameViewModel : ViewModel() {
 
     //**********************************************************************************************************************
     //api
+
+    var gameApiState: GameApiState by mutableStateOf(GameApiState.Loading)
+        private set
+
     init {
         getApiGames()
+        getMostPopularGamesOfThisYear()
+        getMostPopularGamesOfAllTime()
     }
 
     private fun getApiGames() {
         viewModelScope.launch {
-            try {
-                val response = gameService.getGames()
-                val games = response.results
 
-                println("The tasks: $games")
-            } catch (e: Exception) {
-                Log.e("GameViewModel", "Error fetching games from API", e)
-                // Handle error, e.g., show a message to the user
-            }
+                val result = gameService.getGames()
+                gameApiState = GameApiState.Success(result.asDomainObjects())
+                Log.i("getApiGames", "getApiGames: ${result.asDomainObjects()}}")
         }
     }
+
+    private fun getMostPopularGamesOfThisYear(){
+        viewModelScope.launch {
+            val result = gameService.getMostPopularGamesOfThisYear()
+            gameApiState = GameApiState.Success(result.asDomainObjects())
+
+            Log.i("getMostPopularGamesOfThisYear", "getMostPopularGamesOfThisYear: ${result.asDomainObjects()}}")
+        }
+    }
+
+    private fun getMostPopularGamesOfAllTime(){
+        viewModelScope.launch {
+            val result = gameService.getMostPopularGamesOfAllTime()
+            gameApiState = GameApiState.Success(result.asDomainObjects())
+
+            Log.i("getMostPopularGamesOfAllTime", "getMostPopularGamesOfAllTime: ${result.asDomainObjects()}}")
+        }
+    }
+
+
 
 
 
@@ -84,7 +108,7 @@ class GameViewModel : ViewModel() {
                 searchList = if (text.isEmpty()) {
                     currentState.gamesList
                 } else {
-                    currentState.gamesList.filter { it.title.contains(text, ignoreCase = true) }
+                    currentState.gamesList.filter { it.name.contains(text, ignoreCase = true) }
                 }
             )
         }

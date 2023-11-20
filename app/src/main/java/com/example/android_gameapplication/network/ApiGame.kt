@@ -1,5 +1,6 @@
 package com.example.android_gameapplication.network
 
+import com.example.android_gameapplication.model.Game
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -37,3 +38,18 @@ data class Platform(
 data class PlatformDetails(
     val name: String,
 )
+
+
+fun ApiResponse .asDomainObjects(): List<Game> {
+    var domainList = this.results.map {
+        Game(
+            id = it.id,
+            name = it.name,
+            released = it.released,
+            genres = it.genres?.map { genre -> genre.name } ?: listOf(),
+            platforms = it.platforms?.map { platform -> platform.platform.name } ?: listOf(),
+            backgroundImage = it.backgroundImage
+        )
+    }
+    return domainList
+}
