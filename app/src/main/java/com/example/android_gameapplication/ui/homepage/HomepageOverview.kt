@@ -19,7 +19,7 @@ import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @Composable
 fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
-    val viewModel: GameViewModel = viewModel()
+    val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
     val gameUiState by viewModel.gameUiState.collectAsState()
     val gamesList = gameUiState.gamesList
     val gameApiState = viewModel.gameApiState

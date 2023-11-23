@@ -15,19 +15,7 @@ import retrofit2.http.Query
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-private const val BASE_URL = "https://api.rawg.io/api/"
-private val retrofit: Retrofit = Retrofit.Builder()
-    .addConverterFactory(Json { ignoreUnknownKeys = true }
-        .asConverterFactory("application/json".toMediaType()))
-    .baseUrl(BASE_URL)
-    .build()
 
-
-object GameApi {
-    val gameService: GameApiService by lazy {
-        retrofit.create(GameApiService::class.java)
-    }
-}
 
 
 interface GameApiService {

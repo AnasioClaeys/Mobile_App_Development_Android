@@ -12,7 +12,7 @@ import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 fun DetailpageOverview(
     gameId: Int,
     modifier: Modifier = Modifier,
-    gameViewModel: GameViewModel = viewModel()
+    gameViewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
 ) {
     LaunchedEffect(key1 = gameId){
         gameViewModel.getDetailGameById(gameId)
