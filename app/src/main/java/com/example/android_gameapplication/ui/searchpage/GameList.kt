@@ -27,8 +27,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.android_gameapplication.R
-import com.example.android_gameapplication.ui.model.Game
+import com.example.android_gameapplication.model.Game
 
 
 @Composable
@@ -47,23 +48,25 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modi
                 .height(60.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.f2dtyp_wwaabdst),
-                contentDescription = "Image",
+            AsyncImage(
+                model= game.backgroundImage,
+                contentDescription = game.name,
                 contentScale = ContentScale.Crop,
                 modifier = modifier
                     .size(70.dp)
                     .clip(
                         RoundedCornerShape(16.dp)
                     )
+
             )
+
             Column(
                 modifier = modifier
                     .padding(horizontal = 20.dp)
                     .weight(1f)
             ) {
                 Text(
-                    text = game.title,
+                    text = game.name,
                     fontSize = 20.sp,
                     color = Color(0xFF2b2b2b)
                 )

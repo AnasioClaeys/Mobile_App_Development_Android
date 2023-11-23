@@ -1,7 +1,7 @@
 package com.example.android_gameapplication.ui
 
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
-import com.example.android_gameapplication.ui.model.Game
+import com.example.android_gameapplication.model.Game
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -30,10 +30,5 @@ class GameViewModelTest {
         assertEquals(TEXT, viewModel.gameUiState.value?.searchText)
     }
 
-    @Test
-    fun gameViewModel_getGameById_GameIsEqualToGame(){
-        val game = Game.getAllGames()[0]
-        assertEquals(game, viewModel.getGameById(game.id))
-    }
 
 }

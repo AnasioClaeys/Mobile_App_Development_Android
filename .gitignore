@@ -208,4 +208,5 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,kotlin,gradle
-app/src/main/java/com/example/android_gameapplication/keys/
+
+app/src/main/java/com/example/android_gameapplication/keys/ApiKeys.kt
