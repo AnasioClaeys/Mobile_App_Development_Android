@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.network.GameApiState
+import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
+import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @Composable
@@ -21,14 +23,8 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
     val gameUiState by viewModel.gameUiState.collectAsState()
     val gamesList = gameUiState.gamesList
     val gameApiState = viewModel.gameApiState
-
-
-//    when (gameApiState) {
-//        is GameApiState.Loading -> {
-//
-//        }
-//    }
-
+    val popularGamesOfThisYearApiState = viewModel.popularGamesOfThisYearApiState
+    val popularGamesOfAllTimeApiState = viewModel.popularGamesOfAllTimeApiState
 
 
     Column(
@@ -37,12 +33,12 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
     ) {
 
 
-        when(gameApiState){
-            is GameApiState.Loading -> Text("Loading...")
-            is GameApiState.Error -> Text("Couldn't load...")
-            is GameApiState.Success -> MainComponentHomepage(
+        when(popularGamesOfThisYearApiState){
+            is PopularGamesOfThisYearApiState.Loading -> Text("Loading...")
+            is PopularGamesOfThisYearApiState.Error -> Text("Couldn't load...")
+            is PopularGamesOfThisYearApiState.Success -> MainComponentHomepage(
                 title = "Popular games in 2023",
-                gamesList = gameApiState.games,
+                gamesList = popularGamesOfThisYearApiState.games,
                 onCarousel = onCarousel
             )
         }
@@ -51,12 +47,12 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
 
         Spacer(modifier = modifier.height(8.dp))
 
-        when(gameApiState){
-            is GameApiState.Loading -> Text("Loading...")
-            is GameApiState.Error -> Text("Couldn't load...")
-            is GameApiState.Success -> MainComponentHomepage(
+        when(popularGamesOfAllTimeApiState){
+            is PopularGamesOfAllTimeApiState.Loading -> Text("Loading...")
+            is PopularGamesOfAllTimeApiState.Error -> Text("Couldn't load...")
+            is PopularGamesOfAllTimeApiState.Success -> MainComponentHomepage(
                 title = "Popular games of all time",
-                gamesList = gameApiState.games,
+                gamesList = popularGamesOfAllTimeApiState.games,
                 onCarousel = onCarousel
             )
         }

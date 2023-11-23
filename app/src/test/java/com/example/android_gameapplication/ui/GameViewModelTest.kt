@@ -30,10 +30,5 @@ class GameViewModelTest {
         assertEquals(TEXT, viewModel.gameUiState.value?.searchText)
     }
 
-    @Test
-    fun gameViewModel_getGameById_GameIsEqualToGame(){
-        val game = Game.getAllGames()[0]
-        assertEquals(game, viewModel.getGameById(game.id))
-    }
 
 }

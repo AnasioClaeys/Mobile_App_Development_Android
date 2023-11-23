@@ -7,21 +7,26 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_gameapplication.model.Game
+import com.example.android_gameapplication.network.DetailGameApiState
 import com.example.android_gameapplication.network.GameApi.gameService
 import com.example.android_gameapplication.network.GameApiState
+import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
+import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
+import com.example.android_gameapplication.network.asDomainObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.example.android_gameapplication.network.asDomainObjects
 
 
 class GameViewModel : ViewModel() {
-    private val _gameUiState = MutableStateFlow(GameUiState(gamesList= Game.getAllGames(), searchList = Game.getAllGames()))
+    private val _gameUiState = MutableStateFlow(
+        GameUiState(
+            gamesList = Game.getAllGames(),
+            searchList = Game.getAllGames()
+        )
+    )
     val gameUiState = _gameUiState.asStateFlow()
 
     //**********************************************************************************************************************
@@ -30,73 +35,118 @@ class GameViewModel : ViewModel() {
     var gameApiState: GameApiState by mutableStateOf(GameApiState.Loading)
         private set
 
+    var gameDetailApiState: DetailGameApiState by mutableStateOf(DetailGameApiState.Loading)
+        private set
+
+    var popularGamesOfThisYearApiState: PopularGamesOfThisYearApiState by mutableStateOf(
+        PopularGamesOfThisYearApiState.Loading
+    )
+        private set
+
+    var popularGamesOfAllTimeApiState: PopularGamesOfAllTimeApiState by mutableStateOf(
+        PopularGamesOfAllTimeApiState.Loading
+    )
+        private set
+
+
     init {
         getApiGames()
         getMostPopularGamesOfThisYear()
         getMostPopularGamesOfAllTime()
+        getDetailGameById(3498)
     }
 
     private fun getApiGames() {
-        viewModelScope.launch {
 
+        viewModelScope.launch {
+            try {
+                //Ophalen van de data
                 val result = gameService.getGames()
+
+                //Update de beginstate van gameslist en searchlist
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        gamesList = result.asDomainObjects(),
+                        searchList = result.asDomainObjects()
+                    )
+                }
+
+                //Update de gameApiState
                 gameApiState = GameApiState.Success(result.asDomainObjects())
+
+                //Log de resultaten
                 Log.i("getApiGames", "getApiGames: ${result.asDomainObjects()}}")
+            }
+            catch (e: Exception) {
+                gameApiState = GameApiState.Error
+            }
+
         }
     }
 
-    private fun getMostPopularGamesOfThisYear(){
+    fun getDetailGameById(gameId: Int) {
+
         viewModelScope.launch {
-            val result = gameService.getMostPopularGamesOfThisYear()
-            gameApiState = GameApiState.Success(result.asDomainObjects())
+            try {
+                //Ophalen van de data
+                val result = gameService.getGameDetailById(gameId)
 
-            Log.i("getMostPopularGamesOfThisYear", "getMostPopularGamesOfThisYear: ${result.asDomainObjects()}}")
+
+                //Update de DetailGameApiState
+                gameDetailApiState = DetailGameApiState.Success(result.asDomainObject())
+
+                //Log de resultaten
+                Log.i("getDetailGameById", "getDetailGameById: ${result}}")
+            }
+            catch (e: Exception) {
+                gameDetailApiState = DetailGameApiState.Error
+            }
         }
     }
 
-    private fun getMostPopularGamesOfAllTime(){
+    private fun getMostPopularGamesOfThisYear() {
         viewModelScope.launch {
-            val result = gameService.getMostPopularGamesOfAllTime()
-            gameApiState = GameApiState.Success(result.asDomainObjects())
+            try {
+                //Ophalen van de data
+                val result = gameService.getMostPopularGamesOfThisYear()
 
-            Log.i("getMostPopularGamesOfAllTime", "getMostPopularGamesOfAllTime: ${result.asDomainObjects()}}")
+                //Update de PopularGamesOfThisYearApiState
+                popularGamesOfThisYearApiState =
+                    PopularGamesOfThisYearApiState.Success(result.asDomainObjects())
+
+                //Log de resultaten
+                Log.i(
+                    "getMostPopularGamesOfThisYear",
+                    "getMostPopularGamesOfThisYear: ${result.asDomainObjects()}}"
+                )
+            }
+            catch (e: Exception) {
+                popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
+            }
         }
     }
 
+    private fun getMostPopularGamesOfAllTime() {
+        viewModelScope.launch {
+            try {
+                //Ophalen van de data
+                val result = gameService.getMostPopularGamesOfAllTime()
 
+                //Update de PopularGamesOfAllTimeApiState
+                popularGamesOfAllTimeApiState =
+                    PopularGamesOfAllTimeApiState.Success(result.asDomainObjects())
 
-
-
-    //**********************************************************************************************************************
-
-    //gameUiState to getGameById
-    fun getGameById(gameId: Int): Game {
-        return gameUiState.value.gamesList.find { it.id == gameId }!!
+                //Log de resultaten
+                Log.i(
+                    "getMostPopularGamesOfAllTime",
+                    "getMostPopularGamesOfAllTime: ${result.asDomainObjects()}}"
+                )
+            }
+            catch (e: Exception) {
+                popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
+            }
+        }
     }
-
-
-    //**********************************************************************************************************************
-    //SEARCH
-//    private val _searchText = MutableStateFlow("")
-//    val searchText = _searchText.asStateFlow()
-
-//    fun onSearchTextChange(text: String) {
-//        _gameUiState.update {
-//            it.copy(searchText = text)
-//        }
-////        _searchText.value = text
-//    }
-
-//    private val _searchList = MutableStateFlow(gameUiState.value.gamesList)
-//    val searchList = gameUiState
-//        .combine(_searchList) { uiState, searchList ->
-//            if (uiState.searchText.isEmpty()) {
-//                searchList
-//            } else {
-//                searchList.filter { it.title.contains(uiState.searchText, ignoreCase = true) }
-//            }
-//        }
-//        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _searchList.value)
 
     //**********************************************************************************************************************
     //SEARCH

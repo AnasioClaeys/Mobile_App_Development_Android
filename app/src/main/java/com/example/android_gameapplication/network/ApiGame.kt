@@ -41,7 +41,7 @@ data class PlatformDetails(
 
 
 fun ApiResponse .asDomainObjects(): List<Game> {
-    var domainList = this.results.map {
+    return this.results.map {
         Game(
             id = it.id,
             name = it.name,
@@ -51,5 +51,17 @@ fun ApiResponse .asDomainObjects(): List<Game> {
             backgroundImage = it.backgroundImage
         )
     }
-    return domainList
+
+}
+
+
+fun ApiGame .asDomainObject(): Game {
+    return Game(
+        id = this.id,
+        name = this.name,
+        released = this.released,
+        genres = this.genres?.map { genre -> genre.name } ?: listOf(),
+        platforms = this.platforms?.map { platform -> platform.platform.name } ?: listOf(),
+        backgroundImage = this.backgroundImage
+    )
 }
