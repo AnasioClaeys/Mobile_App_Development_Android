@@ -1,6 +1,5 @@
 package com.example.android_gameapplication.ui.detailpage
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -10,11 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.android_gameapplication.R
 import com.example.android_gameapplication.model.Game
 
 @Composable
@@ -40,39 +37,14 @@ fun Detailpage(game: Game, modifier: Modifier = Modifier) {
                 fontSize = 28.sp
             )
 
-            Text(
-                modifier = modifier
-                    .padding(start = 8.dp),
-                text = "Summary:",
-                fontSize = 22.sp
-            )
-
-            Text(
-                modifier = modifier.padding(start = 8.dp),
-                text = "blaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                fontSize = 18.sp
-            )
 
             ComponentRow("Genres", game.genres)
 
             ComponentRow("Platforms", game.platforms)
 
+            ComponentRow(title = "Release date:", component = listOf("${game.released}"))
 
-            Text(
-                modifier = modifier.padding(8.dp),
-                text = "Release date:",
-                fontSize = 22.sp
-            )
-
-            FilledTonalButton(
-                onClick = {
-                    // Handle button click here if needed
-                },
-                content = {
-                    Text(text = "${game.released}")
-                },
-                modifier = modifier.padding(start = 8.dp)
-            )
+            ComponentRow(title = "Average Playtime", component = listOf("${game.playtime} hours"))
         }
 
     }

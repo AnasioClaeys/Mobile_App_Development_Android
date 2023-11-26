@@ -21,7 +21,8 @@ data class ApiGame(
     val genres: List<Genre>?,
     val platforms: List<Platform>?,
     @SerialName("background_image")
-    val backgroundImage: String
+    val backgroundImage: String,
+    val playtime: Int,
 )
 
 @Serializable
@@ -48,7 +49,8 @@ fun ApiResponse .asDomainObjects(): List<Game> {
             released = it.released,
             genres = it.genres?.map { genre -> genre.name } ?: listOf(),
             platforms = it.platforms?.map { platform -> platform.platform.name } ?: listOf(),
-            backgroundImage = it.backgroundImage
+            backgroundImage = it.backgroundImage,
+            playtime = it.playtime
         )
     }
 
@@ -62,6 +64,7 @@ fun ApiGame .asDomainObject(): Game {
         released = this.released,
         genres = this.genres?.map { genre -> genre.name } ?: listOf(),
         platforms = this.platforms?.map { platform -> platform.platform.name } ?: listOf(),
-        backgroundImage = this.backgroundImage
+        backgroundImage = this.backgroundImage,
+        playtime = this.playtime
     )
 }
