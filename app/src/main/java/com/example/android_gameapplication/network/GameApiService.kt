@@ -14,17 +14,22 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
-
+import java.util.Calendar
 
 
 interface GameApiService {
     @GET("games")
     suspend fun getGames(@Query("key") apiKey: String = ApiKeys.API_KEY): ApiResponse
 
+    private fun calculateThisYearDates(): String {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        return "$year-01-01,$year-12-31"
+    }
+
     @GET("games")
     suspend fun getMostPopularGamesOfThisYear(
-        @Query("dates") dates: String = "2023-01-01,2023-12-31",
+        @Query("dates") dates: String = calculateThisYearDates(),
         @Query("ordering") ordering: String = "-added",
         @Query("page_size") pageSize: Int = 10,
         @Query("key") apiKey: String = ApiKeys.API_KEY
