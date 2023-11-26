@@ -5,10 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.android_gameapplication.GamesApplication
+import com.example.android_gameapplication.data.GamesRepository
 import com.example.android_gameapplication.model.Game
 import com.example.android_gameapplication.network.DetailGameApiState
-import com.example.android_gameapplication.network.GameApi.gameService
 import com.example.android_gameapplication.network.GameApiState
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
@@ -20,11 +25,13 @@ import kotlinx.coroutines.launch
 import com.example.android_gameapplication.network.asDomainObjects
 
 
-class GameViewModel : ViewModel() {
+class GameViewModel(
+    private val gamesRepository: GamesRepository) : ViewModel() {
     private val _gameUiState = MutableStateFlow(
         GameUiState(
-            gamesList = Game.getAllGames(),
-            searchList = Game.getAllGames()
+            gamesList = emptyList(),
+            searchList = emptyList(),
+            searchText = ""
         )
     )
     val gameUiState = _gameUiState.asStateFlow()
@@ -53,7 +60,6 @@ class GameViewModel : ViewModel() {
         getApiGames()
         getMostPopularGamesOfThisYear()
         getMostPopularGamesOfAllTime()
-        getDetailGameById(3498)
     }
 
     private fun getApiGames() {
@@ -61,21 +67,21 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 //Ophalen van de data
-                val result = gameService.getGames()
+                val result = gamesRepository.getGames()
 
                 //Update de beginstate van gameslist en searchlist
                 _gameUiState.update { currentState ->
                     currentState.copy(
-                        gamesList = result.asDomainObjects(),
-                        searchList = result.asDomainObjects()
+                        gamesList = result,
+                        searchList = result
                     )
                 }
 
                 //Update de gameApiState
-                gameApiState = GameApiState.Success(result.asDomainObjects())
+                gameApiState = GameApiState.Success(result)
 
                 //Log de resultaten
-                Log.i("getApiGames", "getApiGames: ${result.asDomainObjects()}}")
+                Log.i("getApiGames", "getApiGames: ${result}}")
             }
             catch (e: Exception) {
                 gameApiState = GameApiState.Error
@@ -89,11 +95,11 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 //Ophalen van de data
-                val result = gameService.getGameDetailById(gameId)
+                val result = gamesRepository.getDetailGameById(gameId)
 
 
                 //Update de DetailGameApiState
-                gameDetailApiState = DetailGameApiState.Success(result.asDomainObject())
+                gameDetailApiState = DetailGameApiState.Success(result)
 
                 //Log de resultaten
                 Log.i("getDetailGameById", "getDetailGameById: ${result}}")
@@ -108,16 +114,16 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 //Ophalen van de data
-                val result = gameService.getMostPopularGamesOfThisYear()
+                val result = gamesRepository.getMostPopularGamesOfThisYear()
 
                 //Update de PopularGamesOfThisYearApiState
                 popularGamesOfThisYearApiState =
-                    PopularGamesOfThisYearApiState.Success(result.asDomainObjects())
+                    PopularGamesOfThisYearApiState.Success(result)
 
                 //Log de resultaten
                 Log.i(
                     "getMostPopularGamesOfThisYear",
-                    "getMostPopularGamesOfThisYear: ${result.asDomainObjects()}}"
+                    "getMostPopularGamesOfThisYear: ${result}}"
                 )
             }
             catch (e: Exception) {
@@ -130,16 +136,16 @@ class GameViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 //Ophalen van de data
-                val result = gameService.getMostPopularGamesOfAllTime()
+                val result = gamesRepository.getMostPopularGamesOfAllTime()
 
                 //Update de PopularGamesOfAllTimeApiState
                 popularGamesOfAllTimeApiState =
-                    PopularGamesOfAllTimeApiState.Success(result.asDomainObjects())
+                    PopularGamesOfAllTimeApiState.Success(result)
 
                 //Log de resultaten
                 Log.i(
                     "getMostPopularGamesOfAllTime",
-                    "getMostPopularGamesOfAllTime: ${result.asDomainObjects()}}"
+                    "getMostPopularGamesOfAllTime: ${result}}"
                 )
             }
             catch (e: Exception) {
@@ -161,6 +167,18 @@ class GameViewModel : ViewModel() {
                     currentState.gamesList.filter { it.name.contains(text, ignoreCase = true) }
                 }
             )
+        }
+    }
+
+    //**********************************************************************************************************************
+    //REPOSITORY
+    companion object{
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = this[APPLICATION_KEY] as GamesApplication
+                val gamesRepository = application.container.gamesRepository
+                GameViewModel(gamesRepository)
+            }
         }
     }
 

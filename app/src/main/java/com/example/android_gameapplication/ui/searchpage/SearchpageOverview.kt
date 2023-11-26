@@ -14,14 +14,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.android_gameapplication.data.gamesList
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
-    val viewModel: GameViewModel = viewModel()
+    val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
     val gameUiState by viewModel.gameUiState.collectAsState()
 
     val searchText = gameUiState.searchText
