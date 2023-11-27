@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,15 +14,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.android_gameapplication.R
+import com.example.android_gameapplication.model.Game
 import com.example.android_gameapplication.network.GameApiState
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @Composable
-fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
+fun HomepageOverview(
+    onCarousel: (Int) -> Unit,
+    onListPopularGamesAllTime: () -> Unit,
+    onListPopularGamesOfThisYear: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
     val gameUiState by viewModel.gameUiState.collectAsState()
     val gamesList = gameUiState.gamesList
@@ -32,11 +41,15 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
 
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            //modifier padding top and bottom must be 16.dp
+            .padding(top = 26.dp, bottom = 26.dp)
     ) {
 
 
-        when(popularGamesOfThisYearApiState){
+        when (popularGamesOfThisYearApiState) {
             is PopularGamesOfThisYearApiState.Loading -> {
                 Box(modifier = modifier.fillMaxSize()) {
                     CircularProgressIndicator(
@@ -46,19 +59,19 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
                     )
                 }
             }
-            is PopularGamesOfThisYearApiState.Error -> Text("Couldn't load...")
+
+            is PopularGamesOfThisYearApiState.Error -> Text(stringResource(R.string.couldn_t_load))
             is PopularGamesOfThisYearApiState.Success -> MainComponentHomepage(
-                title = "Popular games in 2023",
+                title = stringResource(R.string.home_title_popular_games_in_YEAR),
                 gamesList = popularGamesOfThisYearApiState.games,
+                onList = onListPopularGamesOfThisYear,
                 onCarousel = onCarousel
             )
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
 
-
-        Spacer(modifier = modifier.height(8.dp))
-
-        when(popularGamesOfAllTimeApiState){
+        when (popularGamesOfAllTimeApiState) {
             is PopularGamesOfAllTimeApiState.Loading -> {
                 Box(modifier = modifier.fillMaxSize()) {
                     CircularProgressIndicator(
@@ -68,10 +81,12 @@ fun HomepageOverview(onCarousel: (Int) -> Unit,modifier: Modifier = Modifier) {
                     )
                 }
             }
-            is PopularGamesOfAllTimeApiState.Error -> Text("Couldn't load...")
+
+            is PopularGamesOfAllTimeApiState.Error -> Text(stringResource(R.string.couldn_t_load))
             is PopularGamesOfAllTimeApiState.Success -> MainComponentHomepage(
-                title = "Popular games of all time",
+                title = stringResource(R.string.home_title_popular_games_of_all_time),
                 gamesList = popularGamesOfAllTimeApiState.games,
+                onList = onListPopularGamesAllTime,
                 onCarousel = onCarousel
             )
         }

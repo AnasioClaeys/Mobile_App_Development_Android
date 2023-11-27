@@ -12,5 +12,7 @@ enum class Destinations(
 
     Start,
     Search,
-    DetailPage
+    DetailPage,
+    ListPagePopularGamesAllTime,
+    ListPagePopularGamesOfThisYear,
 }

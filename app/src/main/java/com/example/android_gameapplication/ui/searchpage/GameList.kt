@@ -14,8 +14,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,6 +28,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -32,22 +39,15 @@ import com.example.android_gameapplication.R
 import com.example.android_gameapplication.model.Game
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modifier) {
-    Card(
+    ListItem(
         modifier = modifier
             .padding(6.dp)
             .clickable(onClick = { onListItem(game.id) }),
-        shape = RoundedCornerShape(15.dp),
-//        elevation = 8.dp
-    ) {
-        Row(
-            modifier = modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .height(60.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        headlineText = { Text(text = game.name, style = MaterialTheme.typography.titleMedium) },
+        leadingContent = {
             AsyncImage(
                 model= game.backgroundImage,
                 contentDescription = game.name,
@@ -59,25 +59,22 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modi
                     )
 
             )
+        },
+        trailingContent = {
 
-            Column(
-                modifier = modifier
-                    .padding(horizontal = 20.dp)
-                    .weight(1f)
-            ) {
-                Text(
-                    text = game.name,
-                    fontSize = 20.sp,
-                    color = Color(0xFF2b2b2b)
+                Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = stringResource(
+                    R.string.listItem_icon_go_to_detail_page
                 )
-            }
-            IconButton(
-                onClick = { onListItem(game.id) }
-            ) {
-                Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = "Arrow Icon")
-            }
-        }
-    }
+                )
+        },
+
+    )
+    Divider(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(1.dp),
+    )
+
 }
 
 @Composable
@@ -91,10 +88,3 @@ fun GamesList(gamesList: List<Game>, onListItem: (Int) -> Unit) {
         }
     }
 }
-
-
-/*@Preview
-@Composable
-fun GameListPreview() {
-    GamesList(gamesList = gamesList)
-}*/

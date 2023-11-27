@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import com.example.android_gameapplication.ui.layoutComponents.GameApp
 import com.example.android_gameapplication.ui.theme.Android_GameApplicationTheme
 
+//import com.example.android_gameapplication.ui.theme.Android_GameApplicationTheme
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

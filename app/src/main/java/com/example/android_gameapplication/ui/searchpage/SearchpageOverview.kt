@@ -13,7 +13,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.android_gameapplication.R
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +34,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             value = searchText,
             onValueChange = viewModel::onSearchTextChange,
             modifier = modifier.fillMaxWidth(),
-            placeholder = { Text(text = "Search") })
+            placeholder = { Text(text = stringResource(R.string.search_placeholder)) })
 
         GamesList(
             gamesList = searchList,
