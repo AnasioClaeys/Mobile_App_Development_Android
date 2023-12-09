@@ -38,16 +38,16 @@ class GameViewModel(
 
     //**********************************************************************************************************************
     //Detailpage from list to string with , and space
-    fun listToString(list: List<String>): String {
-        var string = ""
-        for (i in list.indices) {
-            string += list[i]
-            if (i != list.size - 1) {
-                string += ", "
-            }
-        }
-        return string
-    }
+//    fun listToString(list: List<String>): String {
+//        var string = ""
+//        for (i in list.indices) {
+//            string += list[i]
+//            if (i != list.size - 1) {
+//                string += ", "
+//            }
+//        }
+//        return string
+//    }
 
     //**********************************************************************************************************************
     //api

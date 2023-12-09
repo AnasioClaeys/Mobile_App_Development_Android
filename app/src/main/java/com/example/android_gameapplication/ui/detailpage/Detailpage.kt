@@ -45,15 +45,21 @@ fun Detailpage(game: Game, modifier: Modifier = Modifier) {
             )
 
 
-            ComponentRow(stringResource(R.string.detail_title_genres), viewModel.listToString(game.genres))
+            ComponentRow(stringResource(R.string.detail_title_genres), game.genres)
 
-            ComponentRow(stringResource(R.string.detail_title_platforms), viewModel.listToString(game.platforms))
+            ComponentRow(stringResource(R.string.detail_title_platforms), game.platforms)
 
-            ComponentRow(title = stringResource(R.string.detail_title_release_date), component = game.released)
-
-            ComponentRow(title = stringResource(R.string.detail_title_average_playtime), component = stringResource(
-                R.string.detail_item_playtime_hours, game.playtime
+            ComponentRow(
+                title = stringResource(R.string.detail_title_release_date),
+                component = listOf(game.released)
             )
+
+            ComponentRow(
+                title = stringResource(R.string.detail_title_average_playtime), component = listOf(
+                    stringResource(
+                        R.string.detail_item_playtime_hours, game.playtime
+                    )
+                )
             )
         }
 
