@@ -46,7 +46,7 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modi
         modifier = modifier
             .padding(6.dp)
             .clickable(onClick = { onListItem(game.id) }),
-        headlineText = { Text(text = game.name, style = MaterialTheme.typography.titleMedium) },
+        headlineContent = { Text(text = game.name, style = MaterialTheme.typography.titleMedium) },
         leadingContent = {
             AsyncImage(
                 model= game.backgroundImage,

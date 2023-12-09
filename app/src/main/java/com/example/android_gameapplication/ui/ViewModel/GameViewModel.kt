@@ -31,7 +31,9 @@ class GameViewModel(
         GameUiState(
             gamesList = emptyList(),
             searchList = emptyList(),
-            searchText = ""
+            searchText = "",
+            searchActive = false,
+            searchListHistory = emptyList()
         )
     )
     val gameUiState = _gameUiState.asStateFlow()
@@ -182,6 +184,34 @@ class GameViewModel(
             )
         }
     }
+
+    fun setSearchText(text: String) {
+        _gameUiState.update { currentState ->
+            currentState.copy(
+                searchText = text
+            )
+        }
+    }
+
+    fun onSearchActiveChange(active: Boolean) {
+        _gameUiState.update { currentState ->
+            currentState.copy(
+                searchActive = active
+            )
+        }
+    }
+
+    fun addSearchListHistory(text: String) {
+        //Check if the searchListHistory already contains the text
+        if (!_gameUiState.value.searchListHistory.contains(text)) {
+            _gameUiState.update { currentState ->
+                currentState.copy(
+                    searchListHistory = currentState.searchListHistory + text
+                )
+            }
+        }
+    }
+
 
     //**********************************************************************************************************************
     //REPOSITORY
