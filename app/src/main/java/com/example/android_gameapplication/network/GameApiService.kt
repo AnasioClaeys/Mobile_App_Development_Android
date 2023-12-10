@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.android_gameapplication.keys.ApiKeys
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 
@@ -47,4 +48,9 @@ interface GameApiService {
         @Path("id") id:Int,
         @Query("key") apiKey: String = ApiKeys.API_KEY
     ): ApiGame
+}
+
+fun GameApiService.getGamesAsFlow() = flow{
+    emit(getMostPopularGamesOfAllTime())
+    emit(getMostPopularGamesOfThisYear())
 }

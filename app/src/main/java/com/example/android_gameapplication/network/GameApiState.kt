@@ -20,13 +20,11 @@ sealed interface DetailGameApiState {
 sealed interface PopularGamesOfThisYearApiState {
     object Error : PopularGamesOfThisYearApiState
     object Loading : PopularGamesOfThisYearApiState
-
-    data class Success(val games: List<Game>) : PopularGamesOfThisYearApiState
+    object Success : PopularGamesOfThisYearApiState
 }
 
 sealed interface PopularGamesOfAllTimeApiState {
     object Error : PopularGamesOfAllTimeApiState
     object Loading : PopularGamesOfAllTimeApiState
-
-    data class Success(val games: List<Game>) : PopularGamesOfAllTimeApiState
+    object Success : PopularGamesOfAllTimeApiState
 }

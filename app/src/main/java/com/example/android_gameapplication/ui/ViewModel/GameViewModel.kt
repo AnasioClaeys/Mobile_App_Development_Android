@@ -11,22 +11,25 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android_gameapplication.GamesApplication
-import com.example.android_gameapplication.data.GamesRepository
+import com.example.android_gameapplication.data.GameRepository
 import com.example.android_gameapplication.model.Game
 import com.example.android_gameapplication.network.DetailGameApiState
 import com.example.android_gameapplication.network.GameApiState
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
-import com.example.android_gameapplication.network.asDomainObject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.example.android_gameapplication.network.asDomainObjects
 
 
 class GameViewModel(
-    private val gamesRepository: GamesRepository) : ViewModel() {
+    private val gameRepository: GameRepository
+) : ViewModel() {
     private val _gameUiState = MutableStateFlow(
         GameUiState(
             gamesList = emptyList(),
@@ -70,6 +73,10 @@ class GameViewModel(
     )
         private set
 
+    lateinit var uiListPopularGamesOfThisYearState: StateFlow<List<Game>>
+
+    lateinit var uiListPopularGamesOfAllTimeState: StateFlow<List<Game>>
+
 
     init {
         getApiGames()
@@ -82,7 +89,7 @@ class GameViewModel(
         viewModelScope.launch {
             try {
                 //Ophalen van de data
-                val result = gamesRepository.getGames()
+                val result = gameRepository.getGames()
 
                 //Update de beginstate van gameslist en searchlist
                 _gameUiState.update { currentState ->
@@ -97,8 +104,7 @@ class GameViewModel(
 
                 //Log de resultaten
                 Log.i("getApiGames", "getApiGames: ${result}}")
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 gameApiState = GameApiState.Error
             }
 
@@ -110,7 +116,7 @@ class GameViewModel(
         viewModelScope.launch {
             try {
                 //Ophalen van de data
-                val result = gamesRepository.getDetailGameById(gameId)
+                val result = gameRepository.getDetailGameById(gameId)
 
 
                 //Update de DetailGameApiState
@@ -118,54 +124,70 @@ class GameViewModel(
 
                 //Log de resultaten
                 Log.i("getDetailGameById", "getDetailGameById: ${result}}")
-            }
-            catch (e: Exception) {
+            } catch (e: Exception) {
                 gameDetailApiState = DetailGameApiState.Error
             }
         }
     }
 
     private fun getMostPopularGamesOfThisYear() {
-        viewModelScope.launch {
-            try {
+        try {
+            viewModelScope.launch {
+                gameRepository.refresh()
+            }
+
                 //Ophalen van de data
-                val result = gamesRepository.getMostPopularGamesOfThisYear()
+//                val result = gameRepository.getMostPopularGamesOfThisYear()
+            uiListPopularGamesOfThisYearState = gameRepository.getMostPopularGamesOfThisYear().stateIn(
+                scope = viewModelScope,
+                started= SharingStarted.WhileSubscribed(5_000L),
+                initialValue = listOf()
+            )
 
                 //Update de PopularGamesOfThisYearApiState
                 popularGamesOfThisYearApiState =
-                    PopularGamesOfThisYearApiState.Success(result)
+                    PopularGamesOfThisYearApiState.Success
 
                 //Log de resultaten
-                Log.i(
-                    "getMostPopularGamesOfThisYear",
-                    "getMostPopularGamesOfThisYear: ${result}}"
-                )
-            }
-            catch (e: Exception) {
-                popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
-            }
+//                Log.i(
+//                    "getMostPopularGamesOfThisYear",
+//                    "getMostPopularGamesOfThisYear: ${result}}"
+//                )
+
+
+        } catch (e: Exception) {
+            popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
         }
     }
 
     private fun getMostPopularGamesOfAllTime() {
+        try {
         viewModelScope.launch {
-            try {
+            gameRepository.refresh()
+        }
+
                 //Ophalen van de data
-                val result = gamesRepository.getMostPopularGamesOfAllTime()
+//                val result = gameRepository.getMostPopularGamesOfAllTime()
+            uiListPopularGamesOfAllTimeState = gameRepository.getMostPopularGamesOfAllTime().stateIn(
+                scope = viewModelScope,
+                started= SharingStarted.WhileSubscribed(5_000L),
+                initialValue = listOf()
+            )
+
 
                 //Update de PopularGamesOfAllTimeApiState
                 popularGamesOfAllTimeApiState =
-                    PopularGamesOfAllTimeApiState.Success(result)
+                    PopularGamesOfAllTimeApiState.Success
 
                 //Log de resultaten
-                Log.i(
-                    "getMostPopularGamesOfAllTime",
-                    "getMostPopularGamesOfAllTime: ${result}}"
-                )
-            }
-            catch (e: Exception) {
-                popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
-            }
+//                Log.i(
+//                    "getMostPopularGamesOfAllTime",
+//                    "getMostPopularGamesOfAllTime: ${result}}"
+//                )
+
+        }
+        catch (e: Exception) {
+            popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
         }
     }
 
@@ -215,11 +237,11 @@ class GameViewModel(
 
     //**********************************************************************************************************************
     //REPOSITORY
-    companion object{
+    companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as GamesApplication
-                val gamesRepository = application.container.gamesRepository
+                val gamesRepository = application.container.gameRepository
                 GameViewModel(gamesRepository)
             }
         }
