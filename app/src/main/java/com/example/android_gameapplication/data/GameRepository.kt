@@ -72,15 +72,20 @@ class ApiGameRepository(
 
         gameDao.insert(dbGame)
 
-
+//        gameDao.insert(game.asDbGame())
     }
 
     override fun getMostPopularGamesOfThisYear(): Flow<List<Game>> {
         return gameDao.getMostPopularGamesOfThisYear().map {
             it.asDomainGames()
         }.onEach {
+
             if (it.isEmpty()) {
-                refresh()
+                try {
+                    refresh()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
@@ -90,19 +95,25 @@ class ApiGameRepository(
             it.asDomainGames()
         }.onEach {
             if (it.isEmpty()) {
-                refresh()
+                try {
+                    refresh()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
 
     override suspend fun refresh() {
-        gamesApiService.getGamesAsFlow().collect {
-            for (game in it.results) {
-                Log.i("TEST", "refresh: ${game.asDomainObject()}")
-
-                insert(game.asDomainObject())
+        try {
+            gamesApiService.getGamesAsFlow().collect {
+                for (game in it.results) {
+                    insert(game.asDomainObject())
+                }
             }
         }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
-
 }

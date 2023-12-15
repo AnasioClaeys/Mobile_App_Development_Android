@@ -103,7 +103,7 @@ class GameViewModel(
                 gameApiState = GameApiState.Success(result)
 
                 //Log de resultaten
-                Log.i("getApiGames", "getApiGames: ${result}}")
+//                Log.i("getApiGames", "getApiGames: ${result}}")
             } catch (e: Exception) {
                 gameApiState = GameApiState.Error
             }
@@ -123,7 +123,7 @@ class GameViewModel(
                 gameDetailApiState = DetailGameApiState.Success(result)
 
                 //Log de resultaten
-                Log.i("getDetailGameById", "getDetailGameById: ${result}}")
+//                Log.i("getDetailGameById", "getDetailGameById: ${result}}")
             } catch (e: Exception) {
                 gameDetailApiState = DetailGameApiState.Error
             }

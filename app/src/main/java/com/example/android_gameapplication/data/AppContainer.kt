@@ -8,6 +8,8 @@ import com.example.android_gameapplication.network.GameApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 interface AppContainer {
@@ -23,8 +25,18 @@ class DefaultAppContainer(private val applicationContext: Context) : AppContaine
         .addConverterFactory(json
             .asConverterFactory("application/json".toMediaType()))
         .baseUrl(BASE_URL)
+        .client(createOkHttpClient())
         .build()
 
+    private fun createOkHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor().apply {
+            setLevel(HttpLoggingInterceptor.Level.BASIC)
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .build()
+    }
 
     private val gameService: GameApiService by lazy {
         retrofit.create(GameApiService::class.java)
