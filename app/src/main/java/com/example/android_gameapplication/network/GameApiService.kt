@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.android_gameapplication.keys.ApiKeys
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 
@@ -21,6 +22,13 @@ interface GameApiService {
     @GET("games")
     suspend fun getGames(@Query("key") apiKey: String = ApiKeys.API_KEY): ApiResponse
 
+    @GET("games")
+    suspend fun searchGames(
+        @Query("search") search: String,
+        @Query("page_size") pageSize: Int = 10,
+        @Query("key") apiKey: String = ApiKeys.API_KEY,
+    ): ApiResponse
+
     private fun calculateThisYearDates(): String {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -34,6 +42,7 @@ interface GameApiService {
         @Query("page_size") pageSize: Int = 10,
         @Query("key") apiKey: String = ApiKeys.API_KEY
     ): ApiResponse
+
 
     @GET("games")
     suspend fun getMostPopularGamesOfAllTime(

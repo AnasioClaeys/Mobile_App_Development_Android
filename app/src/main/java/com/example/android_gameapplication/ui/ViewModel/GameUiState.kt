@@ -9,4 +9,7 @@ data class GameUiState(
 
     val searchText: String = "",
     val searchList: List<Game> = listOf(),
+    val searchActive: Boolean = false,
+    val searchListHistory: List<String> = listOf(),
+    val hasSearched: Boolean = false
 )

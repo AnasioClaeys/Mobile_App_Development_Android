@@ -38,6 +38,9 @@ fun HomepageOverview(
     val popularGamesOfThisYearApiState = viewModel.popularGamesOfThisYearApiState
     val popularGamesOfAllTimeApiState = viewModel.popularGamesOfAllTimeApiState
 
+    val uiListPopularGamesOfThisYearState by viewModel.uiListPopularGamesOfThisYearState.collectAsState()
+    val uiListPopularGamesAllTimeState by viewModel.uiListPopularGamesOfAllTimeState.collectAsState()
+
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -63,7 +66,7 @@ fun HomepageOverview(
             is PopularGamesOfThisYearApiState.Error -> Text(stringResource(R.string.couldn_t_load))
             is PopularGamesOfThisYearApiState.Success -> MainComponentHomepage(
                 title = stringResource(R.string.home_title_popular_games_in_YEAR),
-                gamesList = popularGamesOfThisYearApiState.games,
+                gamesList = uiListPopularGamesOfThisYearState,
                 onList = onListPopularGamesOfThisYear,
                 onCarousel = onCarousel
             )
@@ -85,7 +88,7 @@ fun HomepageOverview(
             is PopularGamesOfAllTimeApiState.Error -> Text(stringResource(R.string.couldn_t_load))
             is PopularGamesOfAllTimeApiState.Success -> MainComponentHomepage(
                 title = stringResource(R.string.home_title_popular_games_of_all_time),
-                gamesList = popularGamesOfAllTimeApiState.games,
+                gamesList = uiListPopularGamesAllTimeState,
                 onList = onListPopularGamesAllTime,
                 onCarousel = onCarousel
             )

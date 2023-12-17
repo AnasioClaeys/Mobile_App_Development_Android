@@ -14,6 +14,8 @@
     <string name="go_back">Go back</string>
     <string name="listItem_icon_go_to_detail_page">Go to detail page</string>
     <string name="search_placeholder">Search</string>
+    <string name="close_search">Close Search</string>
+    <string name="quick_results">Quick Results</string>
     <!--    <string name="searchpage_title">Search page</string>-->
 <!--    <string name="detailpage_title">Detail page</string>-->
 

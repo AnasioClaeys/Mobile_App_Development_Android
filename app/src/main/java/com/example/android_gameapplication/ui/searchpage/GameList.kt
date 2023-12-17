@@ -46,7 +46,7 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modi
         modifier = modifier
             .padding(6.dp)
             .clickable(onClick = { onListItem(game.id) }),
-        headlineText = { Text(text = game.name, style = MaterialTheme.typography.titleMedium) },
+        headlineContent = { Text(text = game.name, style = MaterialTheme.typography.titleMedium) },
         leadingContent = {
             AsyncImage(
                 model= game.backgroundImage,
@@ -78,13 +78,21 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modi
 }
 
 @Composable
-fun GamesList(gamesList: List<Game>, onListItem: (Int) -> Unit) {
-    LazyColumn {
-        items(gamesList) { game ->
-            GameListItem(
-                game = game,
-                onListItem = onListItem
-            )
+fun GamesList(gamesList: List<Game>, onListItem: (Int) -> Unit, hasSearched: Boolean) {
+    if (gamesList.isNullOrEmpty()&& hasSearched) {
+        Text(
+            text = "No games found",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(16.dp)
+        )
+    } else {
+        LazyColumn {
+            items(gamesList) { game ->
+                GameListItem(
+                    game = game,
+                    onListItem = onListItem
+                )
+            }
         }
     }
 }

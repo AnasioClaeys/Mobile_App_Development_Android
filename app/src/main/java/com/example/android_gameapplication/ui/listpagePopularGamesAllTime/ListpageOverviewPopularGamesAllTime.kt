@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,6 +21,8 @@ import com.example.android_gameapplication.ui.searchpage.GamesList
 fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
     val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
 
+    val uiListPopularGamesAllTimeState by viewModel.uiListPopularGamesOfAllTimeState.collectAsState()
+
     when (val popularGamesOfAllTime = viewModel.popularGamesOfAllTimeApiState) {
         is PopularGamesOfAllTimeApiState.Loading -> {
             Box(modifier = modifier.fillMaxSize()) {
@@ -32,8 +36,9 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
 
         is PopularGamesOfAllTimeApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
         is PopularGamesOfAllTimeApiState.Success -> GamesList(
-            popularGamesOfAllTime.games,
-            onListItem
+            uiListPopularGamesAllTimeState,
+            onListItem,
+            true
         )
     }
 
