@@ -22,6 +22,13 @@ interface GameApiService {
     @GET("games")
     suspend fun getGames(@Query("key") apiKey: String = ApiKeys.API_KEY): ApiResponse
 
+    @GET("games")
+    suspend fun searchGames(
+        @Query("search") search: String,
+        @Query("page_size") pageSize: Int = 10,
+        @Query("key") apiKey: String = ApiKeys.API_KEY,
+    ): ApiResponse
+
     private fun calculateThisYearDates(): String {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -36,6 +43,7 @@ interface GameApiService {
         @Query("key") apiKey: String = ApiKeys.API_KEY
     ): ApiResponse
 
+
     @GET("games")
     suspend fun getMostPopularGamesOfAllTime(
         @Query("ordering") ordering: String = "-added",
@@ -48,9 +56,4 @@ interface GameApiService {
         @Path("id") id:Int,
         @Query("key") apiKey: String = ApiKeys.API_KEY
     ): ApiGame
-}
-
-fun GameApiService.getGamesAsFlow() = flow{
-    emit(getMostPopularGamesOfAllTime())
-    emit(getMostPopularGamesOfThisYear())
 }

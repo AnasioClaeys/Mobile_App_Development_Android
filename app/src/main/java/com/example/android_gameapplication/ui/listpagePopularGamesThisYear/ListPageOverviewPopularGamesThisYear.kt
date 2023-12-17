@@ -34,7 +34,7 @@ fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Mo
             }
         }
         is PopularGamesOfThisYearApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
-        is PopularGamesOfThisYearApiState.Success -> GamesList(uiListPopularGamesOfThisYearState, onListItem)
+        is PopularGamesOfThisYearApiState.Success -> GamesList(uiListPopularGamesOfThisYearState, onListItem,true)
     }
 
 }

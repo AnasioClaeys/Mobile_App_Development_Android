@@ -37,7 +37,8 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
         is PopularGamesOfAllTimeApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
         is PopularGamesOfAllTimeApiState.Success -> GamesList(
             uiListPopularGamesAllTimeState,
-            onListItem
+            onListItem,
+            true
         )
     }
 

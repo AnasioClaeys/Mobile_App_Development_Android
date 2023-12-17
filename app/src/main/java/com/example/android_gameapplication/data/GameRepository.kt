@@ -8,11 +8,17 @@ import com.example.android_gameapplication.data.database.asDbGame
 import com.example.android_gameapplication.data.database.asDomainGame
 import com.example.android_gameapplication.data.database.asDomainGames
 import com.example.android_gameapplication.model.Game
+import com.example.android_gameapplication.network.ApiResponse
 import com.example.android_gameapplication.network.GameApiService
+import com.example.android_gameapplication.network.GameApiServiceImpl
 import com.example.android_gameapplication.network.asDomainObject
 import com.example.android_gameapplication.network.asDomainObjects
-import com.example.android_gameapplication.network.getGamesAsFlow
+import com.example.android_gameapplication.network.getMostPopularGamesOfAllTimeAsFlow
+import com.example.android_gameapplication.network.getMostPopularGamesOfThisYearAsFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
@@ -22,20 +28,26 @@ interface GameRepository {
     //    suspend fun getMostPopularGamesOfThisYear(): List<Game>
 //    suspend fun getMostPopularGamesOfAllTime(): List<Game>
 
+    suspend fun searchGames(search: String): List<Game>
+
     suspend fun insert(game: Game)
-    suspend fun getDetailGameById(id: Int): Game
+
+    suspend fun getDetailGameById(id: Int): Flow<Game>
 
     fun getMostPopularGamesOfThisYear(): Flow<List<Game>>
 
     fun getMostPopularGamesOfAllTime(): Flow<List<Game>>
 
-    suspend fun refresh()
+    suspend fun refreshMostPopularGamesOfThisYear()
+
+    suspend fun refreshMostPopularGamesOfAllTime()
 
 }
 
 class ApiGameRepository(
     private val gamesApiService: GameApiService,
-    private val gameDao: GameDao
+    private val gameDao: GameDao,
+    private val gamesApiServiceImpl: GameApiServiceImpl
 ) : GameRepository {
 
     //API
@@ -43,66 +55,65 @@ class ApiGameRepository(
         return gamesApiService.getGames().asDomainObjects()
     }
 
-//    override suspend fun getMostPopularGamesOfThisYear(): List<Game> {
-//        return gamesApiService.getMostPopularGamesOfThisYear().asDomainObjects()
-//    }
-//
-//    override suspend fun getMostPopularGamesOfAllTime(): List<Game> {
-//        return gamesApiService.getMostPopularGamesOfAllTime().asDomainObjects()
-//    }
+    override suspend fun searchGames(search: String): List<Game> {
+        return gamesApiService.searchGames(search).asDomainObjects()
+    }
 
-    override suspend fun getDetailGameById(id: Int): Game {
-        return gamesApiService.getGameDetailById(id).asDomainObject()
+    //Database
+    override suspend fun getDetailGameById(id: Int): Flow<Game> = flow {
+        val localGame = gameDao.getDetailGameById(id)
+
+        if (localGame != null) {
+            emit(localGame.asDomainGame())
+        } else {
+            val apiGame = gamesApiService.getGameDetailById(id)
+            insert(apiGame.asDomainObject())
+            emit(apiGame.asDomainObject())
+        }
     }
 
 
-    //Database
+
 
     override suspend fun insert(game: Game) {
-        val isInMostPopularGamesOfThisYear = gamesApiService.getMostPopularGamesOfThisYear()
-            .results.any { it.id == game.id }
-
-        val isInMostPopularGamesOfAllTime = gamesApiService.getMostPopularGamesOfAllTime()
-            .results.any { it.id == game.id }
-
-        val dbGame = game.asDbGame().copy(
-            isInMostPopularGamesOfThisYear = isInMostPopularGamesOfThisYear,
-            isInMostPopularGamesOfAllTime = isInMostPopularGamesOfAllTime
-        )
-
-        gameDao.insert(dbGame)
-
-
+        gameDao.insert(game.asDbGame())
     }
 
     override fun getMostPopularGamesOfThisYear(): Flow<List<Game>> {
         return gameDao.getMostPopularGamesOfThisYear().map {
             it.asDomainGames()
-        }.onEach {
-            if (it.isEmpty()) {
-                refresh()
-            }
         }
     }
 
     override fun getMostPopularGamesOfAllTime(): Flow<List<Game>> {
         return gameDao.getMostPopularGamesOfAllTime().map {
             it.asDomainGames()
-        }.onEach {
-            if (it.isEmpty()) {
-                refresh()
-            }
         }
     }
 
-    override suspend fun refresh() {
-        gamesApiService.getGamesAsFlow().collect {
-            for (game in it.results) {
-                Log.i("TEST", "refresh: ${game.asDomainObject()}")
-
-                insert(game.asDomainObject())
+    override suspend fun refreshMostPopularGamesOfThisYear() {
+        try {
+            gamesApiServiceImpl.getMostPopularGamesOfThisYearAsFlow().collect {
+                for (game in it.results) {
+                    insert(game.asDomainObject())
+                }
             }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
+    override suspend fun refreshMostPopularGamesOfAllTime() {
+        try {
+            gamesApiServiceImpl.getMostPopularGamesOfAllTimeAsFlow().collect {
+                for (game in it.results) {
+                    insert(game.asDomainObject())
+                }
+            }
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }

@@ -47,25 +47,27 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
     val searchActive = gameUiState.searchActive
     val searchListHistory = gameUiState.searchListHistory
 
+    val searchQuery = viewModel.searchQuery.collectAsState()
+
 
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
 
         SearchBar(
-            query = searchText,
+            query = searchQuery.value,
             onQueryChange = viewModel::onSearchTextChange,
             onSearch = {
                 viewModel.onSearchActiveChange(false)
-                if(searchText.isNotEmpty()) {
-                    viewModel.addSearchListHistory(searchText)
+                if(searchQuery.value.isNotEmpty()) {
+                    viewModel.addSearchListHistory(searchQuery.value)
 
                 }
-                if(searchText==""){
+                if(searchQuery.value==""){
                     viewModel.onSearchTextChange("")
                 }
                 else{
-                    viewModel.setSearchText("")
+                    viewModel.onSearchTextChange(searchQuery.value)
                 }
             },
             active = searchActive,
@@ -82,7 +84,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                     Icon(
                         Icons.Outlined.Close,
                         modifier = Modifier.clickable {
-                            if(searchText.isNotEmpty()) {
+                            if(searchQuery.value.isNotEmpty()) {
                                 viewModel.onSearchTextChange("")
                             }
                             else{
@@ -123,14 +125,16 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
 
             GamesList(
                 gamesList = searchList,
-                onListItem = onListItem
+                onListItem = onListItem,
+                hasSearched = gameUiState.hasSearched
             )
 
         }
 
         GamesList(
             gamesList = searchList,
-            onListItem = onListItem
+            onListItem = onListItem,
+            hasSearched = gameUiState.hasSearched
         )
 
     }
