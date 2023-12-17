@@ -21,7 +21,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -60,8 +61,8 @@ class GameViewModel(
     var gameApiState: GameApiState by mutableStateOf(GameApiState.Loading)
         private set
 
-    var gameDetailApiState: DetailGameApiState by mutableStateOf(DetailGameApiState.Loading)
-        private set
+//    var gameDetailApiState: DetailGameApiState by mutableStateOf(DetailGameApiState.Loading)
+//        private set
 
     var popularGamesOfThisYearApiState: PopularGamesOfThisYearApiState by mutableStateOf(
         PopularGamesOfThisYearApiState.Loading
@@ -78,7 +79,9 @@ class GameViewModel(
     lateinit var uiListPopularGamesOfAllTimeState: StateFlow<List<Game>>
 
 
+
     init {
+        Log.d("GameViewModel", "Initializing GameViewModel")
         getApiGames()
         getMostPopularGamesOfThisYear()
         getMostPopularGamesOfAllTime()
@@ -111,38 +114,41 @@ class GameViewModel(
         }
     }
 
-    fun getDetailGameById(gameId: Int) {
+    // Nieuwe StateFlow voor detail game status
+    private val _gameDetailApiState = MutableStateFlow<DetailGameApiState>(DetailGameApiState.Loading)
+    val gameDetailApiState: StateFlow<DetailGameApiState> = _gameDetailApiState.asStateFlow()
 
+    // Functie om detail game data op te halen
+    fun getDetailGameById(gameId: Int) {
         viewModelScope.launch {
             try {
-                //Ophalen van de data
-                val result = gameRepository.getDetailGameById(gameId)
-
-
-                //Update de DetailGameApiState
-                gameDetailApiState = DetailGameApiState.Success(result)
-
-                //Log de resultaten
-//                Log.i("getDetailGameById", "getDetailGameById: ${result}}")
+                _gameDetailApiState.value = DetailGameApiState.Loading
+                gameRepository.getDetailGameById(gameId).collect { game ->
+                    _gameDetailApiState.value = DetailGameApiState.Success(game)
+                }
             } catch (e: Exception) {
-                gameDetailApiState = DetailGameApiState.Error
+                _gameDetailApiState.value = DetailGameApiState.Error
             }
         }
     }
 
-    private fun getMostPopularGamesOfThisYear() {
-        try {
-            viewModelScope.launch {
-                gameRepository.refresh()
-            }
+
+
+
+        private fun getMostPopularGamesOfThisYear() {
+            try {
+                viewModelScope.launch {
+                    gameRepository.refreshMostPopularGamesOfThisYear()
+                }
 
                 //Ophalen van de data
 //                val result = gameRepository.getMostPopularGamesOfThisYear()
-            uiListPopularGamesOfThisYearState = gameRepository.getMostPopularGamesOfThisYear().stateIn(
-                scope = viewModelScope,
-                started= SharingStarted.WhileSubscribed(5_000L),
-                initialValue = listOf()
-            )
+                uiListPopularGamesOfThisYearState =
+                    gameRepository.getMostPopularGamesOfThisYear().stateIn(
+                        scope = viewModelScope,
+                        started = SharingStarted.WhileSubscribed(5_000L),
+                        initialValue = listOf()
+                    )
 
                 //Update de PopularGamesOfThisYearApiState
                 popularGamesOfThisYearApiState =
@@ -155,24 +161,25 @@ class GameViewModel(
 //                )
 
 
-        } catch (e: Exception) {
-            popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
+            } catch (e: Exception) {
+                popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
+            }
         }
-    }
 
-    private fun getMostPopularGamesOfAllTime() {
-        try {
-        viewModelScope.launch {
-            gameRepository.refresh()
-        }
+        private fun getMostPopularGamesOfAllTime() {
+            try {
+                viewModelScope.launch {
+                    gameRepository.refreshMostPopularGamesOfAllTime()
+                }
 
                 //Ophalen van de data
 //                val result = gameRepository.getMostPopularGamesOfAllTime()
-            uiListPopularGamesOfAllTimeState = gameRepository.getMostPopularGamesOfAllTime().stateIn(
-                scope = viewModelScope,
-                started= SharingStarted.WhileSubscribed(5_000L),
-                initialValue = listOf()
-            )
+                uiListPopularGamesOfAllTimeState =
+                    gameRepository.getMostPopularGamesOfAllTime().stateIn(
+                        scope = viewModelScope,
+                        started = SharingStarted.WhileSubscribed(5_000L),
+                        initialValue = listOf()
+                    )
 
 
                 //Update de PopularGamesOfAllTimeApiState
@@ -185,66 +192,124 @@ class GameViewModel(
 //                    "getMostPopularGamesOfAllTime: ${result}}"
 //                )
 
+            } catch (e: Exception) {
+                popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
+            }
         }
-        catch (e: Exception) {
-            popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
+
+        //**********************************************************************************************************************
+        //SEARCH
+
+        private val _searchQuery = MutableStateFlow("")
+        val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+
+        init {
+            viewModelScope.launch {
+                _searchQuery
+                    .debounce(200) // Debounce tijd in milliseconden
+                    .distinctUntilChanged() // Voer alleen uit als de query verandert
+                    .collect { query ->
+                        performSearch(query)
+                    }
+            }
         }
-    }
 
-    //**********************************************************************************************************************
-    //SEARCH
-
-    fun onSearchTextChange(text: String) {
-        _gameUiState.update { currentState ->
-            currentState.copy(
-                searchText = text,
-                searchList = if (text.isEmpty()) {
-                    currentState.gamesList
-                } else {
-                    currentState.gamesList.filter { it.name.contains(text, ignoreCase = true) }
+        private fun performSearch(query: String) {
+            viewModelScope.launch {
+                try {
+                    val result = gameRepository.searchGames(query)
+                    _gameUiState.update { currentState ->
+                        currentState.copy(
+                            searchList = result,
+                            hasSearched = true
+                        )
+                    }
+                } catch (e: Exception) {
+                    _gameUiState.update { currentState ->
+                        currentState.copy(
+                            searchList = emptyList(),
+                            hasSearched = true
+                        )
+                    }
+                    e.printStackTrace()
                 }
-            )
+            }
         }
-    }
 
-    fun setSearchText(text: String) {
-        _gameUiState.update { currentState ->
-            currentState.copy(
-                searchText = text
-            )
+        fun onSearchTextChange(text: String) {
+            _searchQuery.value = text
         }
-    }
 
-    fun onSearchActiveChange(active: Boolean) {
-        _gameUiState.update { currentState ->
-            currentState.copy(
-                searchActive = active
-            )
-        }
-    }
+//    fun onSearchTextChange(text: String) {
+////        _gameUiState.update { currentState ->
+////            currentState.copy(
+////                searchText = text,
+////                searchList = if (text.isEmpty()) {
+////                    currentState.gamesList
+////                } else {
+////                    currentState.gamesList.filter { it.name.contains(text, ignoreCase = true) }
+////                }
+////            )
+////        }
+//
+//        viewModelScope.launch {
+//            try {
+//                //Ophalen van de data
+//                val result = gameRepository.searchGames(text)
+//
+//                //Update de searchList
+//                _gameUiState.update { currentState ->
+//                    currentState.copy(
+//                        searchList = result
+//                    )
+//                }
+//
+//
+//                //Log de resultaten
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//    }
+//    }
 
-    fun addSearchListHistory(text: String) {
-        //Check if the searchListHistory already contains the text
-        if (!_gameUiState.value.searchListHistory.contains(text)) {
+        fun setSearchText(text: String) {
             _gameUiState.update { currentState ->
                 currentState.copy(
-                    searchListHistory = currentState.searchListHistory + text
+                    searchText = text
                 )
             }
         }
-    }
 
-
-    //**********************************************************************************************************************
-    //REPOSITORY
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val application = this[APPLICATION_KEY] as GamesApplication
-                val gamesRepository = application.container.gameRepository
-                GameViewModel(gamesRepository)
+        fun onSearchActiveChange(active: Boolean) {
+            _gameUiState.update { currentState ->
+                currentState.copy(
+                    searchActive = active
+                )
             }
         }
-    }
 
-}
+        fun addSearchListHistory(text: String) {
+            //Check if the searchListHistory already contains the text
+            if (!_gameUiState.value.searchListHistory.contains(text)) {
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        searchListHistory = currentState.searchListHistory + text
+                    )
+                }
+            }
+        }
+
+
+        //**********************************************************************************************************************
+        //REPOSITORY
+        companion object {
+            val Factory: ViewModelProvider.Factory = viewModelFactory {
+                initializer {
+                    val application = this[APPLICATION_KEY] as GamesApplication
+                    val gamesRepository = application.container.gameRepository
+                    GameViewModel(gamesRepository)
+                }
+            }
+        }
+
+    }

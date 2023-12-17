@@ -1,6 +1,7 @@
 package com.example.android_gameapplication.network
 
 import com.example.android_gameapplication.model.Game
+import kotlinx.coroutines.flow.Flow
 
 sealed interface GameApiState {
     //object Error: GameApiState met e van Exception

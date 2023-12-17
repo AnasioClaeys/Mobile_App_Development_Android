@@ -6,6 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,8 +25,11 @@ fun DetailpageOverview(
         gameViewModel.getDetailGameById(gameId)
     }
 
-    when (val gameDetailApiState = gameViewModel.gameDetailApiState) {
-        is DetailGameApiState.Loading -> {
+    val gameDetailApiState = gameViewModel.gameDetailApiState.collectAsState().value
+
+    when (gameDetailApiState) {
+        is DetailGameApiState.Loading ->
+        {
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(

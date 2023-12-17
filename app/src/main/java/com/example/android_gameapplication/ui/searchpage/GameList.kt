@@ -78,13 +78,21 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier= Modi
 }
 
 @Composable
-fun GamesList(gamesList: List<Game>, onListItem: (Int) -> Unit) {
-    LazyColumn {
-        items(gamesList) { game ->
-            GameListItem(
-                game = game,
-                onListItem = onListItem
-            )
+fun GamesList(gamesList: List<Game>, onListItem: (Int) -> Unit, hasSearched: Boolean) {
+    if (gamesList.isNullOrEmpty()&& hasSearched) {
+        Text(
+            text = "No games found",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(16.dp)
+        )
+    } else {
+        LazyColumn {
+            items(gamesList) { game ->
+                GameListItem(
+                    game = game,
+                    onListItem = onListItem
+                )
+            }
         }
     }
 }

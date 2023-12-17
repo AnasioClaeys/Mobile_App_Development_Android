@@ -28,6 +28,8 @@ fun Game.asDbGame()= DbGame(
     platforms = platforms,
     backgroundImage = backgroundImage,
     playtime = playtime,
+    isInMostPopularGamesOfThisYear = isPopularGamesOfThisYear,
+    isInMostPopularGamesOfAllTime = isPopularGamesOfAllTime,
 )
 
 fun DbGame.asDomainGame() = Game(
@@ -38,6 +40,8 @@ fun DbGame.asDomainGame() = Game(
     platforms = platforms,
     backgroundImage = backgroundImage,
     playtime = playtime,
+    isPopularGamesOfThisYear = isInMostPopularGamesOfThisYear,
+    isPopularGamesOfAllTime = isInMostPopularGamesOfAllTime,
 )
 
 fun List<DbGame>.asDomainGames() = map{it.asDomainGame()}

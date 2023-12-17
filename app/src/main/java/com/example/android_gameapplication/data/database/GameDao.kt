@@ -18,4 +18,7 @@ interface GameDao {
     @Query("SELECT * FROM games WHERE isInMostPopularGamesOfAllTime = 1")
     fun getMostPopularGamesOfAllTime(): Flow<List<DbGame>>
 
+    @Query("SELECT * FROM games WHERE id = :id")
+    suspend fun getDetailGameById(id: Int): DbGame?
+
 }
