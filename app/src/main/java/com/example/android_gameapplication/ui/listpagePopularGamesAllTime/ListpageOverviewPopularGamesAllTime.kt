@@ -23,7 +23,7 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
 
     val uiListPopularGamesAllTimeState by viewModel.uiListPopularGamesOfAllTimeState.collectAsState()
 
-    when (val popularGamesOfAllTime = viewModel.popularGamesOfAllTimeApiState) {
+    when (viewModel.popularGamesOfAllTimeApiState) {
         is PopularGamesOfAllTimeApiState.Loading -> {
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
@@ -38,7 +38,8 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
         is PopularGamesOfAllTimeApiState.Success -> GamesList(
             uiListPopularGamesAllTimeState,
             onListItem,
-            true
+            true,
+            viewModel
         )
     }
 

@@ -28,7 +28,7 @@ interface GameRepository {
     //    suspend fun getMostPopularGamesOfThisYear(): List<Game>
 //    suspend fun getMostPopularGamesOfAllTime(): List<Game>
 
-    suspend fun searchGames(search: String): List<Game>
+    suspend fun searchGames(search: String, page:Int): ApiResponse
 
     suspend fun insert(game: Game)
 
@@ -55,8 +55,8 @@ class ApiGameRepository(
         return gamesApiService.getGames().asDomainObjects()
     }
 
-    override suspend fun searchGames(search: String): List<Game> {
-        return gamesApiService.searchGames(search).asDomainObjects()
+    override suspend fun searchGames(search: String, page:Int): ApiResponse {
+        return gamesApiService.searchGames(search, pageSize = 10, page=page)
     }
 
     //Database

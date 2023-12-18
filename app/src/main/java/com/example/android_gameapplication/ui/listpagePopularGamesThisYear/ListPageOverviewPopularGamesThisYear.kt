@@ -23,7 +23,7 @@ fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Mo
 
     val uiListPopularGamesOfThisYearState by viewModel.uiListPopularGamesOfThisYearState.collectAsState()
 
-    when(val popularGamesOfThisYearApiState = viewModel.popularGamesOfThisYearApiState){
+    when(viewModel.popularGamesOfThisYearApiState){
         is PopularGamesOfThisYearApiState.Loading -> {
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
@@ -34,7 +34,7 @@ fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Mo
             }
         }
         is PopularGamesOfThisYearApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
-        is PopularGamesOfThisYearApiState.Success -> GamesList(uiListPopularGamesOfThisYearState, onListItem,true)
+        is PopularGamesOfThisYearApiState.Success -> GamesList(uiListPopularGamesOfThisYearState, onListItem,true, viewModel)
     }
 
 }

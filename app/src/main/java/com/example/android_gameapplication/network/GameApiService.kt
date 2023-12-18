@@ -27,6 +27,7 @@ interface GameApiService {
         @Query("search") search: String,
         @Query("page_size") pageSize: Int = 10,
         @Query("key") apiKey: String = ApiKeys.API_KEY,
+        @Query("page") page: Int = 1
     ): ApiResponse
 
     private fun calculateThisYearDates(): String {
@@ -40,7 +41,8 @@ interface GameApiService {
         @Query("dates") dates: String = calculateThisYearDates(),
         @Query("ordering") ordering: String = "-added",
         @Query("page_size") pageSize: Int = 10,
-        @Query("key") apiKey: String = ApiKeys.API_KEY
+        @Query("key") apiKey: String = ApiKeys.API_KEY,
+        @Query("page") page: Int = 1
     ): ApiResponse
 
 
@@ -48,7 +50,8 @@ interface GameApiService {
     suspend fun getMostPopularGamesOfAllTime(
         @Query("ordering") ordering: String = "-added",
         @Query("page_size") pageSize: Int = 10,
-        @Query("key") apiKey: String = ApiKeys.API_KEY
+        @Query("key") apiKey: String = ApiKeys.API_KEY,
+        @Query("page") page: Int = 1
     ): ApiResponse
 
     @GET("games/{id}")

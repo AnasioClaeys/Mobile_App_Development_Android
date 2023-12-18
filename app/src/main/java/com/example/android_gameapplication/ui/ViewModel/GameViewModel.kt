@@ -17,6 +17,8 @@ import com.example.android_gameapplication.network.DetailGameApiState
 import com.example.android_gameapplication.network.GameApiState
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
+import com.example.android_gameapplication.network.SearchGameApiState
+import com.example.android_gameapplication.network.asDomainObjects
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -42,20 +44,6 @@ class GameViewModel(
     )
     val gameUiState = _gameUiState.asStateFlow()
 
-    //**********************************************************************************************************************
-    //Detailpage from list to string with , and space
-//    fun listToString(list: List<String>): String {
-//        var string = ""
-//        for (i in list.indices) {
-//            string += list[i]
-//            if (i != list.size - 1) {
-//                string += ", "
-//            }
-//        }
-//        return string
-//    }
-
-    //**********************************************************************************************************************
     //api
 
     var gameApiState: GameApiState by mutableStateOf(GameApiState.Loading)
@@ -200,6 +188,40 @@ class GameViewModel(
         //**********************************************************************************************************************
         //SEARCH
 
+    private var currentPage = 1
+    private var isLoading = false
+    private var lastSearchQuery = ""
+    var isLastPage = false
+
+    fun searchNextPage() {
+        if (!isLoading && !isLastPage) {
+            viewModelScope.launch {
+                isLoading = true
+                try {
+                    val result = gameRepository.searchGames(lastSearchQuery, currentPage + 1)
+                    currentPage++
+
+                    // Check of dit de laatste pagina is
+                    isLastPage = (result.next.isNullOrEmpty() || result.count<=result.results.size)
+
+                    // Update de UI State hier met de nieuwe games
+                    // Voeg de nieuwe games toe aan de bestaande lijst
+                    _gameUiState.update { currentState ->
+                        currentState.copy(
+                            searchList = currentState.searchList + result.asDomainObjects()
+                        )
+                    }
+                } catch (e: Exception) {
+                    // Foutafhandeling
+                } finally {
+                    isLoading = false
+                }
+            }
+        }
+    }
+
+
+
         private val _searchQuery = MutableStateFlow("")
         val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
@@ -213,64 +235,38 @@ class GameViewModel(
                     }
             }
         }
+    private val _searchGameApiState = MutableStateFlow<SearchGameApiState>(SearchGameApiState.Loading)
+    val searchGameApiState: StateFlow<SearchGameApiState> = _searchGameApiState.asStateFlow()
 
-        private fun performSearch(query: String) {
-            viewModelScope.launch {
-                try {
-                    val result = gameRepository.searchGames(query)
-                    _gameUiState.update { currentState ->
-                        currentState.copy(
-                            searchList = result,
-                            hasSearched = true
-                        )
-                    }
-                } catch (e: Exception) {
-                    _gameUiState.update { currentState ->
-                        currentState.copy(
-                            searchList = emptyList(),
-                            hasSearched = true
-                        )
-                    }
-                    e.printStackTrace()
+    private fun performSearch(query: String) {
+        lastSearchQuery = query
+        currentPage = 1
+        viewModelScope.launch {
+            try {
+                _searchGameApiState.value = SearchGameApiState.Loading
+                val result = gameRepository.searchGames(lastSearchQuery, currentPage)
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        searchList = result.asDomainObjects(),
+                        hasSearched = true
+                    )
+                }
+                _searchGameApiState.value = SearchGameApiState.Success(result.asDomainObjects())
+            } catch (e: Exception) {
+                _searchGameApiState.value = SearchGameApiState.Error
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        searchList = emptyList(),
+                        hasSearched = true
+                    )
                 }
             }
         }
+    }
 
         fun onSearchTextChange(text: String) {
             _searchQuery.value = text
         }
-
-//    fun onSearchTextChange(text: String) {
-////        _gameUiState.update { currentState ->
-////            currentState.copy(
-////                searchText = text,
-////                searchList = if (text.isEmpty()) {
-////                    currentState.gamesList
-////                } else {
-////                    currentState.gamesList.filter { it.name.contains(text, ignoreCase = true) }
-////                }
-////            )
-////        }
-//
-//        viewModelScope.launch {
-//            try {
-//                //Ophalen van de data
-//                val result = gameRepository.searchGames(text)
-//
-//                //Update de searchList
-//                _gameUiState.update { currentState ->
-//                    currentState.copy(
-//                        searchList = result
-//                    )
-//                }
-//
-//
-//                //Log de resultaten
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//    }
-//    }
 
         fun setSearchText(text: String) {
             _gameUiState.update { currentState ->

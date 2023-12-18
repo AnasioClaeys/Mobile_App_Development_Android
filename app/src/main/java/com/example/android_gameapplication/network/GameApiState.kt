@@ -18,6 +18,12 @@ sealed interface DetailGameApiState {
     data class Success(val game: Game) : DetailGameApiState
 }
 
+sealed interface SearchGameApiState {
+    object Loading : SearchGameApiState
+    object Error : SearchGameApiState
+    data class Success(val games: List<Game>) : SearchGameApiState
+}
+
 sealed interface PopularGamesOfThisYearApiState {
     object Error : PopularGamesOfThisYearApiState
     object Loading : PopularGamesOfThisYearApiState

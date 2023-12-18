@@ -126,7 +126,8 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             GamesList(
                 gamesList = searchList,
                 onListItem = onListItem,
-                hasSearched = gameUiState.hasSearched
+                hasSearched = gameUiState.hasSearched,
+                viewModel = viewModel
             )
 
         }
@@ -134,7 +135,8 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
         GamesList(
             gamesList = searchList,
             onListItem = onListItem,
-            hasSearched = gameUiState.hasSearched
+            hasSearched = gameUiState.hasSearched,
+            viewModel = viewModel
         )
 
     }
