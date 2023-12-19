@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.model.Game
-import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -13,19 +13,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.network.DetailGameApiState
-import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @Composable
 fun DetailpageOverview(
     gameId: Int,
     modifier: Modifier = Modifier,
-    gameViewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
+    detailpageOverviewViewModel: DetailpageOverviewViewModel = viewModel(factory = DetailpageOverviewViewModel.Factory)
 ) {
     LaunchedEffect(key1 = gameId){
-        gameViewModel.getDetailGameById(gameId)
+        detailpageOverviewViewModel.getDetailGameById(gameId)
     }
 
-    val gameDetailApiState = gameViewModel.gameDetailApiState.collectAsState().value
+    val gameDetailApiState = detailpageOverviewViewModel.gameDetailApiState.collectAsState().value
 
     when (gameDetailApiState) {
         is DetailGameApiState.Loading ->

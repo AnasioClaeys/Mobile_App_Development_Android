@@ -20,9 +20,6 @@ import java.util.Calendar
 
 interface GameApiService {
     @GET("games")
-    suspend fun getGames(@Query("key") apiKey: String = ApiKeys.API_KEY): ApiResponse
-
-    @GET("games")
     suspend fun searchGames(
         @Query("search") search: String,
         @Query("page_size") pageSize: Int = 10,

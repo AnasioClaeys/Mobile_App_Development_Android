@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 interface GameRepository {
-    suspend fun getGames(): List<Game>
 
     //    suspend fun getMostPopularGamesOfThisYear(): List<Game>
 //    suspend fun getMostPopularGamesOfAllTime(): List<Game>
@@ -54,10 +53,6 @@ class ApiGameRepository(
     private val gamesApiServiceImpl: GameApiServiceImpl
 ) : GameRepository {
 
-    //API
-    override suspend fun getGames(): List<Game> {
-        return gamesApiService.getGames().asDomainObjects()
-    }
 
     override suspend fun searchGames(search: String, page:Int): ApiResponse {
         return gamesApiService.searchGames(search, pageSize = 10, page=page)

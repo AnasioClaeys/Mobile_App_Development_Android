@@ -18,11 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
-import com.example.android_gameapplication.model.Game
-import com.example.android_gameapplication.network.GameApiState
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
-import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 
 @Composable
 fun HomepageOverview(
@@ -31,10 +28,8 @@ fun HomepageOverview(
     onListPopularGamesOfThisYear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
-    val gameUiState by viewModel.gameUiState.collectAsState()
-    val gamesList = gameUiState.gamesList
-    val gameApiState = viewModel.gameApiState
+    val viewModel: HomepageOverviewViewModel = viewModel(factory = HomepageOverviewViewModel.Factory)
+
     val popularGamesOfThisYearApiState = viewModel.popularGamesOfThisYearApiState
     val popularGamesOfAllTimeApiState = viewModel.popularGamesOfAllTimeApiState
 
@@ -96,10 +91,3 @@ fun HomepageOverview(
 
     }
 }
-
-
-/*@Preview
-@Composable
-fun HomepageOverviewPreview() {
-    HomepageOverview()
-}*/

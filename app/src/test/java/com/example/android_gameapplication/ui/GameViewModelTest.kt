@@ -1,7 +1,5 @@
 package com.example.android_gameapplication.ui
 
-import com.example.android_gameapplication.ui.ViewModel.GameViewModel
-import com.example.android_gameapplication.model.Game
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 

@@ -13,17 +13,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.network.MostPlayedGamesOfAllTimeApiState
-import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
-import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
-import com.example.android_gameapplication.ui.ViewModel.GameViewModel
-import com.example.android_gameapplication.ui.searchpage.GamesList
 
 @Composable
 fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
-    val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
+    val viewModel: ListpageOverviewAllTimeViewModel = viewModel(factory = ListpageOverviewAllTimeViewModel.Factory)
 
     val mostPlayedGamesOfAllTimeApiState = viewModel.mostPlayedGamesOfAllTimeApiState
-    val gameUiState by viewModel.gameUiState.collectAsState()
+    val listpageOverviewAllTimeState by viewModel.listpageOverviewAllTimeState.collectAsState()
 
     when (mostPlayedGamesOfAllTimeApiState) {
         is MostPlayedGamesOfAllTimeApiState.Loading -> {
@@ -38,7 +34,7 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
 
         is MostPlayedGamesOfAllTimeApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
         is MostPlayedGamesOfAllTimeApiState.Success -> GameListPopularGames(
-            gameUiState.mostPlayedGamesOfAllTime,
+            listpageOverviewAllTimeState.mostPlayedGamesOfAllTime,
             onListItem,
             newPage = viewModel::loadNextPageMostPlayedGamesOfAllTime
         )
