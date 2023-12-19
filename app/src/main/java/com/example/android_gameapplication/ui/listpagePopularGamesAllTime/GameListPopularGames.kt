@@ -75,7 +75,7 @@ fun GameListItemPopularGames(game: Game, onListItem: (Int) -> Unit, modifier: Mo
 fun GameListPopularGames(
     gamesList: List<Game>,
     onListItem: (Int) -> Unit,
-    viewModel: GameViewModel,
+    newPage: () -> Unit = {}
 ) {
     if (gamesList.isNullOrEmpty()) {
         Text(
@@ -98,9 +98,9 @@ fun GameListPopularGames(
                             )
                         )
                     }
-//                    LaunchedEffect(Unit) {
-//
-//                    }
+                    LaunchedEffect(gamesList.size) {
+                        newPage()
+                    }
                 }
             }
         }

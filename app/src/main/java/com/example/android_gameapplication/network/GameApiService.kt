@@ -42,7 +42,6 @@ interface GameApiService {
         @Query("ordering") ordering: String = "-added",
         @Query("page_size") pageSize: Int = 10,
         @Query("key") apiKey: String = ApiKeys.API_KEY,
-        @Query("page") page: Int = 1
     ): ApiResponse
 
 
@@ -51,7 +50,6 @@ interface GameApiService {
         @Query("ordering") ordering: String = "-added",
         @Query("page_size") pageSize: Int = 10,
         @Query("key") apiKey: String = ApiKeys.API_KEY,
-        @Query("page") page: Int = 1
     ): ApiResponse
 
     @GET("games/{id}")
@@ -59,4 +57,22 @@ interface GameApiService {
         @Path("id") id:Int,
         @Query("key") apiKey: String = ApiKeys.API_KEY
     ): ApiGame
+
+    @GET("games")
+    suspend fun getMostPlayedGamesOfThisYear(
+        @Query("dates") dates: String = calculateThisYearDates(),
+        @Query("ordering") ordering: String = "-added",
+        @Query("page_size") pageSize: Int = 10,
+        @Query("key") apiKey: String = ApiKeys.API_KEY,
+        @Query("page") page: Int = 1
+    ): ApiResponse
+
+
+    @GET("games")
+    suspend fun getMostPlayedGamesOfAllTime(
+        @Query("ordering") ordering: String = "-added",
+        @Query("page_size") pageSize: Int = 10,
+        @Query("key") apiKey: String = ApiKeys.API_KEY,
+        @Query("page") page: Int = 1
+    ): ApiResponse
 }

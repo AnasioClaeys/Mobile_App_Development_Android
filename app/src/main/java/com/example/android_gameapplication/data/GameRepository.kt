@@ -42,6 +42,10 @@ interface GameRepository {
 
     suspend fun refreshMostPopularGamesOfAllTime()
 
+    suspend fun getMostPlayedGamesOfThisYear(page: Int): ApiResponse
+
+    suspend fun getMostPlayedGamesOfAllTime(page: Int): ApiResponse
+
 }
 
 class ApiGameRepository(
@@ -115,5 +119,13 @@ class ApiGameRepository(
         catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    override suspend fun getMostPlayedGamesOfThisYear(page: Int): ApiResponse {
+        return gamesApiService.getMostPlayedGamesOfThisYear(page = page)
+    }
+
+    override suspend fun getMostPlayedGamesOfAllTime(page: Int): ApiResponse {
+        return gamesApiService.getMostPlayedGamesOfAllTime(page = page)
     }
 }

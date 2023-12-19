@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
+import com.example.android_gameapplication.network.MostPlayedGamesOfThisYearApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
 import com.example.android_gameapplication.ui.listpagePopularGamesAllTime.GameListPopularGames
@@ -21,10 +22,14 @@ import com.example.android_gameapplication.ui.searchpage.GamesList
 fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
     val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
 
-    val uiListPopularGamesOfThisYearState by viewModel.uiListPopularGamesOfThisYearState.collectAsState()
+//    val uiListPopularGamesOfThisYearState by viewModel.uiListPopularGamesOfThisYearState.collectAsState()
+    val mostPlayedGamesOfThisYearApiState = viewModel.mostPlayedGamesOfThisYearApiState
+    val gameUiState by viewModel.gameUiState.collectAsState()
 
-    when (viewModel.popularGamesOfThisYearApiState) {
-        is PopularGamesOfThisYearApiState.Loading -> {
+
+
+    when (mostPlayedGamesOfThisYearApiState) {
+        is MostPlayedGamesOfThisYearApiState.Loading -> {
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(
@@ -34,11 +39,11 @@ fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Mo
             }
         }
 
-        is PopularGamesOfThisYearApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
-        is PopularGamesOfThisYearApiState.Success -> GameListPopularGames(
-            uiListPopularGamesOfThisYearState,
+        is MostPlayedGamesOfThisYearApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
+        is MostPlayedGamesOfThisYearApiState.Success -> GameListPopularGames(
+            gameUiState.mostPlayedGamesOfThisYear,
             onListItem,
-            viewModel
+            newPage = viewModel::loadNextPageMostPlayedGamesOfThisYear
         )
     }
 

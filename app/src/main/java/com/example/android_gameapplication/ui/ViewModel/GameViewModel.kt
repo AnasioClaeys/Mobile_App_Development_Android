@@ -15,6 +15,8 @@ import com.example.android_gameapplication.data.GameRepository
 import com.example.android_gameapplication.model.Game
 import com.example.android_gameapplication.network.DetailGameApiState
 import com.example.android_gameapplication.network.GameApiState
+import com.example.android_gameapplication.network.MostPlayedGamesOfAllTimeApiState
+import com.example.android_gameapplication.network.MostPlayedGamesOfThisYearApiState
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
 import com.example.android_gameapplication.network.SearchGameApiState
@@ -67,12 +69,13 @@ class GameViewModel(
     lateinit var uiListPopularGamesOfAllTimeState: StateFlow<List<Game>>
 
 
-
     init {
         Log.d("GameViewModel", "Initializing GameViewModel")
         getApiGames()
         getMostPopularGamesOfThisYear()
         getMostPopularGamesOfAllTime()
+        getMostPlayedGamesOfThisYear()
+        getMostPlayedGamesOfAllTime()
     }
 
     private fun getApiGames() {
@@ -103,7 +106,8 @@ class GameViewModel(
     }
 
     // Nieuwe StateFlow voor detail game status
-    private val _gameDetailApiState = MutableStateFlow<DetailGameApiState>(DetailGameApiState.Loading)
+    private val _gameDetailApiState =
+        MutableStateFlow<DetailGameApiState>(DetailGameApiState.Loading)
     val gameDetailApiState: StateFlow<DetailGameApiState> = _gameDetailApiState.asStateFlow()
 
     // Functie om detail game data op te halen
@@ -120,73 +124,203 @@ class GameViewModel(
         }
     }
 
+    //**********************************************************************************************************************
 
+    var mostPlayedGamesOfThisYearApiState: MostPlayedGamesOfThisYearApiState by mutableStateOf(
+        MostPlayedGamesOfThisYearApiState.Loading
+    )
+        private set
 
+    private var currentPageMostPlayedGamesOfThisYear = 1
+    private var lastPageMostPlayedGamesOfThisYear = false
 
-        private fun getMostPopularGamesOfThisYear() {
+    private fun getMostPlayedGamesOfThisYear() {
+        currentPageMostPlayedGamesOfThisYear = 1
+        viewModelScope.launch {
             try {
-                viewModelScope.launch {
-                    gameRepository.refreshMostPopularGamesOfThisYear()
-                }
-
                 //Ophalen van de data
-//                val result = gameRepository.getMostPopularGamesOfThisYear()
-                uiListPopularGamesOfThisYearState =
-                    gameRepository.getMostPopularGamesOfThisYear().stateIn(
-                        scope = viewModelScope,
-                        started = SharingStarted.WhileSubscribed(5_000L),
-                        initialValue = listOf()
+                val result =
+                    gameRepository.getMostPlayedGamesOfThisYear(currentPageMostPlayedGamesOfThisYear)
+
+                //Update de gameApiState
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        mostPlayedGamesOfThisYear = result.asDomainObjects()
                     )
+                }
+                mostPlayedGamesOfThisYearApiState =
+                    MostPlayedGamesOfThisYearApiState.Success
 
-                //Update de PopularGamesOfThisYearApiState
-                popularGamesOfThisYearApiState =
-                    PopularGamesOfThisYearApiState.Success
 
-                //Log de resultaten
+            } catch (e: Exception) {
+                mostPlayedGamesOfThisYearApiState =
+                    MostPlayedGamesOfThisYearApiState.Error
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        mostPlayedGamesOfThisYear = emptyList()
+                    )
+                }
+            }
+        }
+    }
+
+    fun loadNextPageMostPlayedGamesOfThisYear() {
+        if (mostPlayedGamesOfThisYearApiState != MostPlayedGamesOfThisYearApiState.Loading && !lastPageMostPlayedGamesOfThisYear) {
+            viewModelScope.launch {
+                try {
+                    val result = gameRepository.getMostPlayedGamesOfThisYear(currentPageMostPlayedGamesOfThisYear + 1)
+
+                    // Voeg de nieuwe games toe aan de bestaande lijst
+                    val currentGames = _gameUiState.value.mostPlayedGamesOfThisYear
+                    val updatedGames = currentGames + result.asDomainObjects()
+
+                    _gameUiState.update { currentState ->
+                        currentState.copy(mostPlayedGamesOfThisYear = updatedGames)
+                    }
+                    currentPageMostPlayedGamesOfThisYear++
+
+                    // Update lastPageMostPlayedGamesOfThisYear
+                    lastPageMostPlayedGamesOfThisYear = result.next.isNullOrEmpty() || result.count <= result.results.size
+                    mostPlayedGamesOfThisYearApiState = MostPlayedGamesOfThisYearApiState.Success
+
+                } catch (e: Exception) {
+                    mostPlayedGamesOfThisYearApiState = MostPlayedGamesOfThisYearApiState.Error
+                }
+            }
+        }
+    }
+
+    var mostPlayedGamesOfAllTimeApiState: MostPlayedGamesOfAllTimeApiState by mutableStateOf(
+        MostPlayedGamesOfAllTimeApiState.Loading
+    )
+        private set
+
+    private var currentPageMostPlayedGamesOfAllTime = 1
+    private var lastPageMostPlayedGamesOfTAllTime = false
+
+    private fun getMostPlayedGamesOfAllTime() {
+        currentPageMostPlayedGamesOfAllTime = 1
+        viewModelScope.launch {
+            try {
+                //Ophalen van de data
+                val result =
+                    gameRepository.getMostPlayedGamesOfAllTime(currentPageMostPlayedGamesOfAllTime)
+
+                //Update de gameApiState
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        mostPlayedGamesOfAllTime = result.asDomainObjects()
+                    )
+                }
+                mostPlayedGamesOfAllTimeApiState =
+                    MostPlayedGamesOfAllTimeApiState.Success
+
+
+            } catch (e: Exception) {
+                mostPlayedGamesOfAllTimeApiState =
+                    MostPlayedGamesOfAllTimeApiState.Error
+                _gameUiState.update { currentState ->
+                    currentState.copy(
+                        mostPlayedGamesOfAllTime = emptyList()
+                    )
+                }
+            }
+        }
+    }
+
+    fun loadNextPageMostPlayedGamesOfAllTime() {
+        if (mostPlayedGamesOfAllTimeApiState != MostPlayedGamesOfAllTimeApiState.Loading && !lastPageMostPlayedGamesOfTAllTime) {
+            viewModelScope.launch {
+                try {
+                    val result = gameRepository.getMostPlayedGamesOfAllTime(currentPageMostPlayedGamesOfAllTime + 1)
+
+                    // Voeg de nieuwe games toe aan de bestaande lijst
+                    val currentGames = _gameUiState.value.mostPlayedGamesOfAllTime
+                    val updatedGames = currentGames + result.asDomainObjects()
+
+                    _gameUiState.update { currentState ->
+                        currentState.copy(mostPlayedGamesOfAllTime = updatedGames)
+                    }
+                    currentPageMostPlayedGamesOfAllTime++
+
+                    // Update lastPageMostPlayedGamesOfThisYear
+                    lastPageMostPlayedGamesOfTAllTime = result.next.isNullOrEmpty() || result.count <= result.results.size
+                    mostPlayedGamesOfAllTimeApiState = MostPlayedGamesOfAllTimeApiState.Success
+
+                } catch (e: Exception) {
+                    mostPlayedGamesOfAllTimeApiState = MostPlayedGamesOfAllTimeApiState.Error
+                }
+            }
+        }
+    }
+
+    //**********************************************************************************************************************
+
+
+    private fun getMostPopularGamesOfThisYear() {
+        try {
+            viewModelScope.launch {
+                gameRepository.refreshMostPopularGamesOfThisYear()
+            }
+
+            //Ophalen van de data
+//                val result = gameRepository.getMostPopularGamesOfThisYear()
+            uiListPopularGamesOfThisYearState =
+                gameRepository.getMostPopularGamesOfThisYear().stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5_000L),
+                    initialValue = listOf()
+                )
+
+            //Update de PopularGamesOfThisYearApiState
+            popularGamesOfThisYearApiState =
+                PopularGamesOfThisYearApiState.Success
+
+            //Log de resultaten
 //                Log.i(
 //                    "getMostPopularGamesOfThisYear",
 //                    "getMostPopularGamesOfThisYear: ${result}}"
 //                )
 
 
-            } catch (e: Exception) {
-                popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
-            }
+        } catch (e: Exception) {
+            popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
         }
+    }
 
-        private fun getMostPopularGamesOfAllTime() {
-            try {
-                viewModelScope.launch {
-                    gameRepository.refreshMostPopularGamesOfAllTime()
-                }
+    private fun getMostPopularGamesOfAllTime() {
+        try {
+            viewModelScope.launch {
+                gameRepository.refreshMostPopularGamesOfAllTime()
+            }
 
-                //Ophalen van de data
+            //Ophalen van de data
 //                val result = gameRepository.getMostPopularGamesOfAllTime()
-                uiListPopularGamesOfAllTimeState =
-                    gameRepository.getMostPopularGamesOfAllTime().stateIn(
-                        scope = viewModelScope,
-                        started = SharingStarted.WhileSubscribed(5_000L),
-                        initialValue = listOf()
-                    )
+            uiListPopularGamesOfAllTimeState =
+                gameRepository.getMostPopularGamesOfAllTime().stateIn(
+                    scope = viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5_000L),
+                    initialValue = listOf()
+                )
 
 
-                //Update de PopularGamesOfAllTimeApiState
-                popularGamesOfAllTimeApiState =
-                    PopularGamesOfAllTimeApiState.Success
+            //Update de PopularGamesOfAllTimeApiState
+            popularGamesOfAllTimeApiState =
+                PopularGamesOfAllTimeApiState.Success
 
-                //Log de resultaten
+            //Log de resultaten
 //                Log.i(
 //                    "getMostPopularGamesOfAllTime",
 //                    "getMostPopularGamesOfAllTime: ${result}}"
 //                )
 
-            } catch (e: Exception) {
-                popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
-            }
+        } catch (e: Exception) {
+            popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
         }
+    }
 
-        //**********************************************************************************************************************
-        //SEARCH
+    //**********************************************************************************************************************
+    //SEARCH
 
     private var currentPage = 1
     private var isLoading = false
@@ -202,7 +336,8 @@ class GameViewModel(
                     currentPage++
 
                     // Check of dit de laatste pagina is
-                    isLastPage = (result.next.isNullOrEmpty() || result.count<=result.results.size)
+                    isLastPage =
+                        (result.next.isNullOrEmpty() || result.count <= result.results.size)
 
                     // Update de UI State hier met de nieuwe games
                     // Voeg de nieuwe games toe aan de bestaande lijst
@@ -221,21 +356,22 @@ class GameViewModel(
     }
 
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
-        private val _searchQuery = MutableStateFlow("")
-        val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
-
-        init {
-            viewModelScope.launch {
-                _searchQuery
-                    .debounce(200) // Debounce tijd in milliseconden
-                    .distinctUntilChanged() // Voer alleen uit als de query verandert
-                    .collect { query ->
-                        performSearch(query)
-                    }
-            }
+    init {
+        viewModelScope.launch {
+            _searchQuery
+                .debounce(200) // Debounce tijd in milliseconden
+                .distinctUntilChanged() // Voer alleen uit als de query verandert
+                .collect { query ->
+                    performSearch(query)
+                }
         }
-    private val _searchGameApiState = MutableStateFlow<SearchGameApiState>(SearchGameApiState.Loading)
+    }
+
+    private val _searchGameApiState =
+        MutableStateFlow<SearchGameApiState>(SearchGameApiState.Loading)
     val searchGameApiState: StateFlow<SearchGameApiState> = _searchGameApiState.asStateFlow()
 
     private fun performSearch(query: String) {
@@ -264,48 +400,48 @@ class GameViewModel(
         }
     }
 
-        fun onSearchTextChange(text: String) {
-            _searchQuery.value = text
-        }
-
-        fun setSearchText(text: String) {
-            _gameUiState.update { currentState ->
-                currentState.copy(
-                    searchText = text
-                )
-            }
-        }
-
-        fun onSearchActiveChange(active: Boolean) {
-            _gameUiState.update { currentState ->
-                currentState.copy(
-                    searchActive = active
-                )
-            }
-        }
-
-        fun addSearchListHistory(text: String) {
-            //Check if the searchListHistory already contains the text
-            if (!_gameUiState.value.searchListHistory.contains(text)) {
-                _gameUiState.update { currentState ->
-                    currentState.copy(
-                        searchListHistory = currentState.searchListHistory + text
-                    )
-                }
-            }
-        }
-
-
-        //**********************************************************************************************************************
-        //REPOSITORY
-        companion object {
-            val Factory: ViewModelProvider.Factory = viewModelFactory {
-                initializer {
-                    val application = this[APPLICATION_KEY] as GamesApplication
-                    val gamesRepository = application.container.gameRepository
-                    GameViewModel(gamesRepository)
-                }
-            }
-        }
-
+    fun onSearchTextChange(text: String) {
+        _searchQuery.value = text
     }
+
+    fun setSearchText(text: String) {
+        _gameUiState.update { currentState ->
+            currentState.copy(
+                searchText = text
+            )
+        }
+    }
+
+    fun onSearchActiveChange(active: Boolean) {
+        _gameUiState.update { currentState ->
+            currentState.copy(
+                searchActive = active
+            )
+        }
+    }
+
+    fun addSearchListHistory(text: String) {
+        //Check if the searchListHistory already contains the text
+        if (!_gameUiState.value.searchListHistory.contains(text)) {
+            _gameUiState.update { currentState ->
+                currentState.copy(
+                    searchListHistory = currentState.searchListHistory + text
+                )
+            }
+        }
+    }
+
+
+    //**********************************************************************************************************************
+    //REPOSITORY
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = this[APPLICATION_KEY] as GamesApplication
+                val gamesRepository = application.container.gameRepository
+                GameViewModel(gamesRepository)
+            }
+        }
+    }
+
+}

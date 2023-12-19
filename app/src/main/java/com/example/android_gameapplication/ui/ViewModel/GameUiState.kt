@@ -12,4 +12,8 @@ data class GameUiState(
     val searchActive: Boolean = false,
     val searchListHistory: List<String> = listOf(),
     val hasSearched: Boolean = false,
+
+
+    val mostPlayedGamesOfThisYear: List<Game> = listOf(),
+    val mostPlayedGamesOfAllTime: List<Game> = listOf(),
 )

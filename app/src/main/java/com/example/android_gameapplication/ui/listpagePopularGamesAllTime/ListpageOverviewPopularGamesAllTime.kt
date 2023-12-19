@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
+import com.example.android_gameapplication.network.MostPlayedGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
 import com.example.android_gameapplication.ui.ViewModel.GameViewModel
@@ -21,10 +22,11 @@ import com.example.android_gameapplication.ui.searchpage.GamesList
 fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
     val viewModel: GameViewModel = viewModel(factory = GameViewModel.Factory)
 
-    val uiListPopularGamesAllTimeState by viewModel.uiListPopularGamesOfAllTimeState.collectAsState()
+    val mostPlayedGamesOfAllTimeApiState = viewModel.mostPlayedGamesOfAllTimeApiState
+    val gameUiState by viewModel.gameUiState.collectAsState()
 
-    when (viewModel.popularGamesOfAllTimeApiState) {
-        is PopularGamesOfAllTimeApiState.Loading -> {
+    when (mostPlayedGamesOfAllTimeApiState) {
+        is MostPlayedGamesOfAllTimeApiState.Loading -> {
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(
@@ -34,11 +36,11 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
             }
         }
 
-        is PopularGamesOfAllTimeApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
-        is PopularGamesOfAllTimeApiState.Success -> GameListPopularGames(
-            uiListPopularGamesAllTimeState,
+        is MostPlayedGamesOfAllTimeApiState.Error -> Text(text = stringResource(R.string.couldn_t_load))
+        is MostPlayedGamesOfAllTimeApiState.Success -> GameListPopularGames(
+            gameUiState.mostPlayedGamesOfAllTime,
             onListItem,
-            viewModel
+            newPage = viewModel::loadNextPageMostPlayedGamesOfAllTime
         )
     }
 

@@ -1,7 +1,6 @@
 package com.example.android_gameapplication.network
 
 import com.example.android_gameapplication.model.Game
-import kotlinx.coroutines.flow.Flow
 
 sealed interface GameApiState {
     //object Error: GameApiState met e van Exception
@@ -22,6 +21,18 @@ sealed interface SearchGameApiState {
     object Loading : SearchGameApiState
     object Error : SearchGameApiState
     data class Success(val games: List<Game>) : SearchGameApiState
+}
+
+sealed interface MostPlayedGamesOfThisYearApiState {
+    object Error : MostPlayedGamesOfThisYearApiState
+    object Loading : MostPlayedGamesOfThisYearApiState
+    object Success : MostPlayedGamesOfThisYearApiState
+}
+
+sealed interface MostPlayedGamesOfAllTimeApiState {
+    object Error : MostPlayedGamesOfAllTimeApiState
+    object Loading : MostPlayedGamesOfAllTimeApiState
+    object Success : MostPlayedGamesOfAllTimeApiState
 }
 
 sealed interface PopularGamesOfThisYearApiState {
