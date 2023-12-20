@@ -1,5 +1,6 @@
 package com.example.android_gameapplication.ui.listpagePopularGamesThisYear
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,16 +38,16 @@ class ListPageOverviewThisYearViewModel(
         getMostPlayedGamesOfThisYear()
     }
 
-    private var currentPageMostPlayedGamesOfThisYear = 1
-    private var lastPageMostPlayedGamesOfThisYear = false
+//    private var currentPageMostPlayedGamesOfThisYear = 1
+//    private var lastPageMostPlayedGamesOfThisYear = false
 
     private fun getMostPlayedGamesOfThisYear() {
-        currentPageMostPlayedGamesOfThisYear = 1
+        _listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear = 1
         viewModelScope.launch {
             try {
                 //Ophalen van de data
                 val result =
-                    gameRepository.getMostPlayedGamesOfThisYear(currentPageMostPlayedGamesOfThisYear)
+                    gameRepository.getMostPlayedGamesOfThisYear(_listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear)
 
                 //Update de gameApiState
                 _listPageOverviewThisYearState.update { currentState ->
@@ -56,7 +57,6 @@ class ListPageOverviewThisYearViewModel(
                 }
                 mostPlayedGamesOfThisYearApiState =
                     MostPlayedGamesOfThisYearApiState.Success
-
 
             } catch (e: Exception) {
                 mostPlayedGamesOfThisYearApiState =
@@ -71,10 +71,10 @@ class ListPageOverviewThisYearViewModel(
     }
 
     fun loadNextPageMostPlayedGamesOfThisYear() {
-        if (mostPlayedGamesOfThisYearApiState != MostPlayedGamesOfThisYearApiState.Loading && !lastPageMostPlayedGamesOfThisYear) {
+        if (mostPlayedGamesOfThisYearApiState != MostPlayedGamesOfThisYearApiState.Loading && !_listPageOverviewThisYearState.value.lastPageMostPlayedGamesOfThisYear) {
             viewModelScope.launch {
                 try {
-                    val result = gameRepository.getMostPlayedGamesOfThisYear(currentPageMostPlayedGamesOfThisYear + 1)
+                    val result = gameRepository.getMostPlayedGamesOfThisYear(_listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear + 1)
 
                     // Voeg de nieuwe games toe aan de bestaande lijst
                     val currentGames = _listPageOverviewThisYearState.value.mostPlayedGamesOfThisYear
@@ -83,10 +83,10 @@ class ListPageOverviewThisYearViewModel(
                     _listPageOverviewThisYearState.update { currentState ->
                         currentState.copy(mostPlayedGamesOfThisYear = updatedGames)
                     }
-                    currentPageMostPlayedGamesOfThisYear++
+                    _listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear++
 
                     // Update lastPageMostPlayedGamesOfThisYear
-                    lastPageMostPlayedGamesOfThisYear = result.next.isNullOrEmpty() || result.count <= result.results.size
+                    _listPageOverviewThisYearState.value.lastPageMostPlayedGamesOfThisYear = result.next.isNullOrEmpty() || result.count <= result.results.size
                     mostPlayedGamesOfThisYearApiState = MostPlayedGamesOfThisYearApiState.Success
 
                 } catch (e: Exception) {

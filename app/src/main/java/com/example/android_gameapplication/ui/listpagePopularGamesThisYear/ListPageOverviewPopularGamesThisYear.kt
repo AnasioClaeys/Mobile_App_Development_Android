@@ -13,12 +13,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.network.MostPlayedGamesOfThisYearApiState
+import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
 import com.example.android_gameapplication.ui.listpagePopularGamesAllTime.GameListPopularGames
+import com.example.android_gameapplication.ui.searchpage.GamesList
 
 @Composable
 fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
     val viewModel: ListPageOverviewThisYearViewModel = viewModel(factory = ListPageOverviewThisYearViewModel.Factory)
 
+//    val uiListPopularGamesOfThisYearState by viewModel.uiListPopularGamesOfThisYearState.collectAsState()
     val mostPlayedGamesOfThisYearApiState = viewModel.mostPlayedGamesOfThisYearApiState
     val gameUiState by viewModel.listPageOverviewThisYearState.collectAsState()
 

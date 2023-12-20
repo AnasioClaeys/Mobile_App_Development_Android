@@ -80,7 +80,7 @@ fun GamesList(
 ) {
     if (gamesList.isNullOrEmpty() && hasSearched) {
         Text(
-            text = "No games found",
+            text = stringResource(R.string.no_games_found),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp)
         )
@@ -90,7 +90,7 @@ fun GamesList(
                 GameListItem(game = game, onListItem = onListItem)
             }
 
-            if (!viewModel.isLastPage && gamesList.isNotEmpty()) {
+            if (!viewModel.searchpageOverviewState.value.isLastPage && gamesList.isNotEmpty()) {
                 item {
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(

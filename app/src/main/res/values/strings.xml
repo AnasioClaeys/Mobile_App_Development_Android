@@ -16,6 +16,9 @@
     <string name="search_placeholder">Search</string>
     <string name="close_search">Close Search</string>
     <string name="quick_results">Quick Results</string>
+    <string name="more_games_this_year">More popular games of this year</string>
+    <string name="more_games_all_time">More popular games of all time</string>
+    <string name="no_games_found">No games found</string>
     <!--    <string name="searchpage_title">Search page</string>-->
 <!--    <string name="detailpage_title">Detail page</string>-->
 

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -23,9 +24,9 @@ import com.example.android_gameapplication.ui.searchpage.SearchpageOverview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameApp() {
+fun GameApp(navController:NavHostController = rememberNavController()) {
 
-    val navController = rememberNavController()
+
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     val onHome: () -> Unit = {

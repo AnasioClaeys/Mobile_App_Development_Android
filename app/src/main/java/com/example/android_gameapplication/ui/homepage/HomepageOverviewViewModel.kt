@@ -1,5 +1,6 @@
 package com.example.android_gameapplication.ui.homepage
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -40,7 +41,7 @@ class HomepageOverviewViewModel( private val gameRepository: GameRepository) :Vi
         getMostPopularGamesOfThisYear()
         getMostPopularGamesOfAllTime()
     }
-    private fun getMostPopularGamesOfThisYear() {
+    fun getMostPopularGamesOfThisYear() {
         try {
             viewModelScope.launch {
                 gameRepository.refreshMostPopularGamesOfThisYear()
@@ -57,13 +58,12 @@ class HomepageOverviewViewModel( private val gameRepository: GameRepository) :Vi
             //Update de PopularGamesOfThisYearApiState
             popularGamesOfThisYearApiState =
                 PopularGamesOfThisYearApiState.Success
-
         } catch (e: Exception) {
             popularGamesOfThisYearApiState = PopularGamesOfThisYearApiState.Error
         }
     }
 
-    private fun getMostPopularGamesOfAllTime() {
+    fun getMostPopularGamesOfAllTime() {
         try {
             viewModelScope.launch {
                 gameRepository.refreshMostPopularGamesOfAllTime()

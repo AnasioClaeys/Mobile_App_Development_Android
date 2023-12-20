@@ -63,7 +63,8 @@ fun HomepageOverview(
                 title = stringResource(R.string.home_title_popular_games_in_YEAR),
                 gamesList = uiListPopularGamesOfThisYearState,
                 onList = onListPopularGamesOfThisYear,
-                onCarousel = onCarousel
+                onCarousel = onCarousel,
+                buttonText = R.string.more_games_this_year
             )
         }
 
@@ -85,7 +86,8 @@ fun HomepageOverview(
                 title = stringResource(R.string.home_title_popular_games_of_all_time),
                 gamesList = uiListPopularGamesAllTimeState,
                 onList = onListPopularGamesAllTime,
-                onCarousel = onCarousel
+                onCarousel = onCarousel,
+                buttonText = R.string.more_games_all_time
             )
         }
 

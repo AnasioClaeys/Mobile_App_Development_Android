@@ -24,31 +24,25 @@ class SearchpageOverviewViewModel(
     private val _searchpageOverviewState = MutableStateFlow(
         SearchpageOverviewState(
             searchList = emptyList(),
-            searchText = "",
             searchActive = false,
-            searchListHistory = emptyList()
+            searchListHistory = emptyList(),
+            hasSearched = false,
+            currentPage = 1,
+            isLoading = false
         )
     )
     val searchpageOverviewState = _searchpageOverviewState.asStateFlow()
 
-    //**********************************************************************************************************************
-    //SEARCH
-
-    private var currentPage = 1
-    private var isLoading = false
-    private var lastSearchQuery = ""
-    var isLastPage = false
-
     fun searchNextPage() {
-        if (!isLoading && !isLastPage) {
+        if (!_searchpageOverviewState.value.isLoading && !_searchpageOverviewState.value.isLastPage) {
             viewModelScope.launch {
-                isLoading = true
+                _searchpageOverviewState.value.isLoading = true
                 try {
-                    val result = gameRepository.searchGames(lastSearchQuery, currentPage + 1)
-                    currentPage++
+                    val result = gameRepository.searchGames(_searchpageOverviewState.value.lastSearchQuery, _searchpageOverviewState.value.currentPage+1)
+                    _searchpageOverviewState.value.currentPage = _searchpageOverviewState.value.currentPage+1
 
                     // Check of dit de laatste pagina is
-                    isLastPage =
+                    _searchpageOverviewState.value.isLastPage =
                         (result.next.isNullOrEmpty() || result.count <= result.results.size)
 
                     // Update de UI State hier met de nieuwe games
@@ -61,7 +55,7 @@ class SearchpageOverviewViewModel(
                 } catch (e: Exception) {
                     // Foutafhandeling
                 } finally {
-                    isLoading = false
+                    _searchpageOverviewState.value.isLoading = false
                 }
             }
         }
@@ -86,13 +80,13 @@ class SearchpageOverviewViewModel(
         MutableStateFlow<SearchGameApiState>(SearchGameApiState.Loading)
     val searchGameApiState: StateFlow<SearchGameApiState> = _searchGameApiState.asStateFlow()
 
-    private fun performSearch(query: String) {
-        lastSearchQuery = query
-        currentPage = 1
+    fun performSearch(query: String) {
+        _searchpageOverviewState.value.lastSearchQuery = query
+        _searchpageOverviewState.value.currentPage = 1
         viewModelScope.launch {
             try {
                 _searchGameApiState.value = SearchGameApiState.Loading
-                val result = gameRepository.searchGames(lastSearchQuery, currentPage)
+                val result = gameRepository.searchGames(_searchpageOverviewState.value.lastSearchQuery, _searchpageOverviewState.value.currentPage)
                 _searchpageOverviewState.update { currentState ->
                     currentState.copy(
                         searchList = result.asDomainObjects(),
@@ -114,14 +108,6 @@ class SearchpageOverviewViewModel(
 
     fun onSearchTextChange(text: String) {
         _searchQuery.value = text
-    }
-
-    fun setSearchText(text: String) {
-        _searchpageOverviewState.update { currentState ->
-            currentState.copy(
-                searchText = text
-            )
-        }
     }
 
     fun onSearchActiveChange(active: Boolean) {

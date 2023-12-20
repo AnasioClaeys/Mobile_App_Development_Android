@@ -23,7 +23,9 @@ class ListpageOverviewAllTimeViewModel(
 
     private val _listpageOverviewAllTimeState = MutableStateFlow(
         ListpageOverviewAllTimeState(
-            mostPlayedGamesOfAllTime = emptyList()
+            mostPlayedGamesOfAllTime = emptyList(),
+            currentPageMostPlayedGamesOfAllTime = 1,
+            lastPageMostPlayedGamesOfTAllTime = false
         )
     )
     val listpageOverviewAllTimeState = _listpageOverviewAllTimeState.asStateFlow()
@@ -37,16 +39,16 @@ class ListpageOverviewAllTimeViewModel(
         getMostPlayedGamesOfAllTime()
     }
 
-    private var currentPageMostPlayedGamesOfAllTime = 1
-    private var lastPageMostPlayedGamesOfTAllTime = false
+//    private var currentPageMostPlayedGamesOfAllTime = 1
+//    private var lastPageMostPlayedGamesOfTAllTime = false
 
     private fun getMostPlayedGamesOfAllTime() {
-        currentPageMostPlayedGamesOfAllTime = 1
+        listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime = 1
         viewModelScope.launch {
             try {
                 //Ophalen van de data
                 val result =
-                    gameRepository.getMostPlayedGamesOfAllTime(currentPageMostPlayedGamesOfAllTime)
+                    gameRepository.getMostPlayedGamesOfAllTime(listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime)
 
                 //Update de gameApiState
                 _listpageOverviewAllTimeState.update { currentState ->
@@ -71,10 +73,10 @@ class ListpageOverviewAllTimeViewModel(
     }
 
     fun loadNextPageMostPlayedGamesOfAllTime() {
-        if (mostPlayedGamesOfAllTimeApiState != MostPlayedGamesOfAllTimeApiState.Loading && !lastPageMostPlayedGamesOfTAllTime) {
+        if (mostPlayedGamesOfAllTimeApiState != MostPlayedGamesOfAllTimeApiState.Loading && !listpageOverviewAllTimeState.value.lastPageMostPlayedGamesOfTAllTime) {
             viewModelScope.launch {
                 try {
-                    val result = gameRepository.getMostPlayedGamesOfAllTime(currentPageMostPlayedGamesOfAllTime + 1)
+                    val result = gameRepository.getMostPlayedGamesOfAllTime(listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime + 1)
 
                     // Voeg de nieuwe games toe aan de bestaande lijst
                     val currentGames = _listpageOverviewAllTimeState.value.mostPlayedGamesOfAllTime
@@ -83,10 +85,10 @@ class ListpageOverviewAllTimeViewModel(
                     _listpageOverviewAllTimeState.update { currentState ->
                         currentState.copy(mostPlayedGamesOfAllTime = updatedGames)
                     }
-                    currentPageMostPlayedGamesOfAllTime++
+                    listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime++
 
                     // Update lastPageMostPlayedGamesOfThisYear
-                    lastPageMostPlayedGamesOfTAllTime = result.next.isNullOrEmpty() || result.count <= result.results.size
+                    listpageOverviewAllTimeState.value.lastPageMostPlayedGamesOfTAllTime = result.next.isNullOrEmpty() || result.count <= result.results.size
                     mostPlayedGamesOfAllTimeApiState = MostPlayedGamesOfAllTimeApiState.Success
 
                 } catch (e: Exception) {

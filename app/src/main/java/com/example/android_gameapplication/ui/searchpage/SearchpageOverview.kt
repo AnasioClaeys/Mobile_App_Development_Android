@@ -31,7 +31,6 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
     val viewModel: SearchpageOverviewViewModel = viewModel(factory = SearchpageOverviewViewModel.Factory)
     val gameUiState by viewModel.searchpageOverviewState.collectAsState()
 
-    val searchText = gameUiState.searchText
     val searchList = gameUiState.searchList
     val searchActive = gameUiState.searchActive
     val searchListHistory = gameUiState.searchListHistory
