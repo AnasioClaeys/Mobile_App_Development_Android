@@ -28,7 +28,8 @@ import com.example.android_gameapplication.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
-    val viewModel: SearchpageOverviewViewModel = viewModel(factory = SearchpageOverviewViewModel.Factory)
+    val viewModel: SearchpageOverviewViewModel =
+        viewModel(factory = SearchpageOverviewViewModel.Factory)
     val gameUiState by viewModel.searchpageOverviewState.collectAsState()
 
     val searchList = gameUiState.searchList
@@ -47,14 +48,13 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             onQueryChange = viewModel::onSearchTextChange,
             onSearch = {
                 viewModel.onSearchActiveChange(false)
-                if(searchQuery.value.isNotEmpty()) {
+                if (searchQuery.value.isNotEmpty()) {
                     viewModel.addSearchListHistory(searchQuery.value)
 
                 }
-                if(searchQuery.value==""){
+                if (searchQuery.value == "") {
                     viewModel.onSearchTextChange("")
-                }
-                else{
+                } else {
                     viewModel.onSearchTextChange(searchQuery.value)
                 }
             },
@@ -72,10 +72,9 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                     Icon(
                         Icons.Outlined.Close,
                         modifier = Modifier.clickable {
-                            if(searchQuery.value.isNotEmpty()) {
+                            if (searchQuery.value.isNotEmpty()) {
                                 viewModel.onSearchTextChange("")
-                            }
-                            else{
+                            } else {
                                 viewModel.onSearchActiveChange(false)
                             }
                         },
@@ -85,8 +84,8 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             },
             placeholder = { Text(text = stringResource(R.string.search_placeholder)) }
         ) {
-            if(searchListHistory.isNotEmpty()){
-                searchListHistory.forEach{
+            if (searchListHistory.isNotEmpty()) {
+                searchListHistory.forEach {
                     Row(
                         modifier = Modifier
                             .padding(all = 14.dp)
@@ -95,7 +94,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                         Icon(
                             Icons.Outlined.Menu,
                             contentDescription = stringResource(R.string.search_placeholder),
-                            modifier=Modifier.padding(end=10.dp),
+                            modifier = Modifier.padding(end = 10.dp),
                         )
                         Text(
                             text = it
@@ -109,7 +108,11 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                     Divider()
                 }
             }
-            Text(text = stringResource(R.string.quick_results), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(all=14.dp))
+            Text(
+                text = stringResource(R.string.quick_results),
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(all = 14.dp)
+            )
 
             GamesList(
                 gamesList = searchList,
@@ -130,11 +133,3 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
     }
 
 }
-
-/*
-@Preview
-@Composable
-fun SearchpageOverviewPreview() {
-    SearchpageOverview()
-}
-*/

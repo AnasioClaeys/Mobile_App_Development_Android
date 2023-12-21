@@ -38,15 +38,16 @@ class SearchpageOverviewViewModel(
             viewModelScope.launch {
                 _searchpageOverviewState.value.isLoading = true
                 try {
-                    val result = gameRepository.searchGames(_searchpageOverviewState.value.lastSearchQuery, _searchpageOverviewState.value.currentPage+1)
-                    _searchpageOverviewState.value.currentPage = _searchpageOverviewState.value.currentPage+1
+                    val result = gameRepository.searchGames(
+                        _searchpageOverviewState.value.lastSearchQuery,
+                        _searchpageOverviewState.value.currentPage + 1
+                    )
+                    _searchpageOverviewState.value.currentPage =
+                        _searchpageOverviewState.value.currentPage + 1
 
-                    // Check of dit de laatste pagina is
                     _searchpageOverviewState.value.isLastPage =
                         (result.next.isNullOrEmpty() || result.count <= result.results.size)
 
-                    // Update de UI State hier met de nieuwe games
-                    // Voeg de nieuwe games toe aan de bestaande lijst
                     _searchpageOverviewState.update { currentState ->
                         currentState.copy(
                             searchList = currentState.searchList + result.asDomainObjects()
@@ -86,7 +87,10 @@ class SearchpageOverviewViewModel(
         viewModelScope.launch {
             try {
                 _searchGameApiState.value = SearchGameApiState.Loading
-                val result = gameRepository.searchGames(_searchpageOverviewState.value.lastSearchQuery, _searchpageOverviewState.value.currentPage)
+                val result = gameRepository.searchGames(
+                    _searchpageOverviewState.value.lastSearchQuery,
+                    _searchpageOverviewState.value.currentPage
+                )
                 _searchpageOverviewState.update { currentState ->
                     currentState.copy(
                         searchList = result.asDomainObjects(),
@@ -119,7 +123,6 @@ class SearchpageOverviewViewModel(
     }
 
     fun addSearchListHistory(text: String) {
-        //Check if the searchListHistory already contains the text
         if (!_searchpageOverviewState.value.searchListHistory.contains(text)) {
             _searchpageOverviewState.update { currentState ->
                 currentState.copy(
@@ -134,7 +137,8 @@ class SearchpageOverviewViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
+                val application =
+                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
                 val gamesRepository = application.container.gameRepository
                 SearchpageOverviewViewModel(gamesRepository)
             }

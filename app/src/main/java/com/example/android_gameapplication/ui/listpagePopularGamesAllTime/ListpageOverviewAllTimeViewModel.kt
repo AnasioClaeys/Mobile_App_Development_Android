@@ -39,9 +39,6 @@ class ListpageOverviewAllTimeViewModel(
         getMostPlayedGamesOfAllTime()
     }
 
-//    private var currentPageMostPlayedGamesOfAllTime = 1
-//    private var lastPageMostPlayedGamesOfTAllTime = false
-
     private fun getMostPlayedGamesOfAllTime() {
         listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime = 1
         viewModelScope.launch {
@@ -76,7 +73,8 @@ class ListpageOverviewAllTimeViewModel(
         if (mostPlayedGamesOfAllTimeApiState != MostPlayedGamesOfAllTimeApiState.Loading && !listpageOverviewAllTimeState.value.lastPageMostPlayedGamesOfTAllTime) {
             viewModelScope.launch {
                 try {
-                    val result = gameRepository.getMostPlayedGamesOfAllTime(listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime + 1)
+                    val result =
+                        gameRepository.getMostPlayedGamesOfAllTime(listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime + 1)
 
                     // Voeg de nieuwe games toe aan de bestaande lijst
                     val currentGames = _listpageOverviewAllTimeState.value.mostPlayedGamesOfAllTime
@@ -88,7 +86,8 @@ class ListpageOverviewAllTimeViewModel(
                     listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime++
 
                     // Update lastPageMostPlayedGamesOfThisYear
-                    listpageOverviewAllTimeState.value.lastPageMostPlayedGamesOfTAllTime = result.next.isNullOrEmpty() || result.count <= result.results.size
+                    listpageOverviewAllTimeState.value.lastPageMostPlayedGamesOfTAllTime =
+                        result.next.isNullOrEmpty() || result.count <= result.results.size
                     mostPlayedGamesOfAllTimeApiState = MostPlayedGamesOfAllTimeApiState.Success
 
                 } catch (e: Exception) {
@@ -104,7 +103,8 @@ class ListpageOverviewAllTimeViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
+                val application =
+                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
                 val gamesRepository = application.container.gameRepository
                 ListpageOverviewAllTimeViewModel(gamesRepository)
             }

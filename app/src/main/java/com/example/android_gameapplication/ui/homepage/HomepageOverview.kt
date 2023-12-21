@@ -28,7 +28,8 @@ fun HomepageOverview(
     onListPopularGamesOfThisYear: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val viewModel: HomepageOverviewViewModel = viewModel(factory = HomepageOverviewViewModel.Factory)
+    val viewModel: HomepageOverviewViewModel =
+        viewModel(factory = HomepageOverviewViewModel.Factory)
 
     val popularGamesOfThisYearApiState = viewModel.popularGamesOfThisYearApiState
     val popularGamesOfAllTimeApiState = viewModel.popularGamesOfAllTimeApiState

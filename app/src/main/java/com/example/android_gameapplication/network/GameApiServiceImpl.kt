@@ -19,12 +19,12 @@ class GameApiServiceImpl(private val service: GameApiService) {
     }
 }
 
-fun GameApiServiceImpl.getMostPopularGamesOfThisYearAsFlow() = flow{
+fun GameApiServiceImpl.getMostPopularGamesOfThisYearAsFlow() = flow {
     emit(getMostPopularGamesOfThisYearProcessed())
 
 }
 
-fun GameApiServiceImpl.getMostPopularGamesOfAllTimeAsFlow() = flow{
+fun GameApiServiceImpl.getMostPopularGamesOfAllTimeAsFlow() = flow {
     emit(getMostPopularGamesOfAllTimeProcessed())
 
 }

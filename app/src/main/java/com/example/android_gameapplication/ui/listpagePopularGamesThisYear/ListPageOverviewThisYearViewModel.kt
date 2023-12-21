@@ -38,18 +38,13 @@ class ListPageOverviewThisYearViewModel(
         getMostPlayedGamesOfThisYear()
     }
 
-//    private var currentPageMostPlayedGamesOfThisYear = 1
-//    private var lastPageMostPlayedGamesOfThisYear = false
-
     private fun getMostPlayedGamesOfThisYear() {
         _listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear = 1
         viewModelScope.launch {
             try {
-                //Ophalen van de data
                 val result =
                     gameRepository.getMostPlayedGamesOfThisYear(_listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear)
 
-                //Update de gameApiState
                 _listPageOverviewThisYearState.update { currentState ->
                     currentState.copy(
                         mostPlayedGamesOfThisYear = result.asDomainObjects()
@@ -74,10 +69,11 @@ class ListPageOverviewThisYearViewModel(
         if (mostPlayedGamesOfThisYearApiState != MostPlayedGamesOfThisYearApiState.Loading && !_listPageOverviewThisYearState.value.lastPageMostPlayedGamesOfThisYear) {
             viewModelScope.launch {
                 try {
-                    val result = gameRepository.getMostPlayedGamesOfThisYear(_listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear + 1)
+                    val result =
+                        gameRepository.getMostPlayedGamesOfThisYear(_listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear + 1)
 
-                    // Voeg de nieuwe games toe aan de bestaande lijst
-                    val currentGames = _listPageOverviewThisYearState.value.mostPlayedGamesOfThisYear
+                    val currentGames =
+                        _listPageOverviewThisYearState.value.mostPlayedGamesOfThisYear
                     val updatedGames = currentGames + result.asDomainObjects()
 
                     _listPageOverviewThisYearState.update { currentState ->
@@ -85,8 +81,8 @@ class ListPageOverviewThisYearViewModel(
                     }
                     _listPageOverviewThisYearState.value.currentPageMostPlayedGamesOfThisYear++
 
-                    // Update lastPageMostPlayedGamesOfThisYear
-                    _listPageOverviewThisYearState.value.lastPageMostPlayedGamesOfThisYear = result.next.isNullOrEmpty() || result.count <= result.results.size
+                    _listPageOverviewThisYearState.value.lastPageMostPlayedGamesOfThisYear =
+                        result.next.isNullOrEmpty() || result.count <= result.results.size
                     mostPlayedGamesOfThisYearApiState = MostPlayedGamesOfThisYearApiState.Success
 
                 } catch (e: Exception) {
@@ -102,7 +98,8 @@ class ListPageOverviewThisYearViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
+                val application =
+                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
                 val gamesRepository = application.container.gameRepository
                 ListPageOverviewThisYearViewModel(gamesRepository)
             }

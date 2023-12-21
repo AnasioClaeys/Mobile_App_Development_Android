@@ -51,7 +51,7 @@ interface GameApiService {
 
     @GET("games/{id}")
     suspend fun getGameDetailById(
-        @Path("id") id:Int,
+        @Path("id") id: Int,
         @Query("key") apiKey: String = ApiKeys.API_KEY
     ): ApiGame
 

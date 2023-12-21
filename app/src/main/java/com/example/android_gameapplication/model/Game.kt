@@ -9,6 +9,6 @@ data class Game(
     val platforms: List<String>,
     val backgroundImage: String,
     val playtime: Int,
-    val isPopularGamesOfAllTime:Boolean = false,
-    val isPopularGamesOfThisYear:Boolean = false,
+    val isPopularGamesOfAllTime: Boolean = false,
+    val isPopularGamesOfThisYear: Boolean = false,
 )

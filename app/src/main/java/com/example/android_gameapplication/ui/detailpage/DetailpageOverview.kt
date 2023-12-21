@@ -20,15 +20,13 @@ fun DetailpageOverview(
     modifier: Modifier = Modifier,
     detailpageOverviewViewModel: DetailpageOverviewViewModel = viewModel(factory = DetailpageOverviewViewModel.Factory)
 ) {
-    LaunchedEffect(key1 = gameId){
+    LaunchedEffect(key1 = gameId) {
         detailpageOverviewViewModel.getDetailGameById(gameId)
     }
 
-    val gameDetailApiState = detailpageOverviewViewModel.gameDetailApiState.collectAsState().value
-
-    when (gameDetailApiState) {
-        is DetailGameApiState.Loading ->
-        {
+    when (val gameDetailApiState =
+        detailpageOverviewViewModel.gameDetailApiState.collectAsState().value) {
+        is DetailGameApiState.Loading -> {
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(

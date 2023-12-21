@@ -28,7 +28,8 @@ import com.example.android_gameapplication.R
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopAppBar(
-    navigationIcon: @Composable () -> Unit, @StringRes title: Int) {
+    navigationIcon: @Composable () -> Unit, @StringRes title: Int
+) {
     androidx.compose.material3.TopAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -41,6 +42,5 @@ fun TopAppBar(
             )
         },
         navigationIcon = navigationIcon,
-
     )
 }

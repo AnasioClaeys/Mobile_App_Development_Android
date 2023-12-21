@@ -16,15 +16,15 @@ data class ApiResponse(
 data class ApiGame(
     val id: Int,
     val name: String,
-    val released: String="No release date",
+    val released: String = "No release date",
     @SerialName("genres")
     val genres: List<Genre>? = listOf(Genre("No genre")),
-    val platforms: List<Platform>? = listOf(Platform(PlatformDetails("No platform"))) ,
+    val platforms: List<Platform>? = listOf(Platform(PlatformDetails("No platform"))),
     @SerialName("background_image")
-    val backgroundImage: String= "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/GHS-pictogram-unknown.svg/1200px-GHS-pictogram-unknown.svg.png",
+    val backgroundImage: String = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/GHS-pictogram-unknown.svg/1200px-GHS-pictogram-unknown.svg.png",
     val playtime: Int,
-    val isPopularGamesOfAllTime:Boolean = false,
-    val isPopularGamesOfThisYear:Boolean = false,
+    val isPopularGamesOfAllTime: Boolean = false,
+    val isPopularGamesOfThisYear: Boolean = false,
 )
 
 @Serializable
@@ -43,7 +43,7 @@ data class PlatformDetails(
 )
 
 
-fun ApiResponse .asDomainObjects(): List<Game> {
+fun ApiResponse.asDomainObjects(): List<Game> {
     return this.results.map {
         Game(
             id = it.id,
@@ -61,7 +61,7 @@ fun ApiResponse .asDomainObjects(): List<Game> {
 }
 
 
-fun ApiGame .asDomainObject(): Game {
+fun ApiGame.asDomainObject(): Game {
     return Game(
         id = this.id,
         name = this.name,

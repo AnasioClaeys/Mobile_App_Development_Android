@@ -22,11 +22,8 @@ import com.example.android_gameapplication.ui.listpagePopularGamesAllTime.Listpa
 import com.example.android_gameapplication.ui.listpagePopularGamesThisYear.ListPageOverviewPopularGamesThisYear
 import com.example.android_gameapplication.ui.searchpage.SearchpageOverview
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameApp(navController:NavHostController = rememberNavController()) {
-
-
+fun GameApp(navController: NavHostController = rememberNavController()) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     val onHome: () -> Unit = {
@@ -34,21 +31,26 @@ fun GameApp(navController:NavHostController = rememberNavController()) {
     }
 
     val onSearch: () -> Unit = {
-        navController.navigate(Destinations.Search.name)
+        navController.navigate(Destinations.Search.name) { launchSingleTop = true }
     }
 
     val onDetail: (Int) -> Unit = { gameId ->
-        navController.navigate("${Destinations.DetailPage.name}/${gameId}")
+        navController.navigate("${Destinations.DetailPage.name}/${gameId}") {
+            launchSingleTop = true
+        }
     }
 
     val onListPopularGamesAllTime: () -> Unit = {
-        navController.navigate(Destinations.ListPagePopularGamesAllTime.name)
+        navController.navigate(Destinations.ListPagePopularGamesAllTime.name) {
+            launchSingleTop = true
+        }
     }
 
     val onListPopularGamesOfThisYear: () -> Unit = {
-        navController.navigate(Destinations.ListPagePopularGamesOfThisYear.name)
+        navController.navigate(Destinations.ListPagePopularGamesOfThisYear.name) {
+            launchSingleTop = true
+        }
     }
-
 
 
 

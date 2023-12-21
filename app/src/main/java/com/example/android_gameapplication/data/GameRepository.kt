@@ -23,11 +23,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 interface GameRepository {
-
-    //    suspend fun getMostPopularGamesOfThisYear(): List<Game>
-//    suspend fun getMostPopularGamesOfAllTime(): List<Game>
-
-    suspend fun searchGames(search: String, page:Int): ApiResponse
+    suspend fun searchGames(search: String, page: Int): ApiResponse
 
     suspend fun insert(game: Game)
 
@@ -54,8 +50,8 @@ class ApiGameRepository(
 ) : GameRepository {
 
 
-    override suspend fun searchGames(search: String, page:Int): ApiResponse {
-        return gamesApiService.searchGames(search, pageSize = 10, page=page)
+    override suspend fun searchGames(search: String, page: Int): ApiResponse {
+        return gamesApiService.searchGames(search, pageSize = 10, page = page)
     }
 
     //Database
@@ -70,9 +66,6 @@ class ApiGameRepository(
             emit(apiGame.asDomainObject())
         }
     }
-
-
-
 
     override suspend fun insert(game: Game) {
         gameDao.insert(game.asDbGame())
@@ -97,8 +90,7 @@ class ApiGameRepository(
                     insert(game.asDomainObject())
                 }
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -110,8 +102,7 @@ class ApiGameRepository(
                     insert(game.asDomainObject())
                 }
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

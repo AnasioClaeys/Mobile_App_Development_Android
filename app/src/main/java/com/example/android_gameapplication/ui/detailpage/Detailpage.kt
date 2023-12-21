@@ -35,7 +35,7 @@ fun Detailpage(game: Game, modifier: Modifier = Modifier) {
 
 
             Text(
-                modifier = modifier.padding(8.dp),
+                modifier = modifier.padding(8.dp).padding(start=10.dp),
                 text = "${game.name}",
                 fontSize = 28.sp
             )

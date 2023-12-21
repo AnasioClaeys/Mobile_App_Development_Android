@@ -20,13 +20,16 @@ interface AppContainer {
 
 class DefaultAppContainer(private val applicationContext: Context) : AppContainer {
     private val BASE_URL = "https://api.rawg.io/api/"
-    private val json = Json { ignoreUnknownKeys = true
+    private val json = Json {
+        ignoreUnknownKeys = true
         coerceInputValues = true
     }
 
     private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(json
-            .asConverterFactory("application/json".toMediaType()))
+        .addConverterFactory(
+            json
+                .asConverterFactory("application/json".toMediaType())
+        )
         .baseUrl(BASE_URL)
         .client(createOkHttpClient())
         .build()
@@ -60,8 +63,11 @@ class DefaultAppContainer(private val applicationContext: Context) : AppContaine
 
 
     override val gameRepository: GameRepository by lazy {
-//        ApiGameRepository(gameService)
-        ApiGameRepository(gameDao = gameDao, gamesApiService = gameService, gamesApiServiceImpl = gameApiServiceImpl)
+        ApiGameRepository(
+            gameDao = gameDao,
+            gamesApiService = gameService,
+            gamesApiServiceImpl = gameApiServiceImpl
+        )
     }
 
 }

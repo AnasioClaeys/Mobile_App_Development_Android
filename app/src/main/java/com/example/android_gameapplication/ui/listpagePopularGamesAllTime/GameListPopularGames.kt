@@ -49,7 +49,6 @@ fun GameListItemPopularGames(game: Game, onListItem: (Int) -> Unit, modifier: Mo
                     .clip(
                         RoundedCornerShape(16.dp)
                     )
-
             )
         },
         trailingContent = {
@@ -60,7 +59,6 @@ fun GameListItemPopularGames(game: Game, onListItem: (Int) -> Unit, modifier: Mo
                 )
             )
         },
-
         )
     Divider(
         modifier = modifier
@@ -78,7 +76,7 @@ fun GameListPopularGames(
 ) {
     if (gamesList.isNullOrEmpty()) {
         Text(
-            text = "No games found",
+            text = stringResource(R.string.no_games_found2),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(16.dp)
         )

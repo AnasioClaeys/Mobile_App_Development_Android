@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.android_gameapplication.R
 import com.example.android_gameapplication.model.Game
 
 @Composable
@@ -25,12 +26,9 @@ fun MainComponentHomepage(
     gamesList: List<Game>,
     onCarousel: (Int) -> Unit,
     onList: () -> Unit,
-    modifier: Modifier = Modifier,
-    //resource id for string button
     @StringRes buttonText: Int
 ) {
     Text(
-//        modifier = modifier.padding(top=16.dp),
         text = title,
         style = MaterialTheme.typography.headlineMedium
     )
@@ -46,8 +44,11 @@ fun MainComponentHomepage(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = stringResource(id = buttonText), style = MaterialTheme.typography.labelLarge)
-            Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = "Arrow Icon")
+            Text(
+                text = stringResource(id = buttonText),
+                style = MaterialTheme.typography.labelLarge
+            )
+            Icon(imageVector = Icons.Outlined.ArrowForward, contentDescription = stringResource(R.string.arrow_icon))
         }
     }
 }

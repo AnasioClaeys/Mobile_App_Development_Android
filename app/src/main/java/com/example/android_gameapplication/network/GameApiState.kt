@@ -6,7 +6,6 @@ sealed interface GameApiState {
     //object Error: GameApiState met e van Exception
     object Error : GameApiState
     object Loading : GameApiState
-
     data class Success(val games: List<Game>) : GameApiState
 }
 

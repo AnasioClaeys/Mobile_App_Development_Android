@@ -19,9 +19,8 @@ import com.example.android_gameapplication.ui.searchpage.GamesList
 
 @Composable
 fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
-    val viewModel: ListPageOverviewThisYearViewModel = viewModel(factory = ListPageOverviewThisYearViewModel.Factory)
-
-//    val uiListPopularGamesOfThisYearState by viewModel.uiListPopularGamesOfThisYearState.collectAsState()
+    val viewModel: ListPageOverviewThisYearViewModel =
+        viewModel(factory = ListPageOverviewThisYearViewModel.Factory)
     val mostPlayedGamesOfThisYearApiState = viewModel.mostPlayedGamesOfThisYearApiState
     val gameUiState by viewModel.listPageOverviewThisYearState.collectAsState()
 
