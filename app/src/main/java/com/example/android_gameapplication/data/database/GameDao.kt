@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GameDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(game: DbGame)
 

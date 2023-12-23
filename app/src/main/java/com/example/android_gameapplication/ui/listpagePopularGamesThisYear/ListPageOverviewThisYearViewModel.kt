@@ -1,6 +1,5 @@
 package com.example.android_gameapplication.ui.listpagePopularGamesThisYear
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,18 +18,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ListPageOverviewThisYearViewModel(
-    private val gameRepository: GameRepository
+    private val gameRepository: GameRepository,
 ) : ViewModel() {
 
     private val _listPageOverviewThisYearState = MutableStateFlow(
         ListPageOverviewThisYearState(
-            mostPlayedGamesOfThisYear = emptyList()
-        )
+            mostPlayedGamesOfThisYear = emptyList(),
+        ),
     )
     val listPageOverviewThisYearState = _listPageOverviewThisYearState.asStateFlow()
 
     var mostPlayedGamesOfThisYearApiState: MostPlayedGamesOfThisYearApiState by mutableStateOf(
-        MostPlayedGamesOfThisYearApiState.Loading
+        MostPlayedGamesOfThisYearApiState.Loading,
     )
         private set
 
@@ -47,18 +46,17 @@ class ListPageOverviewThisYearViewModel(
 
                 _listPageOverviewThisYearState.update { currentState ->
                     currentState.copy(
-                        mostPlayedGamesOfThisYear = result.asDomainObjects()
+                        mostPlayedGamesOfThisYear = result.asDomainObjects(),
                     )
                 }
                 mostPlayedGamesOfThisYearApiState =
                     MostPlayedGamesOfThisYearApiState.Success
-
             } catch (e: Exception) {
                 mostPlayedGamesOfThisYearApiState =
                     MostPlayedGamesOfThisYearApiState.Error
                 _listPageOverviewThisYearState.update { currentState ->
                     currentState.copy(
-                        mostPlayedGamesOfThisYear = emptyList()
+                        mostPlayedGamesOfThisYear = emptyList(),
                     )
                 }
             }
@@ -84,7 +82,6 @@ class ListPageOverviewThisYearViewModel(
                     _listPageOverviewThisYearState.value.lastPageMostPlayedGamesOfThisYear =
                         result.next.isNullOrEmpty() || result.count <= result.results.size
                     mostPlayedGamesOfThisYearApiState = MostPlayedGamesOfThisYearApiState.Success
-
                 } catch (e: Exception) {
                     mostPlayedGamesOfThisYearApiState = MostPlayedGamesOfThisYearApiState.Error
                 }
@@ -92,9 +89,8 @@ class ListPageOverviewThisYearViewModel(
         }
     }
 
-
-    //**********************************************************************************************************************
-    //REPOSITORY
+    // **********************************************************************************************************************
+    // REPOSITORY
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

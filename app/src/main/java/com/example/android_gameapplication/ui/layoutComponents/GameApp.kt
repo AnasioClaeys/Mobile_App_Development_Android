@@ -23,17 +23,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.ui.detailpage.DetailpageOverview
 import com.example.android_gameapplication.ui.layoutComponents.LandscapeComponents.NavigationRailAppBar
-import com.example.android_gameapplication.ui.listpagePopularGamesAllTime.ListpageOverviewAllTimeState
 import com.example.android_gameapplication.ui.listpagePopularGamesAllTime.ListpageOverviewPopularGamesAllTime
 import com.example.android_gameapplication.ui.listpagePopularGamesThisYear.ListPageOverviewPopularGamesThisYear
 import com.example.android_gameapplication.ui.searchpage.SearchpageOverview
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 @Composable
 fun GameApp(
     navController: NavHostController = rememberNavController(),
-    windowSize: WindowWidthSizeClass
+    windowSize: WindowWidthSizeClass,
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val isStartDestination =
@@ -54,7 +51,7 @@ fun GameApp(
 
     val onDetail: (Int) -> Unit = { gameId ->
         selectedGameId = gameId
-        if (windowSize == WindowWidthSizeClass.Compact|| windowSize == WindowWidthSizeClass.Medium) {
+        if (windowSize == WindowWidthSizeClass.Compact || windowSize == WindowWidthSizeClass.Medium) {
             navController.navigate("${Destinations.DetailPage.name}/$gameId") {
                 launchSingleTop = true
             }
@@ -92,8 +89,6 @@ fun GameApp(
         }
     }
 
-
-
     Scaffold(
         topBar = {
             if (navigationType == GameAppNavigationType.BOTTOM_NAVIGATION) {
@@ -102,18 +97,19 @@ fun GameApp(
                         val isStartDestination =
                             currentBackStackEntry?.destination?.route == Destinations.Start.name
 
-                        if (!isStartDestination)
+                        if (!isStartDestination) {
                             IconButton(onClick = {
                                 navController.popBackStack()
                             }) {
                                 Icon(
                                     Icons.Outlined.ArrowBack,
-                                    contentDescription = stringResource(R.string.go_back)
+                                    contentDescription = stringResource(R.string.go_back),
                                 )
                             }
+                        }
                     },
 
-                    title = R.string.app_name
+                    title = R.string.app_name,
 
                 )
             }
@@ -123,15 +119,12 @@ fun GameApp(
                 BottomAppBar(
                     onHome = onHome,
                     onSearch = onSearch,
-                    currentBackStackEntry = currentBackStackEntry?.destination?.route
+                    currentBackStackEntry = currentBackStackEntry?.destination?.route,
                 )
             }
         },
     ) { innerPadding ->
-        Row{
-
-
-
+        Row {
             if (navigationType == GameAppNavigationType.NAVIGATION_RAIL || navigationType == GameAppNavigationType.PERMANENT_NAVIGATION_DRAWER) {
                 NavigationRailAppBar(
                     onItemSelected = { selectedItem ->
@@ -151,23 +144,20 @@ fun GameApp(
                     },
                     isStartDestination = isStartDestination,
                     showCloseIcon = windowSize == WindowWidthSizeClass.Expanded && selectedGameId != null,
-                    onClose = onCloseDetailPage
+                    onClose = onCloseDetailPage,
                 )
-
             }
-
-
 
             NavHost(
                 navController = navController,
                 startDestination = Destinations.Start.name,
-                if(windowSize == WindowWidthSizeClass.Expanded) Modifier.weight(1f) else Modifier.padding(innerPadding)
+                if (windowSize == WindowWidthSizeClass.Expanded) Modifier.weight(1f) else Modifier.padding(innerPadding),
             ) {
                 composable(route = Destinations.Start.name) {
                     StartScreen(
                         onCarousel = onDetail,
                         onListPopularGamesAllTime = onListPopularGamesAllTime,
-                        onListPopularGamesOfThisYear = onListPopularGamesOfThisYear
+                        onListPopularGamesOfThisYear = onListPopularGamesOfThisYear,
                     )
                 }
                 composable(route = Destinations.Search.name) {
@@ -185,10 +175,8 @@ fun GameApp(
             }
 
             if ((windowSize == WindowWidthSizeClass.Expanded) && selectedGameId != null) {
-                DetailpageOverview(gameId = selectedGameId!!,Modifier.weight(1f))
+                DetailpageOverview(gameId = selectedGameId!!, Modifier.weight(1f))
             }
-
         }
     }
-
 }

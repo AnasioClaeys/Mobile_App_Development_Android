@@ -26,7 +26,7 @@ fun HomepageOverview(
     onCarousel: (Int) -> Unit,
     onListPopularGamesAllTime: () -> Unit,
     onListPopularGamesOfThisYear: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val viewModel: HomepageOverviewViewModel =
         viewModel(factory = HomepageOverviewViewModel.Factory)
@@ -37,24 +37,21 @@ fun HomepageOverview(
     val uiListPopularGamesOfThisYearState by viewModel.uiListPopularGamesOfThisYearState.collectAsState()
     val uiListPopularGamesAllTimeState by viewModel.uiListPopularGamesOfAllTimeState.collectAsState()
 
-
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            //modifier padding top and bottom must be 16.dp
-            .padding(top = 26.dp, bottom = 26.dp)
+            // modifier padding top and bottom must be 16.dp
+            .padding(top = 26.dp, bottom = 26.dp),
     ) {
-
-
         when (popularGamesOfThisYearApiState) {
             is PopularGamesOfThisYearApiState.Loading -> {
                 Box(modifier = modifier.fillMaxSize()) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(
-                            alignment = Alignment.Center
-                        )
+                            alignment = Alignment.Center,
+                        ),
                     )
                 }
             }
@@ -65,7 +62,7 @@ fun HomepageOverview(
                 gamesList = uiListPopularGamesOfThisYearState,
                 onList = onListPopularGamesOfThisYear,
                 onCarousel = onCarousel,
-                buttonText = R.string.more_games_this_year
+                buttonText = R.string.more_games_this_year,
             )
         }
 
@@ -76,8 +73,8 @@ fun HomepageOverview(
                 Box(modifier = modifier.fillMaxSize()) {
                     CircularProgressIndicator(
                         modifier = Modifier.align(
-                            alignment = Alignment.Center
-                        )
+                            alignment = Alignment.Center,
+                        ),
                     )
                 }
             }
@@ -88,9 +85,8 @@ fun HomepageOverview(
                 gamesList = uiListPopularGamesAllTimeState,
                 onList = onListPopularGamesAllTime,
                 onCarousel = onCarousel,
-                buttonText = R.string.more_games_all_time
+                buttonText = R.string.more_games_all_time,
             )
         }
-
     }
 }

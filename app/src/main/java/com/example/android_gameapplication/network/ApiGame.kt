@@ -42,7 +42,6 @@ data class PlatformDetails(
     val name: String,
 )
 
-
 fun ApiResponse.asDomainObjects(): List<Game> {
     return this.results.map {
         Game(
@@ -54,12 +53,10 @@ fun ApiResponse.asDomainObjects(): List<Game> {
             backgroundImage = it.backgroundImage,
             playtime = it.playtime,
             isPopularGamesOfAllTime = it.isPopularGamesOfAllTime,
-            isPopularGamesOfThisYear = it.isPopularGamesOfThisYear
+            isPopularGamesOfThisYear = it.isPopularGamesOfThisYear,
         )
     }
-
 }
-
 
 fun ApiGame.asDomainObject(): Game {
     return Game(
@@ -71,6 +68,6 @@ fun ApiGame.asDomainObject(): Game {
         backgroundImage = this.backgroundImage,
         playtime = this.playtime,
         isPopularGamesOfAllTime = this.isPopularGamesOfAllTime,
-        isPopularGamesOfThisYear = this.isPopularGamesOfThisYear
+        isPopularGamesOfThisYear = this.isPopularGamesOfThisYear,
     )
 }

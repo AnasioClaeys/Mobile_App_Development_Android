@@ -19,12 +19,16 @@ import com.example.android_gameapplication.R
 
 @Composable
 fun NavigationRailAppBar(
-    onItemSelected: (Int) -> Unit, isStartDestination: Boolean, showCloseIcon: Boolean,
-    onClose: () -> Unit
+    onItemSelected: (Int) -> Unit,
+    isStartDestination: Boolean,
+    showCloseIcon: Boolean,
+    onClose: () -> Unit,
 ) {
     var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf(stringResource(R.string.back),
-        stringResource(R.string.home_navRailBar), stringResource(R.string.search_NavRailBar)
+    val items = listOf(
+        stringResource(R.string.back),
+        stringResource(R.string.home_navRailBar),
+        stringResource(R.string.search_NavRailBar),
     )
     val icons = listOf(
         Icons.Outlined.ArrowBack,
@@ -32,14 +36,13 @@ fun NavigationRailAppBar(
         Icons.Outlined.Search,
     )
 
-
     NavigationRail {
         if (showCloseIcon) {
             NavigationRailItem(
                 icon = { Icon(Icons.Outlined.Close, contentDescription = stringResource(R.string.close_icon)) },
                 label = { Text(stringResource(R.string.close_detailpage)) },
                 selected = false,
-                onClick = onClose
+                onClick = onClose,
             )
         }
         items.forEachIndexed { index, item ->
@@ -51,7 +54,7 @@ fun NavigationRailAppBar(
                     onClick = {
                         selectedItem = index
                         onItemSelected(index)
-                    }
+                    },
                 )
             }
         }

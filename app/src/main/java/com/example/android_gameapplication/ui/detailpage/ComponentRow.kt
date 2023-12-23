@@ -16,10 +16,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -38,9 +34,9 @@ fun ComponentRow(title: String, component: List<String>, modifier: Modifier = Mo
             .animateContentSize(
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioNoBouncy,
-                    stiffness = Spring.StiffnessMedium
-                )
-            )
+                    stiffness = Spring.StiffnessMedium,
+                ),
+            ),
     ) {
         Row {
             Text(
@@ -48,7 +44,7 @@ fun ComponentRow(title: String, component: List<String>, modifier: Modifier = Mo
                     .padding(8.dp)
                     .padding(start = 10.dp),
                 text = title,
-                fontSize = 22.sp
+                fontSize = 22.sp,
             )
             IconButton(
                 onClick = { viewModel.toggleExpanded(title) },
@@ -56,11 +52,10 @@ fun ComponentRow(title: String, component: List<String>, modifier: Modifier = Mo
                 Icon(
 
                     imageVector = if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                    contentDescription = stringResource(R.string.expandable_icon)
+                    contentDescription = stringResource(R.string.expandable_icon),
                 )
             }
         }
-
 
         if (!expanded) {
             LazyRow(
@@ -75,13 +70,12 @@ fun ComponentRow(title: String, component: List<String>, modifier: Modifier = Mo
                                 content = {
                                     Text(text = component)
                                 },
-                                modifier = modifier.padding(start = 8.dp, end = 8.dp)
+                                modifier = modifier.padding(start = 8.dp, end = 8.dp),
                             )
                         }
                     }
-                }
+                },
             )
         }
     }
-
 }

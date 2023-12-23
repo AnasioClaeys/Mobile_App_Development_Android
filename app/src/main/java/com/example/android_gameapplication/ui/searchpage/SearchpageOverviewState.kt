@@ -10,5 +10,5 @@ data class SearchpageOverviewState(
     var currentPage: Int = 1,
     var isLoading: Boolean = false,
     var lastSearchQuery: String = "",
-    var isLastPage: Boolean = false
+    var isLastPage: Boolean = false,
 )

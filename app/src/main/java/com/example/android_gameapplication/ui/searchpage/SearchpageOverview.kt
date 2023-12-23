@@ -39,11 +39,9 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
 
     val searchQuery = viewModel.searchQuery.collectAsState()
 
-
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
-
         SearchBar(
             query = searchQuery.value,
             onQueryChange = viewModel::onSearchTextChange,
@@ -51,7 +49,6 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                 viewModel.onSearchActiveChange(false)
                 if (searchQuery.value.isNotEmpty()) {
                     viewModel.addSearchListHistory(searchQuery.value)
-
                 }
                 if (searchQuery.value == "") {
                     viewModel.onSearchTextChange("")
@@ -65,7 +62,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             leadingIcon = {
                 Icon(
                     Icons.Outlined.Search,
-                    contentDescription = stringResource(R.string.search_icon)
+                    contentDescription = stringResource(R.string.search_icon),
                 )
             },
             trailingIcon = {
@@ -79,7 +76,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                                 viewModel.onSearchActiveChange(false)
                             }
                         },
-                        contentDescription = stringResource(R.string.close_search)
+                        contentDescription = stringResource(R.string.close_search),
                     )
                 }
             },
@@ -87,14 +84,14 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                 Text(
                     text = stringResource(R.string.search_placeholder),
                 )
-            }
+            },
         ) {
             if (searchListHistory.isNotEmpty()) {
                 searchListHistory.forEach {
                     Row(
                         modifier = Modifier
                             .padding(all = 14.dp)
-                            .clickable { viewModel.onSearchTextChange(it) }
+                            .clickable { viewModel.onSearchTextChange(it) },
                     ) {
                         Icon(
                             Icons.Outlined.Menu,
@@ -102,13 +99,13 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                             modifier = Modifier.padding(end = 10.dp),
                         )
                         Text(
-                            text = it
+                            text = it,
                         )
                     }
                 }
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Divider()
                 }
@@ -116,25 +113,22 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             Text(
                 text = stringResource(R.string.quick_results),
                 style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(all = 14.dp)
+                modifier = Modifier.padding(all = 14.dp),
             )
 
             GamesList(
                 gamesList = searchList,
                 onListItem = onListItem,
                 hasSearched = gameUiState.hasSearched,
-                viewModel = viewModel
+                viewModel = viewModel,
             )
-
         }
 
         GamesList(
             gamesList = searchList,
             onListItem = onListItem,
             hasSearched = gameUiState.hasSearched,
-            viewModel = viewModel
+            viewModel = viewModel,
         )
-
     }
-
 }

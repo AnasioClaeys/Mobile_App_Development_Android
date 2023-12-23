@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SearchpageOverviewViewModel(
-    private val gameRepository: GameRepository
+    private val gameRepository: GameRepository,
 ) : ViewModel() {
 
     private val _searchpageOverviewState = MutableStateFlow(
@@ -28,8 +28,8 @@ class SearchpageOverviewViewModel(
             searchListHistory = emptyList(),
             hasSearched = false,
             currentPage = 1,
-            isLoading = false
-        )
+            isLoading = false,
+        ),
     )
     val searchpageOverviewState = _searchpageOverviewState.asStateFlow()
 
@@ -40,7 +40,7 @@ class SearchpageOverviewViewModel(
                 try {
                     val result = gameRepository.searchGames(
                         _searchpageOverviewState.value.lastSearchQuery,
-                        _searchpageOverviewState.value.currentPage + 1
+                        _searchpageOverviewState.value.currentPage + 1,
                     )
                     _searchpageOverviewState.value.currentPage =
                         _searchpageOverviewState.value.currentPage + 1
@@ -50,7 +50,7 @@ class SearchpageOverviewViewModel(
 
                     _searchpageOverviewState.update { currentState ->
                         currentState.copy(
-                            searchList = currentState.searchList + result.asDomainObjects()
+                            searchList = currentState.searchList + result.asDomainObjects(),
                         )
                     }
                 } catch (e: Exception) {
@@ -61,7 +61,6 @@ class SearchpageOverviewViewModel(
             }
         }
     }
-
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
@@ -89,12 +88,12 @@ class SearchpageOverviewViewModel(
                 _searchGameApiState.value = SearchGameApiState.Loading
                 val result = gameRepository.searchGames(
                     _searchpageOverviewState.value.lastSearchQuery,
-                    _searchpageOverviewState.value.currentPage
+                    _searchpageOverviewState.value.currentPage,
                 )
                 _searchpageOverviewState.update { currentState ->
                     currentState.copy(
                         searchList = result.asDomainObjects(),
-                        hasSearched = true
+                        hasSearched = true,
                     )
                 }
                 _searchGameApiState.value = SearchGameApiState.Success(result.asDomainObjects())
@@ -103,7 +102,7 @@ class SearchpageOverviewViewModel(
                 _searchpageOverviewState.update { currentState ->
                     currentState.copy(
                         searchList = emptyList(),
-                        hasSearched = true
+                        hasSearched = true,
                     )
                 }
             }
@@ -117,7 +116,7 @@ class SearchpageOverviewViewModel(
     fun onSearchActiveChange(active: Boolean) {
         _searchpageOverviewState.update { currentState ->
             currentState.copy(
-                searchActive = active
+                searchActive = active,
             )
         }
     }
@@ -126,14 +125,14 @@ class SearchpageOverviewViewModel(
         if (!_searchpageOverviewState.value.searchListHistory.contains(text)) {
             _searchpageOverviewState.update { currentState ->
                 currentState.copy(
-                    searchListHistory = currentState.searchListHistory + text
+                    searchListHistory = currentState.searchListHistory + text,
                 )
             }
         }
     }
 
-    //**********************************************************************************************************************
-    //REPOSITORY
+    // **********************************************************************************************************************
+    // REPOSITORY
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

@@ -18,20 +18,22 @@ import com.example.android_gameapplication.network.DetailGameApiState
 fun DetailpageOverview(
     gameId: Int,
     modifier: Modifier = Modifier,
-    detailpageOverviewViewModel: DetailpageOverviewViewModel = viewModel(factory = DetailpageOverviewViewModel.Factory)
+    detailpageOverviewViewModel: DetailpageOverviewViewModel = viewModel(factory = DetailpageOverviewViewModel.Factory),
 ) {
     LaunchedEffect(key1 = gameId) {
         detailpageOverviewViewModel.getDetailGameById(gameId)
     }
 
-    when (val gameDetailApiState =
-        detailpageOverviewViewModel.gameDetailApiState.collectAsState().value) {
+    when (
+        val gameDetailApiState =
+            detailpageOverviewViewModel.gameDetailApiState.collectAsState().value
+    ) {
         is DetailGameApiState.Loading -> {
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(
-                        alignment = Alignment.Center
-                    )
+                        alignment = Alignment.Center,
+                    ),
                 )
             }
         }
@@ -46,5 +48,4 @@ fun DetailpageOverview(
             Detailpage(game = game, modifier = modifier)
         }
     }
-
 }

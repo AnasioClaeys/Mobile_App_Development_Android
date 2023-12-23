@@ -18,20 +18,20 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ListpageOverviewAllTimeViewModel(
-    private val gameRepository: GameRepository
+    private val gameRepository: GameRepository,
 ) : ViewModel() {
 
     private val _listpageOverviewAllTimeState = MutableStateFlow(
         ListpageOverviewAllTimeState(
             mostPlayedGamesOfAllTime = emptyList(),
             currentPageMostPlayedGamesOfAllTime = 1,
-            lastPageMostPlayedGamesOfTAllTime = false
-        )
+            lastPageMostPlayedGamesOfTAllTime = false,
+        ),
     )
     val listpageOverviewAllTimeState = _listpageOverviewAllTimeState.asStateFlow()
 
     var mostPlayedGamesOfAllTimeApiState: MostPlayedGamesOfAllTimeApiState by mutableStateOf(
-        MostPlayedGamesOfAllTimeApiState.Loading
+        MostPlayedGamesOfAllTimeApiState.Loading,
     )
         private set
 
@@ -43,26 +43,24 @@ class ListpageOverviewAllTimeViewModel(
         listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime = 1
         viewModelScope.launch {
             try {
-                //Ophalen van de data
+                // Ophalen van de data
                 val result =
                     gameRepository.getMostPlayedGamesOfAllTime(listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime)
 
-                //Update de gameApiState
+                // Update de gameApiState
                 _listpageOverviewAllTimeState.update { currentState ->
                     currentState.copy(
-                        mostPlayedGamesOfAllTime = result.asDomainObjects()
+                        mostPlayedGamesOfAllTime = result.asDomainObjects(),
                     )
                 }
                 mostPlayedGamesOfAllTimeApiState =
                     MostPlayedGamesOfAllTimeApiState.Success
-
-
             } catch (e: Exception) {
                 mostPlayedGamesOfAllTimeApiState =
                     MostPlayedGamesOfAllTimeApiState.Error
                 _listpageOverviewAllTimeState.update { currentState ->
                     currentState.copy(
-                        mostPlayedGamesOfAllTime = emptyList()
+                        mostPlayedGamesOfAllTime = emptyList(),
                     )
                 }
             }
@@ -89,7 +87,6 @@ class ListpageOverviewAllTimeViewModel(
                     listpageOverviewAllTimeState.value.lastPageMostPlayedGamesOfTAllTime =
                         result.next.isNullOrEmpty() || result.count <= result.results.size
                     mostPlayedGamesOfAllTimeApiState = MostPlayedGamesOfAllTimeApiState.Success
-
                 } catch (e: Exception) {
                     mostPlayedGamesOfAllTimeApiState = MostPlayedGamesOfAllTimeApiState.Error
                 }
@@ -97,9 +94,8 @@ class ListpageOverviewAllTimeViewModel(
         }
     }
 
-
-    //**********************************************************************************************************************
-    //REPOSITORY
+    // **********************************************************************************************************************
+    // REPOSITORY
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

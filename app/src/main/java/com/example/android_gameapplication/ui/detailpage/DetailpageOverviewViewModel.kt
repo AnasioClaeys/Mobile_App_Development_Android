@@ -1,9 +1,5 @@
 package com.example.android_gameapplication.ui.detailpage
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -12,28 +8,25 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.android_gameapplication.GamesApplication
 import com.example.android_gameapplication.data.GameRepository
 import com.example.android_gameapplication.network.DetailGameApiState
-import com.example.android_gameapplication.ui.searchpage.SearchpageOverviewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DetailpageOverviewViewModel(
-    private val gameRepository: GameRepository
+    private val gameRepository: GameRepository,
 ) : ViewModel() {
 
     private val _detailpageOverviewState = MutableStateFlow(
         DetailpageOverviewState(
-            expandedStates = mutableMapOf()
-        )
+            expandedStates = mutableMapOf(),
+        ),
     )
     val detailpageOverviewState = _detailpageOverviewState.asStateFlow()
-
 
     private val _gameDetailApiState =
         MutableStateFlow<DetailGameApiState>(DetailGameApiState.Loading)
     val gameDetailApiState: StateFlow<DetailGameApiState> = _gameDetailApiState.asStateFlow()
-
 
     fun getDetailGameById(gameId: Int) {
         viewModelScope.launch {
@@ -53,13 +46,12 @@ class DetailpageOverviewViewModel(
         _detailpageOverviewState.value = _detailpageOverviewState.value.copy(
             expandedStates = _detailpageOverviewState.value.expandedStates.toMutableMap().apply {
                 put(title, !currentState)
-            }
+            },
         )
     }
 
-
-    //**********************************************************************************************************************
-    //REPOSITORY
+    // **********************************************************************************************************************
+    // REPOSITORY
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

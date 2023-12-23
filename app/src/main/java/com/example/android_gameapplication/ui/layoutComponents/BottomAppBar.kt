@@ -4,7 +4,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -24,12 +23,11 @@ fun BottomAppBar(onHome: () -> Unit, onSearch: () -> Unit, currentBackStackEntry
                 icon = {
                     Icon(
                         Icons.Outlined.Home,
-                        contentDescription = stringResource(R.string.bottomAppBar_navigate_to_home_screen)
+                        contentDescription = stringResource(R.string.bottomAppBar_navigate_to_home_screen),
                     )
                 },
-                label = { Text(text = stringResource(R.string.home)) }
+                label = { Text(text = stringResource(R.string.home)) },
             )
-
 
             NavigationBarItem(
                 selected = currentBackStackEntry == Destinations.Search.name,
@@ -37,11 +35,11 @@ fun BottomAppBar(onHome: () -> Unit, onSearch: () -> Unit, currentBackStackEntry
                 icon = {
                     Icon(
                         Icons.Outlined.Search,
-                        contentDescription = stringResource(R.string.bottomAppBar_navigate_to_search_screen)
+                        contentDescription = stringResource(R.string.bottomAppBar_navigate_to_search_screen),
                     )
                 },
-                label = { Text(text = stringResource(R.string.search)) }
+                label = { Text(text = stringResource(R.string.search)) },
             )
-        }
+        },
     )
 }

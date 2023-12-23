@@ -1,6 +1,5 @@
 package com.example.android_gameapplication.ui.homepage
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,22 +13,20 @@ import com.example.android_gameapplication.data.GameRepository
 import com.example.android_gameapplication.model.Game
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class HomepageOverviewViewModel( private val gameRepository: GameRepository) :ViewModel(){
+class HomepageOverviewViewModel(private val gameRepository: GameRepository) : ViewModel() {
 
     var popularGamesOfThisYearApiState: PopularGamesOfThisYearApiState by mutableStateOf(
-        PopularGamesOfThisYearApiState.Loading
+        PopularGamesOfThisYearApiState.Loading,
     )
         private set
 
     var popularGamesOfAllTimeApiState: PopularGamesOfAllTimeApiState by mutableStateOf(
-        PopularGamesOfAllTimeApiState.Loading
+        PopularGamesOfAllTimeApiState.Loading,
     )
         private set
 
@@ -47,15 +44,15 @@ class HomepageOverviewViewModel( private val gameRepository: GameRepository) :Vi
                 gameRepository.refreshMostPopularGamesOfThisYear()
             }
 
-            //Ophalen van de data
+            // Ophalen van de data
             uiListPopularGamesOfThisYearState =
                 gameRepository.getMostPopularGamesOfThisYear().stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000L),
-                    initialValue = listOf()
+                    initialValue = listOf(),
                 )
 
-            //Update de PopularGamesOfThisYearApiState
+            // Update de PopularGamesOfThisYearApiState
             popularGamesOfThisYearApiState =
                 PopularGamesOfThisYearApiState.Success
         } catch (e: Exception) {
@@ -73,21 +70,19 @@ class HomepageOverviewViewModel( private val gameRepository: GameRepository) :Vi
                 gameRepository.getMostPopularGamesOfAllTime().stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.WhileSubscribed(5_000L),
-                    initialValue = listOf()
+                    initialValue = listOf(),
                 )
 
-
-            //Update de PopularGamesOfAllTimeApiState
+            // Update de PopularGamesOfAllTimeApiState
             popularGamesOfAllTimeApiState =
                 PopularGamesOfAllTimeApiState.Success
-
         } catch (e: Exception) {
             popularGamesOfAllTimeApiState = PopularGamesOfAllTimeApiState.Error
         }
     }
 
-    //**********************************************************************************************************************
-    //REPOSITORY
+    // **********************************************************************************************************************
+    // REPOSITORY
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

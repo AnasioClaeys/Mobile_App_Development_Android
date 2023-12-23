@@ -47,38 +47,37 @@ fun GameListItemPopularGames(game: Game, onListItem: (Int) -> Unit, modifier: Mo
                 modifier = modifier
                     .size(70.dp)
                     .clip(
-                        RoundedCornerShape(16.dp)
-                    )
+                        RoundedCornerShape(16.dp),
+                    ),
             )
         },
         trailingContent = {
-
             Icon(
-                imageVector = Icons.Outlined.ArrowForward, contentDescription = stringResource(
-                    R.string.listItem_icon_go_to_detail_page
-                )
+                imageVector = Icons.Outlined.ArrowForward,
+                contentDescription = stringResource(
+                    R.string.listItem_icon_go_to_detail_page,
+                ),
             )
         },
-        )
+    )
     Divider(
         modifier = modifier
             .fillMaxWidth()
             .height(1.dp),
     )
-
 }
 
 @Composable
 fun GameListPopularGames(
     gamesList: List<Game>,
     onListItem: (Int) -> Unit,
-    newPage: () -> Unit = {}
+    newPage: () -> Unit = {},
 ) {
     if (gamesList.isNullOrEmpty()) {
         Text(
             text = stringResource(R.string.no_games_found2),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         )
     } else {
         LazyColumn {
@@ -91,8 +90,8 @@ fun GameListPopularGames(
                     Box(modifier = Modifier.fillMaxSize()) {
                         CircularProgressIndicator(
                             modifier = Modifier.align(
-                                alignment = Alignment.Center
-                            )
+                                alignment = Alignment.Center,
+                            ),
                         )
                     }
                     LaunchedEffect(gamesList.size) {

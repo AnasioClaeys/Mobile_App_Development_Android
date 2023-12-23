@@ -26,8 +26,8 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
             Box(modifier = modifier.fillMaxSize()) {
                 CircularProgressIndicator(
                     modifier = Modifier.align(
-                        alignment = Alignment.Center
-                    )
+                        alignment = Alignment.Center,
+                    ),
                 )
             }
         }
@@ -36,9 +36,7 @@ fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Mod
         is MostPlayedGamesOfAllTimeApiState.Success -> GameListPopularGames(
             listpageOverviewAllTimeState.mostPlayedGamesOfAllTime,
             onListItem,
-            newPage = viewModel::loadNextPageMostPlayedGamesOfAllTime
+            newPage = viewModel::loadNextPageMostPlayedGamesOfAllTime,
         )
     }
-
-
 }

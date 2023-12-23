@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import com.example.android_gameapplication.ui.layoutComponents.GameApp
 import com.example.android_gameapplication.ui.theme.Android_GameApplicationTheme
 
-
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +20,7 @@ class MainActivity : ComponentActivity() {
             Android_GameApplicationTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     val windowSize = calculateWindowSizeClass(this)
                     GameApp(windowSize = windowSize.widthSizeClass)

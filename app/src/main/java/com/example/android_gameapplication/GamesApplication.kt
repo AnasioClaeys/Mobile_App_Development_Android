@@ -4,9 +4,9 @@ import android.app.Application
 import com.example.android_gameapplication.data.AppContainer
 import com.example.android_gameapplication.data.DefaultAppContainer
 
-class GamesApplication: Application() {
+class GamesApplication : Application() {
 
-    lateinit var container:AppContainer
+    lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
