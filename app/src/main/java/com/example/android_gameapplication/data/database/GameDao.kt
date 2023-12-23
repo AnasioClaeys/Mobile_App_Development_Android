@@ -20,5 +20,4 @@ interface GameDao {
 
     @Query("SELECT * FROM games WHERE id = :id")
     suspend fun getDetailGameById(id: Int): DbGame?
-
 }

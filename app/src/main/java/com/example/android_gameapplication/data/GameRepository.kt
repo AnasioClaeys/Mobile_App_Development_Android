@@ -1,8 +1,5 @@
 package com.example.android_gameapplication.data
 
-import android.util.Log
-import androidx.room.Query
-import com.example.android_gameapplication.data.database.DbGame
 import com.example.android_gameapplication.data.database.GameDao
 import com.example.android_gameapplication.data.database.asDbGame
 import com.example.android_gameapplication.data.database.asDomainGame
@@ -12,17 +9,14 @@ import com.example.android_gameapplication.network.ApiResponse
 import com.example.android_gameapplication.network.GameApiService
 import com.example.android_gameapplication.network.GameApiServiceImpl
 import com.example.android_gameapplication.network.asDomainObject
-import com.example.android_gameapplication.network.asDomainObjects
 import com.example.android_gameapplication.network.getMostPopularGamesOfAllTimeAsFlow
 import com.example.android_gameapplication.network.getMostPopularGamesOfThisYearAsFlow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 
 interface GameRepository {
+
     suspend fun searchGames(search: String, page: Int): ApiResponse
 
     suspend fun insert(game: Game)
@@ -40,21 +34,19 @@ interface GameRepository {
     suspend fun getMostPlayedGamesOfThisYear(page: Int): ApiResponse
 
     suspend fun getMostPlayedGamesOfAllTime(page: Int): ApiResponse
-
 }
 
 class ApiGameRepository(
     private val gamesApiService: GameApiService,
     private val gameDao: GameDao,
-    private val gamesApiServiceImpl: GameApiServiceImpl
+    private val gamesApiServiceImpl: GameApiServiceImpl,
 ) : GameRepository {
-
 
     override suspend fun searchGames(search: String, page: Int): ApiResponse {
         return gamesApiService.searchGames(search, pageSize = 10, page = page)
     }
 
-    //Database
+    // Database
     override suspend fun getDetailGameById(id: Int): Flow<Game> = flow {
         val localGame = gameDao.getDetailGameById(id)
 

@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,11 +61,11 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             },
             active = searchActive,
             onActiveChange = viewModel::onSearchActiveChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().testTag("test"),
             leadingIcon = {
                 Icon(
                     Icons.Outlined.Search,
-                    contentDescription = stringResource(R.string.search_placeholder)
+                    contentDescription = stringResource(R.string.search_icon)
                 )
             },
             trailingIcon = {
@@ -82,7 +83,11 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                     )
                 }
             },
-            placeholder = { Text(text = stringResource(R.string.search_placeholder)) }
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.search_placeholder),
+                )
+            }
         ) {
             if (searchListHistory.isNotEmpty()) {
                 searchListHistory.forEach {
@@ -93,7 +98,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                     ) {
                         Icon(
                             Icons.Outlined.Menu,
-                            contentDescription = stringResource(R.string.search_placeholder),
+                            contentDescription = stringResource(R.string.search_button),
                             modifier = Modifier.padding(end = 10.dp),
                         )
                         Text(

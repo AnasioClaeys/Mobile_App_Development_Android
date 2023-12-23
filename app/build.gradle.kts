@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
     id("com.google.devtools.ksp")
+    id("org.jetbrains.dokka")
 }
 
 android {
@@ -72,6 +73,9 @@ dependencies {
     //Image Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    // Dokka
+    dokkaPlugin("org.jetbrains.dokka:android-documentation-plugin:1.9.10")
+
     //room
     val room_version = "2.5.0"
     implementation("androidx.room:room-runtime:$room_version")
@@ -102,4 +106,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     androidTestImplementation("androidx.navigation:navigation-compose:2.7.2")
+
+    implementation("androidx.compose.material3:material3-window-size-class")
 }

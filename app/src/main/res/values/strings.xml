@@ -13,7 +13,7 @@
     <string name="bottomAppBar_navigate_to_search_screen">Navigate to search screen</string>
     <string name="go_back">Go back</string>
     <string name="listItem_icon_go_to_detail_page">Go to detail page</string>
-    <string name="search_placeholder">Search</string>
+    <string name="search_placeholder">Search for games</string>
     <string name="close_search">Close Search</string>
     <string name="quick_results">Quick Results</string>
     <string name="more_games_this_year">More popular games of this year</string>
@@ -24,6 +24,13 @@
     <string name="expandable_icon">Expandable icon</string>
     <string name="arrow_icon">Arrow Icon</string>
     <string name="no_games_found2">No games found</string>
+    <string name="search_button">search button</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="close_icon">Close icon</string>
+    <string name="close_detailpage">Close detailpage</string>
+    <string name="back">Back</string>
+    <string name="home_navRailBar">Home</string>
+    <string name="search_NavRailBar">Search</string>
     <!--    <string name="searchpage_title">Search page</string>-->
 <!--    <string name="detailpage_title">Detail page</string>-->
 

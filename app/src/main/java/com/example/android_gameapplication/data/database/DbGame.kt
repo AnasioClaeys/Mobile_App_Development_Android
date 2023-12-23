@@ -5,9 +5,9 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.android_gameapplication.model.Game
 
-@Entity(tableName="games")
+@Entity(tableName = "games")
 @TypeConverters(ListTypeConverter::class)
-data class DbGame (
+data class DbGame(
     @PrimaryKey
     val id: Int,
     val name: String,
@@ -20,7 +20,7 @@ data class DbGame (
     val isInMostPopularGamesOfAllTime: Boolean = false,
 )
 
-fun Game.asDbGame()= DbGame(
+fun Game.asDbGame() = DbGame(
     id = id,
     name = name,
     genres = genres,
@@ -44,4 +44,4 @@ fun DbGame.asDomainGame() = Game(
     isPopularGamesOfAllTime = isInMostPopularGamesOfAllTime,
 )
 
-fun List<DbGame>.asDomainGames() = map{it.asDomainGame()}
+fun List<DbGame>.asDomainGames() = map { it.asDomainGame() }

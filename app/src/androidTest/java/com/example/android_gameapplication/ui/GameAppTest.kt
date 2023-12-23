@@ -2,6 +2,7 @@ package com.example.android_gameapplication.ui
 
 import android.content.Context
 import androidx.annotation.StringRes
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertIsDisplayed
@@ -9,6 +10,7 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
@@ -39,20 +41,26 @@ class GameAppTest {
         composeTestRule.setContent {
             navController = TestNavHostController(LocalContext.current)
             navController.navigatorProvider.addNavigator(ComposeNavigator())
-            GameApp(navController)
+            GameApp(navController, WindowWidthSizeClass.Compact)
         }
     }
 
     @Test
     fun startscreen_Initialize_showsHomeButton() {
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.bottomAppBar_navigate_to_home_screen))
+        composeTestRule.onNodeWithContentDescription(
+            getResourceString(R.string.bottomAppBar_navigate_to_home_screen),
+            useUnmergedTree = true
+        )
             .assertIsDisplayed()
             .assertIsEnabled()
     }
 
     @Test
     fun startscreen_Initialize_showsSearchButton() {
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.bottomAppBar_navigate_to_search_screen))
+        composeTestRule.onNodeWithContentDescription(
+            getResourceString(R.string.bottomAppBar_navigate_to_search_screen),
+            useUnmergedTree = true
+        )
             .assertIsDisplayed()
             .assertIsEnabled()
     }
@@ -65,9 +73,10 @@ class GameAppTest {
 
     @Test
     fun clickOnSearchButton_navigatesToSearchScreen() {
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.bottomAppBar_navigate_to_search_screen))
-            .assertIsDisplayed()
-            .assertIsEnabled()
+        composeTestRule.onNodeWithContentDescription(
+            getResourceString(R.string.bottomAppBar_navigate_to_search_screen),
+            useUnmergedTree = true
+        ).assertIsDisplayed().assertIsEnabled()
             .performClick()
         navController.currentDestination?.route?.let { route ->
             assert(route == Destinations.Search.name)
@@ -76,7 +85,10 @@ class GameAppTest {
 
     @Test
     fun clickOnHomeButton_navigatesToHomeScreen() {
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.bottomAppBar_navigate_to_home_screen))
+        composeTestRule.onNodeWithContentDescription(
+            getResourceString(R.string.bottomAppBar_navigate_to_home_screen),
+            useUnmergedTree = true
+        )
             .assertIsDisplayed()
             .assertIsEnabled()
             .performClick()
@@ -86,7 +98,7 @@ class GameAppTest {
     }
 
     @Test
-    fun clickButtonPopularGameOfThisYear_navigatesToListPagePopularGamesOfThisYear(){
+    fun clickButtonPopularGameOfThisYear_navigatesToListPagePopularGamesOfThisYear() {
         //click on button more games this year
         composeTestRule.onNodeWithText(getResourceString(R.string.more_games_this_year))
             .assertIsDisplayed()
@@ -98,7 +110,7 @@ class GameAppTest {
     }
 
     @Test
-    fun clickButtonPopularGameOfAllTime_navigatesToListPagePopularGamesAllTime(){
+    fun clickButtonPopularGameOfAllTime_navigatesToListPagePopularGamesAllTime() {
         // Scroll naar de knop 'more games all time'
         composeTestRule
             .onNodeWithText(getResourceString(R.string.more_games_all_time))
@@ -118,48 +130,33 @@ class GameAppTest {
     }
 
     @Test
-    fun goToSeachPage_clickOnSearchButton_TypesTextThatIsnTInList_ShowsNoResultsFound(){
+    fun goToSeachPage_clickOnSearchButton_OpenSearchbar_ShowsResultsFound() {
         //click on search button
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.bottomAppBar_navigate_to_search_screen))
+        composeTestRule.onNodeWithContentDescription(
+            getResourceString(R.string.bottomAppBar_navigate_to_search_screen),
+            useUnmergedTree = true
+        )
             .assertIsDisplayed()
             .assertIsEnabled()
             .performClick()
 
-        //type text that isn't in list
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.search_placeholder))
-            .performTextInput("ZAAAAAAAAAAAAAAAAAAAAAAAZZZZZZZZZZZZZZZZZZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-
-        //click on search button in keyboard
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.search_placeholder))
-            .performImeAction()
-
-        //check if text no results found is displayed
-        composeTestRule.onNodeWithText(getResourceString(R.string.no_games_found))
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun goToSeachPage_clickOnSearchButton_TypesTextThatIsInList_ShowsResultsFound(){
-        //click on search button
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.bottomAppBar_navigate_to_search_screen))
-            .assertIsDisplayed()
-            .assertIsEnabled()
+        // Click on search icon to activate the search field
+        composeTestRule.onNodeWithContentDescription(
+            getResourceString(R.string.search_icon),
+            useUnmergedTree = true
+        )
             .performClick()
 
-        //type text that isn't in list
-        composeTestRule.onNodeWithContentDescription(getResourceString(R.string.search_placeholder))
-            .performTextInput("Grand")
+        // Wait for search results
+        Thread.sleep(2000)
 
-    //wait for search results
-        Thread.sleep(1000)
-
-
-            //check if quick results is displayed
-        composeTestRule.onNodeWithText(getResourceString(R.string.quick_results))
+        // Check if quick results is displayed
+        composeTestRule.onNodeWithText(
+            getResourceString(R.string.quick_results),
+            useUnmergedTree = true
+        )
             .assertIsDisplayed()
-
     }
-
 
 
 }

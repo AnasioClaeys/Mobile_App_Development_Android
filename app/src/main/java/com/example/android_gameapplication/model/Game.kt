@@ -1,6 +1,5 @@
 package com.example.android_gameapplication.model
 
-
 data class Game(
     val id: Int,
     val name: String,
