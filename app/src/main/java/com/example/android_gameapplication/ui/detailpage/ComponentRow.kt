@@ -23,6 +23,14 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 
+/**
+ * A Composable function that creates a row component for the detail page.
+ * It displays a list of strings (components) in a row format, with the ability to expand and collapse.
+ *
+ * @param title The title for the row.
+ * @param component The list of strings to be displayed in the row.
+ * @param modifier The modifier to be applied to the row layout.
+ */
 @Composable
 fun ComponentRow(title: String, component: List<String>, modifier: Modifier = Modifier) {
     val viewModel: DetailpageOverviewViewModel =

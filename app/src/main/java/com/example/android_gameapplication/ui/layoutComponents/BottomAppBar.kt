@@ -11,6 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.android_gameapplication.R
 
+/**
+ * A Composable function that creates a bottom app bar.
+ * It includes navigation items for home and search, with visual and functional elements based on the current navigation state.
+ *
+ * @param onHome A lambda function to be invoked when the home item is clicked.
+ * @param onSearch A lambda function to be invoked when the search item is clicked.
+ * @param currentBackStackEntry The current back stack entry name to determine which item is selected.
+ */
 @Composable
 fun BottomAppBar(onHome: () -> Unit, onSearch: () -> Unit, currentBackStackEntry: String?) {
     androidx.compose.material3.BottomAppBar(

@@ -9,6 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 
+/**
+ * A Composable function that creates a top app bar.
+ * This app bar is used across different screens of the application and includes a title and a navigation icon.
+ *
+ * @param navigationIcon A composable lambda function that defines the navigation icon to be displayed on the top app bar.
+ * @param title The resource ID of the title string to be displayed in the top app bar.
+ */
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TopAppBar(

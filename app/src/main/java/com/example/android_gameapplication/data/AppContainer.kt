@@ -13,10 +13,19 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
+/**
+ * Interface representing a container that holds application-level dependencies.
+ */
 interface AppContainer {
     val gameRepository: GameRepository
 }
 
+/**
+ * Default implementation of [AppContainer].
+ * Provides dependencies such as API services, database access objects, and repositories.
+ *
+ * @property applicationContext The context of the application.
+ */
 class DefaultAppContainer(private val applicationContext: Context) : AppContainer {
     private val BASE_URL = "https://api.rawg.io/api/"
     private val json = Json {
@@ -33,6 +42,11 @@ class DefaultAppContainer(private val applicationContext: Context) : AppContaine
         .client(createOkHttpClient())
         .build()
 
+    /**
+     * Creates an OkHttpClient with logging capabilities.
+     *
+     * @return Configured OkHttpClient instance.
+     */
     private fun createOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BASIC)
@@ -60,6 +74,9 @@ class DefaultAppContainer(private val applicationContext: Context) : AppContaine
         gameDb.gameDao()
     }
 
+    /**
+     * Provides a repository for accessing game data, using both local database and remote API.
+     */
     override val gameRepository: GameRepository by lazy {
         ApiGameRepository(
             gameDao = gameDao,

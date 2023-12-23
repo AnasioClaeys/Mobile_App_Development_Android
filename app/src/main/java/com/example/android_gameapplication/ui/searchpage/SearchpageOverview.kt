@@ -26,22 +26,33 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 
+/**
+ * A composable function that represents the overview of the search page, including a search bar and a list of games.
+ *
+ * @param onListItem A lambda function to handle item click events.
+ * @param modifier Modifier for customizing the appearance of the search page.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
+    // Obtain the ViewModel for the search page
     val viewModel: SearchpageOverviewViewModel =
         viewModel(factory = SearchpageOverviewViewModel.Factory)
+    // Collect the game UI state as a Composable state
     val gameUiState by viewModel.searchpageOverviewState.collectAsState()
 
+    // Extract relevant properties from the game UI state
     val searchList = gameUiState.searchList
     val searchActive = gameUiState.searchActive
     val searchListHistory = gameUiState.searchListHistory
 
+    // Collect the search query as a Composable state
     val searchQuery = viewModel.searchQuery.collectAsState()
 
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
+        // SearchBar for inputting and searching games
         SearchBar(
             query = searchQuery.value,
             onQueryChange = viewModel::onSearchTextChange,
@@ -58,7 +69,9 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             },
             active = searchActive,
             onActiveChange = viewModel::onSearchActiveChange,
-            modifier = Modifier.fillMaxWidth().testTag("test"),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("test"),
             leadingIcon = {
                 Icon(
                     Icons.Outlined.Search,
@@ -86,6 +99,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                 )
             },
         ) {
+            // Display search history and quick results
             if (searchListHistory.isNotEmpty()) {
                 searchListHistory.forEach {
                     Row(
@@ -116,6 +130,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
                 modifier = Modifier.padding(all = 14.dp),
             )
 
+            // Display the list of games
             GamesList(
                 gamesList = searchList,
                 onListItem = onListItem,
@@ -124,6 +139,7 @@ fun SearchpageOverview(onListItem: (Int) -> Unit, modifier: Modifier = Modifier)
             )
         }
 
+        // Display the list of games again (outside of the search bar)
         GamesList(
             gamesList = searchList,
             onListItem = onListItem,

@@ -14,9 +14,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.network.MostPlayedGamesOfAllTimeApiState
 
+/**
+ * A Composable function that creates an overview of the list page for the most played games of all time.
+ * It handles the state of the game list data, displaying a loading indicator, error message, or the game list.
+ *
+ * @param onListItem A lambda function to be invoked when a list item is clicked, passing the game's ID.
+ * @param modifier The modifier to be applied to the layout.
+ */
 @Composable
 fun ListpageOverviewPopularGamesAllTime(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
-    val viewModel: ListpageOverviewAllTimeViewModel = viewModel(factory = ListpageOverviewAllTimeViewModel.Factory)
+    val viewModel: ListpageOverviewAllTimeViewModel =
+        viewModel(factory = ListpageOverviewAllTimeViewModel.Factory)
 
     val mostPlayedGamesOfAllTimeApiState = viewModel.mostPlayedGamesOfAllTimeApiState
     val listpageOverviewAllTimeState by viewModel.listpageOverviewAllTimeState.collectAsState()

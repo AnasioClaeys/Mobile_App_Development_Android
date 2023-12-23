@@ -27,6 +27,13 @@ import com.example.android_gameapplication.ui.listpagePopularGamesAllTime.Listpa
 import com.example.android_gameapplication.ui.listpagePopularGamesThisYear.ListPageOverviewPopularGamesThisYear
 import com.example.android_gameapplication.ui.searchpage.SearchpageOverview
 
+/**
+ * A Composable function that creates the main layout for the application.
+ * It sets up navigation and dynamically adjusts the layout based on the screen size.
+ *
+ * @param navController The NavController for managing app navigation.
+ * @param windowSize The size classification of the current window, which affects the layout type.
+ */
 @Composable
 fun GameApp(
     navController: NavHostController = rememberNavController(),
@@ -111,7 +118,7 @@ fun GameApp(
 
                     title = R.string.app_name,
 
-                )
+                    )
             }
         },
         bottomBar = {
@@ -134,9 +141,11 @@ fun GameApp(
                                     navController.popBackStack()
                                 }
                             }
+
                             1 -> {
                                 onHome()
                             }
+
                             2 -> {
                                 onSearch()
                             }
@@ -151,7 +160,9 @@ fun GameApp(
             NavHost(
                 navController = navController,
                 startDestination = Destinations.Start.name,
-                if (windowSize == WindowWidthSizeClass.Expanded) Modifier.weight(1f) else Modifier.padding(innerPadding),
+                if (windowSize == WindowWidthSizeClass.Expanded) Modifier.weight(1f) else Modifier.padding(
+                    innerPadding
+                ),
             ) {
                 composable(route = Destinations.Start.name) {
                     StartScreen(

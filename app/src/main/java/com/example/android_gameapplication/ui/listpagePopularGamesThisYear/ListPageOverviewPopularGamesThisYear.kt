@@ -15,6 +15,13 @@ import com.example.android_gameapplication.R
 import com.example.android_gameapplication.network.MostPlayedGamesOfThisYearApiState
 import com.example.android_gameapplication.ui.listpagePopularGamesAllTime.GameListPopularGames
 
+/**
+ * A Composable function that creates an overview of the list page for the most played games of this year.
+ * It handles the state of the game list data, displaying a loading indicator, error message, or the game list.
+ *
+ * @param onListItem A lambda function to be invoked when a list item is clicked, passing the game's ID.
+ * @param modifier The modifier to be applied to the layout.
+ */
 @Composable
 fun ListPageOverviewPopularGamesThisYear(onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
     val viewModel: ListPageOverviewThisYearViewModel =

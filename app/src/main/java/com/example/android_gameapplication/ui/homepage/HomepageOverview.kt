@@ -21,6 +21,15 @@ import com.example.android_gameapplication.R
 import com.example.android_gameapplication.network.PopularGamesOfAllTimeApiState
 import com.example.android_gameapplication.network.PopularGamesOfThisYearApiState
 
+/**
+ * A Composable function that provides an overview of the homepage.
+ * It displays sections for popular games of the year and of all time, handling their respective API states.
+ *
+ * @param onCarousel A lambda function to be invoked when a game in the carousel is clicked, passing the game's ID.
+ * @param onListPopularGamesAllTime A lambda function to be invoked when the 'more games of all time' button is clicked.
+ * @param onListPopularGamesOfThisYear A lambda function to be invoked when the 'more games of this year' button is clicked.
+ * @param modifier The modifier to be applied to the layout.
+ */
 @Composable
 fun HomepageOverview(
     onCarousel: (Int) -> Unit,

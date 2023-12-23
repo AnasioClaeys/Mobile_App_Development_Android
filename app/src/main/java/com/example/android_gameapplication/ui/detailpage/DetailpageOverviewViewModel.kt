@@ -13,6 +13,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for managing the UI state and data for the game detail page overview.
+ *
+ * @property gameRepository The repository for accessing game data.
+ */
 class DetailpageOverviewViewModel(
     private val gameRepository: GameRepository,
 ) : ViewModel() {
@@ -28,6 +33,11 @@ class DetailpageOverviewViewModel(
         MutableStateFlow<DetailGameApiState>(DetailGameApiState.Loading)
     val gameDetailApiState: StateFlow<DetailGameApiState> = _gameDetailApiState.asStateFlow()
 
+    /**
+     * Fetches the details of a game by its ID and updates the game detail API state.
+     *
+     * @param gameId The unique identifier of the game.
+     */
     fun getDetailGameById(gameId: Int) {
         viewModelScope.launch {
             try {
@@ -41,6 +51,11 @@ class DetailpageOverviewViewModel(
         }
     }
 
+    /**
+     * Toggles the expanded state of a UI component identified by its title.
+     *
+     * @param title The title of the component.
+     */
     fun toggleExpanded(title: String) {
         val currentState = _detailpageOverviewState.value.expandedStates[title] ?: false
         _detailpageOverviewState.value = _detailpageOverviewState.value.copy(
@@ -50,8 +65,7 @@ class DetailpageOverviewViewModel(
         )
     }
 
-    // **********************************************************************************************************************
-    // REPOSITORY
+    // Factory for creating instances of the ViewModel.
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

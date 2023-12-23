@@ -15,6 +15,13 @@ import coil.compose.AsyncImage
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.model.Game
 
+/**
+ * A Composable function that creates the detail page for a game.
+ * It displays various information about the game including the background image, name, genres, platforms, release date, and playtime.
+ *
+ * @param game The [Game] object containing the details to be displayed.
+ * @param modifier The modifier to be applied to the layout.
+ */
 @Composable
 fun Detailpage(game: Game, modifier: Modifier = Modifier) {
     LazyColumn(

@@ -17,10 +17,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel class responsible for managing the state and logic of the search page in the Android game application.
+ *
+ * @param gameRepository The repository for accessing game data.
+ */
 class SearchpageOverviewViewModel(
     private val gameRepository: GameRepository,
 ) : ViewModel() {
 
+    // Mutable state flow for holding the search page state
     private val _searchpageOverviewState = MutableStateFlow(
         SearchpageOverviewState(
             searchList = emptyList(),
@@ -33,6 +39,9 @@ class SearchpageOverviewViewModel(
     )
     val searchpageOverviewState = _searchpageOverviewState.asStateFlow()
 
+    /**
+     * Loads the next page of search results.
+     */
     fun searchNextPage() {
         if (!_searchpageOverviewState.value.isLoading && !_searchpageOverviewState.value.isLastPage) {
             viewModelScope.launch {
@@ -62,24 +71,32 @@ class SearchpageOverviewViewModel(
         }
     }
 
+    // Mutable state flow for holding the current search query
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     init {
+        // Perform a search when the search query changes, debounce to avoid rapid searches
         viewModelScope.launch {
             _searchQuery
-                .debounce(200) // Debounce tijd in milliseconden
-                .distinctUntilChanged() // Voer alleen uit als de query verandert
+                .debounce(200)
+                .distinctUntilChanged()
                 .collect { query ->
                     performSearch(query)
                 }
         }
     }
 
+    // Mutable state flow for holding the state of the search API call
     private val _searchGameApiState =
         MutableStateFlow<SearchGameApiState>(SearchGameApiState.Loading)
     val searchGameApiState: StateFlow<SearchGameApiState> = _searchGameApiState.asStateFlow()
 
+    /**
+     * Performs a search for games based on the provided query.
+     *
+     * @param query The search query.
+     */
     fun performSearch(query: String) {
         _searchpageOverviewState.value.lastSearchQuery = query
         _searchpageOverviewState.value.currentPage = 1
@@ -109,10 +126,20 @@ class SearchpageOverviewViewModel(
         }
     }
 
+    /**
+     * Updates the search query with the provided text.
+     *
+     * @param text The new search query text.
+     */
     fun onSearchTextChange(text: String) {
         _searchQuery.value = text
     }
 
+    /**
+     * Updates the search active state.
+     *
+     * @param active The new search active state.
+     */
     fun onSearchActiveChange(active: Boolean) {
         _searchpageOverviewState.update { currentState ->
             currentState.copy(
@@ -121,6 +148,11 @@ class SearchpageOverviewViewModel(
         }
     }
 
+    /**
+     * Updates the search active state.
+     *
+     * @param active The new search active state.
+     */
     fun addSearchListHistory(text: String) {
         if (!_searchpageOverviewState.value.searchListHistory.contains(text)) {
             _searchpageOverviewState.update { currentState ->
@@ -131,8 +163,7 @@ class SearchpageOverviewViewModel(
         }
     }
 
-    // **********************************************************************************************************************
-    // REPOSITORY
+    // Factory for creating instances of the ViewModel.
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

@@ -18,6 +18,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for managing the homepage's UI state and fetching data for the most popular games of the year and all time.
+ *
+ * @property gameRepository The repository for accessing game data.
+ */
 class HomepageOverviewViewModel(private val gameRepository: GameRepository) : ViewModel() {
 
     var popularGamesOfThisYearApiState: PopularGamesOfThisYearApiState by mutableStateOf(
@@ -38,6 +43,10 @@ class HomepageOverviewViewModel(private val gameRepository: GameRepository) : Vi
         getMostPopularGamesOfThisYear()
         getMostPopularGamesOfAllTime()
     }
+
+    /**
+     * Fetches and updates the UI state for the most popular games of the current year.
+     */
     fun getMostPopularGamesOfThisYear() {
         try {
             viewModelScope.launch {
@@ -60,6 +69,9 @@ class HomepageOverviewViewModel(private val gameRepository: GameRepository) : Vi
         }
     }
 
+    /**
+     * Fetches and updates the UI state for the most popular games of all time.
+     */
     fun getMostPopularGamesOfAllTime() {
         try {
             viewModelScope.launch {
@@ -81,12 +93,12 @@ class HomepageOverviewViewModel(private val gameRepository: GameRepository) : Vi
         }
     }
 
-    // **********************************************************************************************************************
-    // REPOSITORY
+    // Factory for creating instances of the ViewModel.
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
+                val application =
+                    this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as GamesApplication
                 val gamesRepository = application.container.gameRepository
                 HomepageOverviewViewModel(gamesRepository)
             }

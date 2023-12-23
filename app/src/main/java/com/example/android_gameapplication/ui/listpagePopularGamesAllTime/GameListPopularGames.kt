@@ -31,6 +31,14 @@ import coil.compose.AsyncImage
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.model.Game
 
+/**
+ * A Composable function that creates a list item for popular games.
+ * Each item displays game details and is clickable to perform a specified action.
+ *
+ * @param game The [Game] object containing information to be displayed in the list item.
+ * @param onListItem A lambda function to be invoked when the list item is clicked, passing the game's ID.
+ * @param modifier The modifier to be applied to the list item layout.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListItemPopularGames(game: Game, onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
@@ -67,6 +75,14 @@ fun GameListItemPopularGames(game: Game, onListItem: (Int) -> Unit, modifier: Mo
     )
 }
 
+/**
+ * A Composable function that creates a list of popular games.
+ * It displays a list of game items and handles loading new pages of games.
+ *
+ * @param gamesList The list of [Game] objects to be displayed.
+ * @param onListItem A lambda function to be invoked when a list item is clicked, passing the game's ID.
+ * @param newPage A lambda function to be invoked to load a new page of games.
+ */
 @Composable
 fun GameListPopularGames(
     gamesList: List<Game>,

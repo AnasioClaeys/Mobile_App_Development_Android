@@ -17,6 +17,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for managing the state and fetching data for the list of most played games of all time.
+ * It holds and updates the list of games and pagination details.
+ *
+ * @property gameRepository The repository for accessing game data.
+ */
 class ListpageOverviewAllTimeViewModel(
     private val gameRepository: GameRepository,
 ) : ViewModel() {
@@ -39,6 +45,9 @@ class ListpageOverviewAllTimeViewModel(
         getMostPlayedGamesOfAllTime()
     }
 
+    /**
+     * Fetches and updates the UI state for the most played games of all time.
+     */
     private fun getMostPlayedGamesOfAllTime() {
         listpageOverviewAllTimeState.value.currentPageMostPlayedGamesOfAllTime = 1
         viewModelScope.launch {
@@ -67,6 +76,9 @@ class ListpageOverviewAllTimeViewModel(
         }
     }
 
+    /**
+     * Loads the next page of the most played games of all time.
+     */
     fun loadNextPageMostPlayedGamesOfAllTime() {
         if (mostPlayedGamesOfAllTimeApiState != MostPlayedGamesOfAllTimeApiState.Loading && !listpageOverviewAllTimeState.value.lastPageMostPlayedGamesOfTAllTime) {
             viewModelScope.launch {
@@ -94,8 +106,7 @@ class ListpageOverviewAllTimeViewModel(
         }
     }
 
-    // **********************************************************************************************************************
-    // REPOSITORY
+    // Factory for creating instances of the ViewModel.
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

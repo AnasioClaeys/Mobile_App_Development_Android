@@ -26,6 +26,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.android_gameapplication.model.Game
 
+/**
+ * A Composable function that creates a card for a game.
+ * Each card displays the game's image and name and can be clicked to trigger a specified action.
+ *
+ * @param game The [Game] object containing information to be displayed in the card.
+ * @param onCarousel A lambda function to be invoked when the card is clicked, passing the game's ID.
+ * @param modifier The modifier to be applied to the card layout.
+ */
 @Composable
 fun GameCard(game: Game, onCarousel: (Int) -> Unit, modifier: Modifier = Modifier) {
     ElevatedCard(
@@ -34,7 +42,7 @@ fun GameCard(game: Game, onCarousel: (Int) -> Unit, modifier: Modifier = Modifie
             .height(210.dp)
             .clickable(onClick = { onCarousel(game.id) }),
 
-    ) {
+        ) {
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -73,10 +81,16 @@ fun GameCard(game: Game, onCarousel: (Int) -> Unit, modifier: Modifier = Modifie
     }
 }
 
+/**
+ * A Composable function that creates a carousel of game cards.
+ * It lays out game cards horizontally and allows users to scroll through them.
+ *
+ * @param gamesList The list of [Game] objects to be displayed in the carousel.
+ * @param onCarousel A lambda function to be invoked when a game card is clicked, passing the game's ID.
+ */
 @Composable
 fun Carousel(gamesList: List<Game>, onCarousel: (Int) -> Unit) {
     LazyRow(
-        // padding top en bottom 16dp
         modifier = Modifier
             .padding(top = 16.dp, bottom = 16.dp)
             .fillMaxWidth(),

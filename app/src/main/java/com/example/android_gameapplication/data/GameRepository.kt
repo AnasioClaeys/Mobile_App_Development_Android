@@ -15,6 +15,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Interface for the repository managing game data.
+ * This includes operations for fetching, inserting, and updating game data from/to local database and remote API.
+ */
 interface GameRepository {
 
     suspend fun searchGames(search: String, page: Int): ApiResponse
@@ -36,6 +40,13 @@ interface GameRepository {
     suspend fun getMostPlayedGamesOfAllTime(page: Int): ApiResponse
 }
 
+/**
+ * Implementation of [GameRepository] that interacts with both local database and network API.
+ *
+ * @property gamesApiService Service for network API calls.
+ * @property gameDao DAO for database operations.
+ * @property gamesApiServiceImpl Service implementation for handling API logic.
+ */
 class ApiGameRepository(
     private val gamesApiService: GameApiService,
     private val gameDao: GameDao,

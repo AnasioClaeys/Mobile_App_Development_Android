@@ -31,6 +31,13 @@ import coil.compose.AsyncImage
 import com.example.android_gameapplication.R
 import com.example.android_gameapplication.model.Game
 
+/**
+ * A composable function that displays a single item in the game list.
+ *
+ * @param game The game to display in the list item.
+ * @param onListItem A lambda function to handle item click events.
+ * @param modifier Modifier for customizing the appearance of the list item.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier = Modifier) {
@@ -50,7 +57,7 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier = Mod
                         RoundedCornerShape(16.dp),
                     ),
 
-            )
+                )
         },
         trailingContent = {
             Icon(
@@ -61,7 +68,7 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier = Mod
             )
         },
 
-    )
+        )
     Divider(
         modifier = modifier
             .fillMaxWidth()
@@ -69,6 +76,14 @@ fun GameListItem(game: Game, onListItem: (Int) -> Unit, modifier: Modifier = Mod
     )
 }
 
+/**
+ * A composable function that displays a list of games.
+ *
+ * @param gamesList The list of games to display.
+ * @param onListItem A lambda function to handle item click events.
+ * @param hasSearched Indicates whether a search has been performed.
+ * @param viewModel The view model for the search page.
+ */
 @Composable
 fun GamesList(
     gamesList: List<Game>,
