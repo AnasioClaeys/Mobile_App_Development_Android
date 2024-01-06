@@ -7,7 +7,7 @@
     <string name="detail_item_playtime_hours">%1$s hours</string>
     <string name="error">Error</string>
     <string name="couldn_t_load">Couldn\'t load...</string>
-    <string name="home_title_popular_games_in_YEAR">Popular games in 2023</string>
+    <string name="home_title_popular_games_in_YEAR">Popular games in 2024</string>
     <string name="home_title_popular_games_of_all_time">Popular games of all time</string>
     <string name="bottomAppBar_navigate_to_home_screen">Navigate to home screen</string>
     <string name="bottomAppBar_navigate_to_search_screen">Navigate to search screen</string>
@@ -32,6 +32,6 @@
     <string name="home_navRailBar">Home</string>
     <string name="search_NavRailBar">Search</string>
     <!--    <string name="searchpage_title">Search page</string>-->
-<!--    <string name="detailpage_title">Detail page</string>-->
+    <!--    <string name="detailpage_title">Detail page</string>-->
 
 </resources>
