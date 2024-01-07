@@ -12,11 +12,8 @@
 
 ## Extra informatie
 
-Voor extra informatie over de applicatie, kan KDoc gegenereerd worden. Dit kan door de volgende commando's uit te voeren als Gradle Task:
+Voor extra informatie over de applicatie, kan KDoc via Dokka geraadpleegd worden door dokka.zip te unzippen en de index.html te openen.
 
-```bash
-./gradlew dokkaHtml
-```
 
 Voor deze applicatie is er gebruik gemaakt van de RAWG API. Deze API is te vinden op https://rawg.io/apidocs. De API is volledig gratis te gebruiken tot
 20 000 requests per maand. De API is een game database met meer dan 500 000 games. De API key kan verkregen worden via de website. Hierbij moet dan een package "keys" gemaakt worden in de root folder van de applicatie zelf. Hierin wordt dan een kotlin file "ApiKeys.kt" gemaakt. In deze file wordt dan de volgende code geplaatst:
