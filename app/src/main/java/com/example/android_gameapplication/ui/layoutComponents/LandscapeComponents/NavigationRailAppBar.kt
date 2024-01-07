@@ -11,7 +11,7 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
@@ -33,7 +33,7 @@ fun NavigationRailAppBar(
     showCloseIcon: Boolean,
     onClose: () -> Unit,
 ) {
-    var selectedItem by remember { mutableStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(0) }
     val items = listOf(
         stringResource(R.string.back),
         stringResource(R.string.home_navRailBar),
